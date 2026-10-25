@@ -2,23 +2,29 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
-    @State private var columnVisibility: NavigationSplitViewVisibility = .all
 
     var body: some View {
         @Bindable var model = model
-        NavigationSplitView(columnVisibility: $columnVisibility) {
-            SidebarView()
-                .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 320)
-        } content: {
-            content
-                .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
-        } detail: {
+        Group {
             if model.sidebarSelection == .settings {
-                SettingsView()
-            } else if let run = model.run(model.runSelection) {
-                RunDetailView(run: run)
+                NavigationSplitView(columnVisibility: .constant(.all)) {
+                    sidebar
+                } detail: {
+                    SettingsView()
+                }
             } else {
-                ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                NavigationSplitView(columnVisibility: .constant(.all)) {
+                    sidebar
+                } content: {
+                    content
+                        .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
+                } detail: {
+                    if let run = model.run(model.runSelection) {
+                        RunDetailView(run: run)
+                    } else {
+                        ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                    }
+                }
             }
         }
         .sheet(item: $model.editingJob) { job in
@@ -49,15 +55,19 @@ struct ContentView: View {
                 model.runSelection = runs.first?.id
             }
             model.revealedRunID = nil
-            columnVisibility = model.sidebarSelection == .settings ? .doubleColumn : .all
         }
         .task {
             model.start()
-            columnVisibility = model.sidebarSelection == .settings ? .doubleColumn : .all
             if model.runSelection == nil {
                 model.runSelection = model.visibleRuns(for: model.sidebarSelection).first?.id
             }
         }
+    }
+
+    private var sidebar: some View {
+        SidebarView()
+            .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 320)
+            .toolbar(removing: .sidebarToggle)
     }
 
     @ViewBuilder
@@ -67,8 +77,6 @@ struct ContentView: View {
             RunListView(jobID: nil)
         case .job(let id)? where model.job(id) != nil:
             RunListView(jobID: id)
-        case .settings?:
-            Color.clear
         default:
             ContentUnavailableView("No Job Selected", systemImage: "clock", description: Text("Select a job in the sidebar."))
         }
