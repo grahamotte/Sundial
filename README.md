@@ -1,5 +1,9 @@
 # Sundial
 
+<p align="center">
+  <img src="assets/screenshot.png" alt="Sundial screenshot">
+</p>
+
 Sundial is a small native macOS app for running your own shell commands on a schedule and seeing, at a glance, whether each run passed or failed.
 
 ## Install
