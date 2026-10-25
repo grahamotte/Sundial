@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
-    @State private var started = false
 
     var body: some View {
         @Bindable var model = model
@@ -40,13 +39,19 @@ struct ContentView: View {
             Text(model.errorMessage ?? "")
         }
         .onChange(of: model.sidebarSelection) {
-            model.runSelection = visibleRuns.first?.id
+            let runs = model.visibleRuns(for: model.sidebarSelection)
+            if let revealed = model.revealedRunID, runs.contains(where: { $0.id == revealed }) {
+                model.runSelection = revealed
+            } else {
+                model.runSelection = runs.first?.id
+            }
+            model.revealedRunID = nil
         }
         .task {
-            guard !started else { return }
-            started = true
             model.start()
-            model.runSelection = visibleRuns.first?.id
+            if model.runSelection == nil {
+                model.runSelection = model.visibleRuns(for: model.sidebarSelection).first?.id
+            }
         }
     }
 
@@ -59,14 +64,6 @@ struct ContentView: View {
             RunListView(jobID: id)
         default:
             ContentUnavailableView("No Job Selected", systemImage: "clock", description: Text("Select a job in the sidebar."))
-        }
-    }
-
-    private var visibleRuns: [RunRecord] {
-        switch model.sidebarSelection {
-        case .allRuns?: return model.runs
-        case .job(let id)?: return model.runs(for: id)
-        default: return []
         }
     }
 }
