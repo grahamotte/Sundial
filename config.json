@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.2.1",
+    "build": "0.2.2",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.2.1",
-    "whatsNew": "Settings now opens in the main window from a button at the bottom of the sidebar instead of a separate window."
+    "version": "0.2.2",
+    "whatsNew": "Opening Settings no longer hides the sidebar, and the sidebar always stays visible."
   }
 }
