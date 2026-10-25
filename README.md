@@ -10,7 +10,7 @@ Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto), a share
 
 - Jobs live in `~/Library/Application Support/Sundial/jobs.json`.
 - Each enabled job gets `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist`, which runs `Sundial.app/Contents/MacOS/Sundial run <id>` on a `StartCalendarInterval` schedule.
-- The runner runs the command with `/bin/zsh -l -c`, with Homebrew, mise shims, and `~/.local/bin` on `PATH`, and writes combined stdout and stderr plus a run record to `~/Library/Application Support/Sundial/Runs`.
+- The runner runs the command with `/bin/zsh -c` (not a login shell, so macOS `path_helper` cannot reorder `PATH`), with Homebrew, mise shims, and `~/.local/bin` on `PATH`, and writes combined stdout and stderr plus a run record to `~/Library/Application Support/Sundial/Runs`.
 - A run passes when the command exits 0. Non-zero exits, signals, and runs whose runner died are failures.
 
 ## Contributing

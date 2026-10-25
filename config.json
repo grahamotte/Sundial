@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.1.0",
+    "build": "0.1.1",
     "marketingUrl": "https://github.com/grahamotte/Sundial",
     "name": "Sundial",
     "skip_app_stores": true,
@@ -58,7 +58,7 @@
       },
       "android": {}
     },
-    "version": "0.1.0",
-    "whatsNew": "First release: schedule commands with launchd and review every run from the last 30 days."
+    "version": "0.1.1",
+    "whatsNew": "Jobs now run in a non-login zsh, so tools installed with mise (Ruby, Bundler, and others) resolve correctly."
   }
 }

@@ -59,7 +59,7 @@ struct JobRunner {
         do {
             outcome = try launcher.run(
                 executable: JobRunner.shell,
-                arguments: ["-l", "-c", job.command],
+                arguments: ["-c", job.command],
                 environment: environment(),
                 directory: job.workingDirectoryURL(home: paths.home),
                 output: output

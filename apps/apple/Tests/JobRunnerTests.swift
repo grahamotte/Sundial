@@ -35,7 +35,7 @@ final class JobRunnerTests: XCTestCase {
         XCTAssertEqual(try runner().run(jobID: job.id.uuidString), 0)
 
         XCTAssertEqual(launcher.received?.executable.path, "/bin/zsh")
-        XCTAssertEqual(launcher.received?.arguments, ["-l", "-c", "echo hi && false"])
+        XCTAssertEqual(launcher.received?.arguments, ["-c", "echo hi && false"])
         XCTAssertEqual(launcher.received?.directory.path, paths.home.appending(path: "Code").path)
         let records = RunStore(directory: paths.runsDirectory).records()
         XCTAssertEqual(records.count, 1)

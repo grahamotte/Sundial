@@ -38,7 +38,7 @@ struct JobEditorView: View {
             } header: {
                 Text("Command")
             } footer: {
-                Text("Runs in zsh as a login shell, so your ~/.zprofile is loaded.")
+                Text("Runs with zsh -c. Homebrew, mise, and ~/.local/bin are on PATH.")
                     .foregroundStyle(.secondary)
             }
             Section {
