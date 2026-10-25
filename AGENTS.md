@@ -105,6 +105,7 @@ Sundial is a native macOS app (macOS 27+) that schedules user shell commands wit
 
 ### Apple Workflow
 
+- Debug builds compile with `SUNDIAL_DEV`, which stores data in `~/Library/Application Support/Sundial Dev` and labels launch agents `com.grahamotte.sundial.dev.job.<id>`, so development never touches the installed app's jobs.
 - `mise test` runs the repository suite, including the `SundialCore` package tests in `apps/apple/Tests`, which compile the non-UI files listed in `Tests/Package.swift`. Add new business-logic files to its `sources` and app-only files to its `exclude`.
 - Use `mise simulate macos` to build and launch the app and `mise xcode` to open the project.
 - Use the [publish runbook](runbooks/publish.md) for versioning and the signed, notarized GitHub release workflow.

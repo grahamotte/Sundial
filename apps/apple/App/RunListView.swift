@@ -28,6 +28,7 @@ struct RunListView: View {
                     .selectionDisabled()
             }
         }
+        .environment(\.defaultMinListRowHeight, RunRow.height)
         .overlay {
             if runs.isEmpty && job == nil {
                 ContentUnavailableView(
@@ -137,6 +138,8 @@ struct JobSummaryView: View {
 }
 
 struct RunRow: View {
+    static let height: CGFloat = 40
+
     let run: RunRecord
     let showsJobName: Bool
 
