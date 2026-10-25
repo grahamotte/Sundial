@@ -100,6 +100,7 @@ Sundial is a native macOS app (macOS 27+) that schedules user shell commands wit
 - `Schedule` is the only source of schedule semantics: launchd `StartCalendarInterval` entries, next-run calculation, and summaries all derive from `calendarIntervals`. Keep schedules calendar-based so missed runs are coalesced after sleep; do not use `StartInterval`.
 - `AppModel` is the single observable state for the UI and the only caller of the stores and `LaunchAgentManager`. `FileMonitor` reloads runs when the `Runs` directory changes and follows the log of a running run.
 - The UI is a three-column `NavigationSplitView`: jobs in the sidebar, runs for the selection in the middle, and the selected run's output on the right. Keep it native, dependency-free, and pass/fail first.
+- `JobRunner` runs commands with non-login `/bin/zsh -c`. A login shell runs `/etc/zprofile`, whose `path_helper` drops the mise shims from `PATH` and breaks `mise` tasks.
 - System boundaries are `CommandRunning` (launchctl) and `ProcessLaunching` (the job's shell); stub them in tests.
 
 ### Apple Workflow
