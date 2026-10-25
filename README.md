@@ -19,6 +19,12 @@ Sundial requires macOS 27 or later. The first time it installs a job, macOS show
 - **Output** for the selected run shows the full combined stdout and stderr, along with the start time, duration, and exit code. Copy it, or show the log file in Finder.
 - **Run Now** (⌘R) runs a job immediately, even if it is disabled. **Edit** (⌘E), **Duplicate**, **Enabled**, and **Delete** are in the toolbar's More menu and in the sidebar's context menu.
 
+### Menu bar and settings
+
+Sundial adds a sundial icon to the menu bar. Click it to see the 10 most recent runs across all jobs with their pass/fail status. Choose a run to open it in the main window, or choose **View All Runs…**. While the menu bar icon is shown, closing the main window leaves Sundial running in the menu bar.
+
+**Settings** (⌘,) has two options: **Show in menu bar** (on by default) and **Open at login**.
+
 A run passes when its command exits with status 0. A non-zero exit, a termination signal, or a run that was cut off (shown as **Interrupted**) counts as a failure.
 
 ### Schedules

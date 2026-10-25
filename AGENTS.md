@@ -89,7 +89,7 @@ This repository is not deployed. Do not run `mise deploy` or the [deploy runbook
 
 ### Sundial
 
-Sundial is a native macOS app (macOS 27+) that schedules user shell commands with launchd and shows whether each run passed or failed. It is distributed as a signed and notarized repository release, not through the App Store. It has no notifications.
+Sundial is a native macOS app (macOS 27+) that schedules user shell commands with launchd and shows whether each run passed or failed. It is distributed as a signed and notarized repository release, not through the App Store. It has a menu bar item listing recent runs, and no notifications.
 
 ### Apple App Architecture
 
@@ -99,6 +99,9 @@ Sundial is a native macOS app (macOS 27+) that schedules user shell commands wit
 - `LaunchAgentManager` owns `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist` files. `sync` writes, bootstraps, boots out, and removes only labels with that prefix; it reloads a job only when its plist bytes change or it is not loaded. Rebooting out a running job stops that run, which then shows as interrupted.
 - `Schedule` is the only source of schedule semantics: launchd `StartCalendarInterval` entries, next-run calculation, and summaries all derive from `calendarIntervals`. Keep schedules calendar-based so missed runs are coalesced after sleep; do not use `StartInterval`.
 - `AppModel` is the single observable state for the UI and the only caller of the stores and `LaunchAgentManager`. `FileMonitor` reloads runs when the `Runs` directory changes and follows the log of a running run.
+- `SundialApp` has three scenes: the main `Window` (`SundialApp.mainWindowID`), `Settings` (`SettingsView`), and a `.window`-style `MenuBarExtra` (`MenuBarView`) shown while the `showsMenuBarExtra` preference is on. The app quits when its last window closes only while the menu bar item is off. `LoginItem` wraps `SMAppService.mainApp` for Open at login.
+- `SundialGlyph` draws the template menu bar glyph in code; there is no SF Symbol for a sundial. The app icon PNGs in `AppIcon.appiconset` show the same dial, gnomon, and shadow.
+- `AppModel.reveal(_:)` selects a run's job and the run itself; `ContentView` applies `revealedRunID` after the sidebar selection changes.
 - The UI is a three-column `NavigationSplitView`: jobs in the sidebar, runs for the selection in the middle, and the selected run's output on the right. Keep it native, dependency-free, and pass/fail first.
 - `JobRunner` runs commands with non-login `/bin/zsh -c`. A login shell runs `/etc/zprofile`, whose `path_helper` drops the mise shims from `PATH` and breaks `mise` tasks.
 - System boundaries are `CommandRunning` (launchctl) and `ProcessLaunching` (the job's shell); stub them in tests.

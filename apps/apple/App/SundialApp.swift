@@ -2,11 +2,18 @@ import AppKit
 import SwiftUI
 
 struct SundialApp: App {
+    static let mainWindowID = "main"
+
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @State private var model = AppModel()
+    @AppStorage(Preferences.showsMenuBarExtraKey) private var showsMenuBarExtra = true
+    @State private var model: AppModel = {
+        let model = AppModel()
+        model.start()
+        return model
+    }()
 
     var body: some Scene {
-        Window("Sundial", id: "main") {
+        Window("Sundial", id: SundialApp.mainWindowID) {
             ContentView()
                 .environment(model)
         }
@@ -31,11 +38,23 @@ struct SundialApp: App {
                     .disabled(model.selectedJob == nil)
             }
         }
+
+        Settings {
+            SettingsView()
+        }
+
+        MenuBarExtra(isInserted: $showsMenuBarExtra) {
+            MenuBarView()
+                .environment(model)
+        } label: {
+            Image(nsImage: SundialGlyph.menuBarImage)
+        }
+        .menuBarExtraStyle(.window)
     }
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        true
+        !Preferences.showsMenuBarExtra
     }
 }

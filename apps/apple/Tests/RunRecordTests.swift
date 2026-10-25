@@ -47,6 +47,17 @@ final class RunRecordTests: XCTestCase {
         XCTAssertEqual(record(finished: false).durationText(status: .interrupted, now: now), "—")
     }
 
+    func testRecentIsNewestFirstAcrossJobsAndLimited() {
+        let jobA = UUID(), jobB = UUID()
+        let runs = (0..<5).map { index in
+            RunRecord(id: "\(index)", jobID: index.isMultiple(of: 2) ? jobA : jobB, jobName: "Job", command: "true", startedAt: utcDate(2026, 10, 25, index), processID: 1)
+        }.shuffled()
+        XCTAssertEqual(RunRecord.recent(runs, limit: 3).map(\.id), ["4", "3", "2"])
+        XCTAssertEqual(RunRecord.recent(runs, limit: 10).map(\.id), ["4", "3", "2", "1", "0"])
+        XCTAssertEqual(RunRecord.recent(runs, limit: 0), [])
+        XCTAssertEqual(RunRecord.recent(runs, limit: -1), [])
+    }
+
     func testFormatDuration() {
         XCTAssertEqual(RunRecord.formatDuration(0.2), "<1s")
         XCTAssertEqual(RunRecord.formatDuration(59.9), "59s")

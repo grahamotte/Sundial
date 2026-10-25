@@ -24,6 +24,7 @@ final class AppModel {
     var editingJob: Job?
     var jobPendingDeletion: Job?
     var errorMessage: String?
+    var revealedRunID: RunRecord.ID?
 
     private let paths: SundialPaths
     private let jobStore: JobStore
@@ -43,7 +44,11 @@ final class AppModel {
         )
     }
 
+    @ObservationIgnored private var started = false
+
     func start() {
+        guard !started else { return }
+        started = true
         do {
             jobs = try jobStore.load()
         } catch {
@@ -91,6 +96,25 @@ final class AppModel {
 
     func reloadRuns() {
         runs = runStore.records()
+    }
+
+    func reveal(_ run: RunRecord) {
+        let item: SidebarItem = job(run.jobID) == nil ? .allRuns : .job(run.jobID)
+        revealedRunID = run.id
+        if sidebarSelection == item {
+            runSelection = run.id
+            revealedRunID = nil
+        } else {
+            sidebarSelection = item
+        }
+    }
+
+    func visibleRuns(for item: SidebarItem?) -> [RunRecord] {
+        switch item {
+        case .allRuns?: return runs
+        case .job(let id)?: return runs(for: id)
+        default: return []
+        }
     }
 
     func newJob() {

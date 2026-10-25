@@ -54,6 +54,10 @@ struct RunRecord: Codable, Identifiable, Hashable {
         return kill(processID, 0) == 0 || errno == EPERM
     }
 
+    static func recent(_ runs: [RunRecord], limit: Int) -> [RunRecord] {
+        Array(runs.sorted { $0.startedAt > $1.startedAt }.prefix(max(0, limit)))
+    }
+
     static func formatDuration(_ interval: TimeInterval) -> String {
         if interval < 1 { return "<1s" }
         let seconds = Int(interval.rounded(.down))
