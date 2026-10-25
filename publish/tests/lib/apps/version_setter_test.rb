@@ -10,9 +10,6 @@ class AppsVersionSetterTest < Minitest::Test
     FileUtils.mkdir_p(second_project)
     File.write(File.join(first_project, "project.pbxproj"), "MARKETING_VERSION = 1.2.3; CURRENT_PROJECT_VERSION = 456;")
     File.write(File.join(second_project, "project.pbxproj"), "CURRENT_PROJECT_VERSION = 1;\nMARKETING_VERSION = 1.2.3;")
-    cask_path = File.join(root, "Casks", "app.rb")
-    FileUtils.mkdir_p(File.dirname(cask_path))
-    File.write(cask_path, "cask \"app\" do\n  version \"1.2.3\"\n  url \"https://example.com/v\#{version}/App-\#{version}.zip\"\nend\n")
     File.write(
       config_path,
       JSON.generate(
@@ -42,7 +39,6 @@ class AppsVersionSetterTest < Minitest::Test
     assert_equal "Changes", config.dig("apps", "whatsNew")
     assert_equal "MARKETING_VERSION = 2.0.1; CURRENT_PROJECT_VERSION = 2.0.1;", File.read(File.join(first_project, "project.pbxproj"))
     assert_equal "CURRENT_PROJECT_VERSION = 2.0.1;\nMARKETING_VERSION = 2.0.1;", File.read(File.join(second_project, "project.pbxproj"))
-    assert_equal "cask \"app\" do\n  version \"2.0.1\"\n  url \"https://example.com/v\#{version}/App-\#{version}.zip\"\nend\n", File.read(cask_path)
   end
 
   def test_rejects_invalid_versions_before_writing

@@ -13,7 +13,6 @@ module Apps
       targets.fetch("apple", {}).each_value.map { |target| target.fetch("project") }.uniq.each do |project|
         set_xcode_version(File.expand_path(project, root), version)
       end
-      Dir.glob(File.join(root, "Casks", "*.rb")).each { |cask| set_cask_version(cask, version) }
       apps["version"] = version
       apps["build"] = version
       File.write(config_path, "#{JSON.pretty_generate(config)}\n")
@@ -22,11 +21,6 @@ module Apps
     def self.set_xcode_version(project, version)
       path = File.join(project, "project.pbxproj")
       contents = File.read(path).gsub(/(MARKETING_VERSION|CURRENT_PROJECT_VERSION) = [^;]+;/, "\\1 = #{version};")
-      File.write(path, contents)
-    end
-
-    def self.set_cask_version(path, version)
-      contents = File.read(path).sub(/^(\s*version )"[^"]*"$/, "\\1\"#{version}\"")
       File.write(path, contents)
     end
   end
