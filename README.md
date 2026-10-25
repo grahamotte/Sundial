@@ -6,6 +6,18 @@ Each job is a command, a working directory, and a schedule. Sundial hands the sc
 
 ## Install
 
+### Homebrew
+
+```sh
+brew tap grahamotte/sundial https://github.com/grahamotte/Sundial
+brew trust --cask grahamotte/sundial/sundial
+brew install --cask grahamotte/sundial/sundial
+```
+
+Update with `brew update && brew upgrade --cask sundial`. If you already installed the latest release by hand, add `--adopt` to the install command so Homebrew takes over the existing `/Applications/Sundial.app`.
+
+### Download
+
 1. Download the latest `Sundial-macos-<version>.zip` from [Releases](https://github.com/grahamotte/Sundial/releases). Builds are signed with a Developer ID and notarized by Apple.
 2. Unzip it and move `Sundial.app` to `/Applications`.
 3. Open Sundial and add a job with **New Job** (⌘N).
@@ -58,8 +70,8 @@ Sundial creates, updates, and removes only launch agents with the `com.grahamott
 ## Uninstall
 
 1. In Sundial, delete every job. This removes their launch agents.
-2. Quit Sundial and move it to the Trash.
-3. Delete `~/Library/Application Support/Sundial`.
+2. Quit Sundial and move it to the Trash, or run `brew uninstall --cask sundial` if you installed it with Homebrew.
+3. Delete `~/Library/Application Support/Sundial`, or run `brew uninstall --zap --cask sundial`, which also removes Sundial's launch agents and preferences.
 
 ## Development
 
@@ -76,7 +88,7 @@ Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto) and keep
 
 Debug builds store their data in `~/Library/Application Support/Sundial Dev` and label their launch agents `com.grahamotte.sundial.dev.job.<id>`, so they never touch the installed app's jobs.
 
-Releases follow the [publish runbook](runbooks/publish.md): `mise publish` archives, signs with Developer ID, notarizes, and attaches the zip to a GitHub release. See [AGENTS.md](AGENTS.md) for architecture notes and contribution rules.
+Releases follow the [publish runbook](runbooks/publish.md): `mise publish` archives, signs with Developer ID, notarizes, and attaches the zip to a GitHub release. The Homebrew cask in `Casks/sundial.rb` downloads that zip, and `mise publish:set_version` keeps its version in step. See [AGENTS.md](AGENTS.md) for architecture notes and contribution rules.
 
 ## License
 
