@@ -59,7 +59,7 @@ For card work, use Mr. Moto's `mr` CLI: run `mr card claim <CARD>` and follow it
 - `runbooks/` - Project operation instructions, such as deployment and publishing.
 - `.env.default` - Template for the `.env.*` secret files.
 - `.env.*` - Gitignored secrets, identifiers issued or rotated with them, and `RAILS_ENV`/`NODE_ENV`. Do not expose secret values. Mr. Moto generates them from 1Password with its `secrets` command; each item stores one concealed field per env key, labeled with the key name, and the file follows the `.env.default` layout with extra keys at the end.
-- `apps/` - Mobile apps for iOS and Android.
+- `apps/` - The Sundial macOS app and its tests.
 - `assets/` - Shared images and media.
 - `backend/` - Ruby on Rails API server.
 - `config.json` - Non-secret configuration, including mobile app release (`apps`) and website subdomain (`subdomains`) settings. Code reads it directly instead of `ENV`.
@@ -85,9 +85,25 @@ Run `mise tasks` to discover available tasks and their descriptions, including d
 
 ### Deployment
 
-This repository is deployed to codemoto.org with `mise deploy` and the [deploy runbook](runbooks/deploy.md).
+This repository is not deployed. Do not run `mise deploy` or the [deploy runbook](runbooks/deploy.md). The `deploy/` tooling is inherited from Code Moto and unused.
 
-Every Code Moto downstream repository states deployment in its own Repo Specific section with one of these lines, and merges preserve it:
+### Sundial
 
-- Not deployed: "This repository is not deployed. Do not run `mise deploy` or the [deploy runbook](runbooks/deploy.md). The `deploy/` tooling is inherited from Code Moto and unused."
-- Deployed: "This repository is deployed to <host or domain> with `mise deploy` and the [deploy runbook](runbooks/deploy.md)."
+Sundial is a native macOS app (macOS 27+) that schedules user shell commands with launchd and shows whether each run passed or failed. It is distributed as a signed and notarized repository release, not through the App Store. It has no notifications.
+
+### Apple App Architecture
+
+- The app source is in `apps/apple/App`; the Xcode project is `apps/apple/App.xcodeproj` with the `Sundial` scheme.
+- `SundialMain` is the entry point. `Sundial run <job-id>` runs one job headlessly through `JobRunner` and exits with the job's status; any other launch starts `SundialApp`.
+- `JobStore` persists jobs to `~/Library/Application Support/Sundial/jobs.json`. `RunStore` writes one `<run-id>.json` record and `<run-id>.log` per run under `Runs/`, trims logs to 5 MB, and prunes runs older than 30 days.
+- `LaunchAgentManager` owns `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist` files. `sync` writes, bootstraps, boots out, and removes only labels with that prefix; it reloads a job only when its plist bytes change or it is not loaded. Rebooting out a running job stops that run, which then shows as interrupted.
+- `Schedule` is the only source of schedule semantics: launchd `StartCalendarInterval` entries, next-run calculation, and summaries all derive from `calendarIntervals`. Keep schedules calendar-based so missed runs are coalesced after sleep; do not use `StartInterval`.
+- `AppModel` is the single observable state for the UI and the only caller of the stores and `LaunchAgentManager`. `FileMonitor` reloads runs when the `Runs` directory changes and follows the log of a running run.
+- The UI is a three-column `NavigationSplitView`: jobs in the sidebar, runs for the selection in the middle, and the selected run's output on the right. Keep it native, dependency-free, and pass/fail first.
+- System boundaries are `CommandRunning` (launchctl) and `ProcessLaunching` (the job's shell); stub them in tests.
+
+### Apple Workflow
+
+- `mise test` runs the repository suite, including the `SundialCore` package tests in `apps/apple/Tests`, which compile the non-UI files listed in `Tests/Package.swift`. Add new business-logic files to its `sources` and app-only files to its `exclude`.
+- Use `mise simulate macos` to build and launch the app and `mise xcode` to open the project.
+- Use the [publish runbook](runbooks/publish.md) for versioning and the signed, notarized GitHub release workflow.
