@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.2.0",
+    "build": "0.2.1",
     "marketingUrl": "https://github.com/grahamotte/Sundial",
     "name": "Sundial",
     "skip_app_stores": true,
@@ -58,7 +58,7 @@
       },
       "android": {}
     },
-    "version": "0.2.0",
-    "whatsNew": "A new sundial app icon, a menu bar item with your latest runs, and Settings for the menu bar item and Open at login. Run rows no longer clip when runs arrive while the window is open."
+    "version": "0.2.1",
+    "whatsNew": "Settings now opens in the main window from a button at the bottom of the sidebar instead of a separate window."
   }
 }

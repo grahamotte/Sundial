@@ -6,7 +6,6 @@ struct MenuBarView: View {
 
     @Environment(AppModel.self) private var model
     @Environment(\.openWindow) private var openWindow
-    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         let recent = RunRecord.recent(model.runs, limit: MenuBarView.runLimit)
@@ -53,8 +52,8 @@ struct MenuBarView: View {
     }
 
     private func showSettings() {
-        NSApp.activate()
-        openSettings()
+        model.sidebarSelection = .settings
+        openMainWindow()
     }
 
     private func openMainWindow() {

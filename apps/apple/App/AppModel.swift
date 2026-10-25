@@ -5,6 +5,7 @@ import Observation
 enum SidebarItem: Hashable {
     case allRuns
     case job(UUID)
+    case settings
 }
 
 enum RunFilter: String, CaseIterable, Identifiable {
