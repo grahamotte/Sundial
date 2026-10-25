@@ -1,15 +1,26 @@
-# Code Moto
+# Sundial
 
-Code Moto is a shared foundation for building and maintaining apps. It brings a Rails API, a React website, native Apple apps, and project tooling into one repository, so new projects can start with the same development, testing, deployment, and release workflow.
+Sundial is a native macOS app for running your own commands on a schedule. Each job is a shell command, a working directory, and a schedule. Sundial installs one launchd agent per job, records every run's output and exit status, and keeps 30 days of history so you can see at a glance what passed and what failed.
 
-Projects built on Code Moto keep their own Git history and configuration, and can merge improvements from this repository as the foundation evolves. Components can be added or removed to suit each project.
+Jobs run through launchd, so Sundial doesn't need to be open. If your Mac is asleep when a job is due, launchd runs it once when the Mac wakes.
 
-## What's included
+Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto), a shared foundation for a Rails API, a React website, native Apple apps, and project tooling. This repository keeps its own Git history and configuration, and merges improvements from Code Moto as the foundation evolves.
 
-- **Backend:** Ruby on Rails with PostgreSQL and GoodJob background jobs.
-- **Frontend:** React, TypeScript, Vite, and Tailwind CSS, with separate sites for configured subdomains.
-- **Apps:** Swift apps targeting iOS, macOS, and tvOS, with simulator and App Store publishing tools.
-- **Operations:** Server provisioning and deployment, backups, and shared Ruby gems.
+## How it works
+
+- Jobs live in `~/Library/Application Support/Sundial/jobs.json`.
+- Each enabled job gets `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist`, which runs `Sundial.app/Contents/MacOS/Sundial run <id>` on a `StartCalendarInterval` schedule.
+- The runner runs the command with `/bin/zsh -l -c`, with Homebrew, mise shims, and `~/.local/bin` on `PATH`, and writes combined stdout and stderr plus a run record to `~/Library/Application Support/Sundial/Runs`.
+- A run passes when the command exits 0. Non-zero exits, signals, and runs whose runner died are failures.
+
+## Contributing
+
+Tools:
+
+- `mise test` — run the complete app, web, deployment, and shared-gem test suite
+- `mise simulate macos` — build and launch the macOS app
+- `mise xcode` — open the Xcode project
+- the [publish runbook](runbooks/publish.md) — version, test, sign, notarize, and publish to GitHub Releases
 
 ## Local development
 
