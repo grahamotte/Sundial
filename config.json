@@ -37,6 +37,15 @@
   },
   "apps": {
     "build": "0.2.1",
+    "homebrew": {
+      "desc": "Schedule local commands and see whether each run passed or failed",
+      "macos": "golden_gate",
+      "zap": [
+        "~/Library/Application Support/Sundial",
+        "~/Library/LaunchAgents/com.grahamotte.sundial.job.*.plist",
+        "~/Library/Preferences/com.grahamotte.sundial.plist"
+      ]
+    },
     "marketingUrl": "https://github.com/grahamotte/Sundial",
     "name": "Sundial",
     "skip_app_stores": true,

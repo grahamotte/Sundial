@@ -6,6 +6,12 @@ Each job is a command, a working directory, and a schedule. Sundial hands the sc
 
 ## Install
 
+```sh
+brew install grahamotte/tap/sundial
+```
+
+Update with `brew upgrade`. To install by hand instead:
+
 1. Download the latest `Sundial-macos-<version>.zip` from [Releases](https://github.com/grahamotte/Sundial/releases). Builds are signed with a Developer ID and notarized by Apple.
 2. Unzip it and move `Sundial.app` to `/Applications`.
 3. Open Sundial and add a job with **New Job** (⌘N).
@@ -58,8 +64,7 @@ Sundial creates, updates, and removes only launch agents with the `com.grahamott
 ## Uninstall
 
 1. In Sundial, delete every job. This removes their launch agents.
-2. Quit Sundial and move it to the Trash.
-3. Delete `~/Library/Application Support/Sundial`.
+2. Quit Sundial and run `brew uninstall --zap sundial`, which also deletes Sundial's data. If you installed it by hand, move it to the Trash and delete `~/Library/Application Support/Sundial`.
 
 ## Development
 
@@ -76,7 +81,7 @@ Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto) and keep
 
 Debug builds store their data in `~/Library/Application Support/Sundial Dev` and label their launch agents `com.grahamotte.sundial.dev.job.<id>`, so they never touch the installed app's jobs.
 
-Releases follow the [publish runbook](runbooks/publish.md): `mise publish` archives, signs with Developer ID, notarizes, and attaches the zip to a GitHub release. See [AGENTS.md](AGENTS.md) for architecture notes and contribution rules.
+Releases follow the [publish runbook](runbooks/publish.md): `mise publish` archives, signs with Developer ID, notarizes, attaches the zip to a GitHub release, and then updates the `sundial` cask in [grahamotte/homebrew-tap](https://github.com/grahamotte/homebrew-tap). See [AGENTS.md](AGENTS.md) for architecture notes and contribution rules.
 
 ## License
 
