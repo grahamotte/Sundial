@@ -89,7 +89,7 @@ This repository is not deployed. Do not run `mise deploy` or the [deploy runbook
 
 ### Sundial
 
-Sundial is a native macOS app (macOS 27+) that schedules user shell commands with launchd and shows whether each run passed or failed. It is distributed as a signed and notarized repository release, not through the App Store. It has a menu bar item listing recent runs, and no notifications.
+Sundial is a native macOS app (macOS 27+) that schedules user shell commands with launchd and shows whether each run passed or failed. It is distributed as a signed and notarized repository release, not through the App Store, and through the `sundial` Homebrew cask in `grahamotte/homebrew-tap`, which `mise publish` updates from `apps.homebrew` in `config.json` after each release. It has a menu bar item listing recent runs, and no notifications.
 
 ### Apple App Architecture
 
