@@ -1,68 +1,77 @@
 # Sundial
 
-Sundial is a native macOS app for running your own commands on a schedule. Each job is a shell command, a working directory, and a schedule. Sundial installs one launchd agent per job, records every run's output and exit status, and keeps 30 days of history so you can see at a glance what passed and what failed.
+Sundial is a small native macOS app for running your own shell commands on a schedule and seeing, at a glance, whether each run passed or failed.
 
-Jobs run through launchd, so Sundial doesn't need to be open. If your Mac is asleep when a job is due, launchd runs it once when the Mac wakes.
+Each job is a command, a working directory, and a schedule. Sundial hands the schedule to launchd, so jobs run whether or not Sundial is open, and it keeps the output, exit status, and duration of every run from the last 30 days.
 
-Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto), a shared foundation for a Rails API, a React website, native Apple apps, and project tooling. This repository keeps its own Git history and configuration, and merges improvements from Code Moto as the foundation evolves.
+## Install
 
-## How it works
+1. Download the latest `Sundial-macos-<version>.zip` from [Releases](https://github.com/grahamotte/Sundial/releases). Builds are signed with a Developer ID and notarized by Apple.
+2. Unzip it and move `Sundial.app` to `/Applications`.
+3. Open Sundial and add a job with **New Job** (⌘N).
 
-- Jobs live in `~/Library/Application Support/Sundial/jobs.json`.
-- Each enabled job gets `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist`, which runs `Sundial.app/Contents/MacOS/Sundial run <id>` on a `StartCalendarInterval` schedule.
-- The runner runs the command with `/bin/zsh -c` (not a login shell, so macOS `path_helper` cannot reorder `PATH`), with Homebrew, mise shims, and `~/.local/bin` on `PATH`, and writes combined stdout and stderr plus a run record to `~/Library/Application Support/Sundial/Runs`.
-- A run passes when the command exits 0. Non-zero exits, signals, and runs whose runner died are failures.
+Sundial requires macOS 27 or later. The first time it installs a job, macOS shows a "Background Items Added" notification for Sundial. That is expected: each job is a launch agent, listed under Sundial in System Settings → General → Login Items & Extensions.
 
-## Contributing
+## Using Sundial
 
-Tools:
+- **Jobs** are listed in the sidebar with the result of their latest run: a green check for a pass, a red cross for a failure, or a spinner while running.
+- **Runs** for the selected job are grouped by day. **All Runs** shows every job's runs together, and the **Failed** filter shows only failures.
+- **Output** for the selected run shows the full combined stdout and stderr, along with the start time, duration, and exit code. Copy it, or show the log file in Finder.
+- **Run Now** (⌘R) runs a job immediately, even if it is disabled. **Edit** (⌘E), **Duplicate**, **Enabled**, and **Delete** are in the toolbar's More menu and in the sidebar's context menu.
 
-- `mise test` — run the complete app, web, deployment, and shared-gem test suite
-- `mise simulate macos` — build and launch the macOS app
-- `mise xcode` — open the Xcode project
-- the [publish runbook](runbooks/publish.md) — version, test, sign, notarize, and publish to GitHub Releases
+A run passes when its command exits with status 0. A non-zero exit, a termination signal, or a run that was cut off (shown as **Interrupted**) counts as a failure.
 
-## Local development
+### Schedules
 
-Install mise and PostgreSQL, and have PostgreSQL running locally. Apple app development and tests also require macOS with Xcode.
+| Repeat | Options |
+| --- | --- |
+| Repeatedly | Every 1, 5, 10, 15, or 30 minutes, or every 1, 2, 3, 4, 6, 8, or 12 hours, aligned to the clock (for example, every 6 hours runs at 12 AM, 6 AM, 12 PM, and 6 PM) |
+| Daily | At a set time |
+| Weekly | At a set time on chosen days |
 
-1. Run `mise install` to install the tool versions pinned in `mise.toml`.
-2. Create `.env.development` and `.env.production` from `.env.default` and fill in the required values. Projects registered in Mr. Moto with 1Password references can generate them by running Mr. Moto's `mr secrets` in the checkout instead.
-3. Run `mise dependencies` to install project dependencies.
-4. Run `mise db:migrate` to prepare the development database.
-5. Run `mise start` to start the API, background jobs, and frontend sites. It prints the local URLs; the API runs at `http://localhost:3000`.
+If your Mac is asleep or off when a job is due, launchd runs it once when the Mac wakes, rather than once for every missed time.
 
-Non-secret project settings live in `config.json`, including the domain, GitHub repository, database name, subdomains, and app release details. Application credentials live in the gitignored `.env.*` files. Linear, GitHub/Forgejo PR operations, and macOS release uploads use Mr. Moto's central commands; repository-local tokens are not supported.
+### How commands run
 
-## Common commands
+- Commands run with `/bin/zsh -c` in the job's working directory (your home folder by default). Multi-line commands and `&&` chains work as they do in Terminal.
+- `PATH` starts with mise shims, `~/.local/bin`, and Homebrew (`/opt/homebrew/bin`), followed by the system paths, so tools installed with mise or Homebrew work without extra setup.
+- zsh does not run as a login shell, so `~/.zprofile` and `~/.zshrc` are not loaded; `~/.zshenv` is. Put anything a job needs, such as environment variables, in the command itself or in a script the command calls.
+- If a command reads from a folder macOS protects, such as Desktop, Documents, or another app's data, macOS may ask you to allow Sundial access in System Settings → Privacy & Security.
+- Logs over 5 MB keep only their last 5 MB.
+
+## Where Sundial keeps things
+
+| Path | Contents |
+| --- | --- |
+| `~/Library/Application Support/Sundial/jobs.json` | Your jobs |
+| `~/Library/Application Support/Sundial/Runs/` | One `.json` record and one `.log` file per run |
+| `~/Library/LaunchAgents/com.grahamotte.sundial.job.<id>.plist` | One launch agent per enabled job, running `Sundial.app/Contents/MacOS/Sundial run <id>` |
+
+Sundial creates, updates, and removes only launch agents with the `com.grahamotte.sundial.job.` prefix.
+
+## Uninstall
+
+1. In Sundial, delete every job. This removes their launch agents.
+2. Quit Sundial and move it to the Trash.
+3. Delete `~/Library/Application Support/Sundial`.
+
+## Development
+
+Sundial is built on [Code Moto](https://github.com/grahamotte/CodeMoto) and keeps its tooling. The app lives in `apps/apple`. The Rails, frontend, and deploy components are inherited from Code Moto and unused, but `mise test` still runs their suites.
+
+1. Install [mise](https://mise.jdx.dev), Xcode, and PostgreSQL (for the inherited backend tests), then run `mise install` and `mise dependencies`.
+2. Generate `.env.development` and `.env.production` with Mr. Moto's `mr secrets`, or create them from `.env.default`.
 
 | Command | Purpose |
 | --- | --- |
-| `mise test` | Run all test suites, including frontend type checking |
-| `mise tsc` | Type-check the frontend |
-| `mise console` | Open the Rails development console |
-| `mise simulate iphone` | Launch the iPhone app in a simulator |
-| `mise xcode` | Open the Apple app project |
-| `mise keychain` | Restore keychain settings left by an interrupted signing run; `--repair` resets the login keychain |
+| `mise test` | Run every suite, including the `SundialCore` Swift tests |
+| `mise simulate macos` | Build and launch the app |
+| `mise xcode` | Open `apps/apple/App.xcodeproj` |
 
-Deployment and publishing use the project-specific instructions in [runbooks](runbooks). Mr. Moto owns card tracking, enqueueing, the review workflow, and the Code Moto merge rollout.
+Debug builds store their data in `~/Library/Application Support/Sundial Dev` and label their launch agents `com.grahamotte.sundial.dev.job.<id>`, so they never touch the installed app's jobs.
 
-## Starting another project
+Releases follow the [publish runbook](runbooks/publish.md): `mise publish` archives, signs with Developer ID, notarizes, and attaches the zip to a GitHub release. See [AGENTS.md](AGENTS.md) for architecture notes and contribution rules.
 
-Run `mise spawn example.com` from this repository to create a sibling checkout with project configuration and generated environment files. Create its GitHub repository and review its configuration and credentials before using it. Repository registration and scheduling are handled separately by [Mr. Moto](https://github.com/grahamotte/MrMoto). Downstream projects use Mr. Moto's [merge runbook](https://github.com/grahamotte/MrMoto/blob/master/runbooks/merge.md) to bring in updates from Code Moto without replacing their history.
+## License
 
-## Repository guide
-
-| Directory | Contents |
-| --- | --- |
-| `backend/` | Rails API and background jobs |
-| `frontend/` | React sites and shared frontend code |
-| `apps/` | Native apps and screenshots |
-| `gems/` | Shared Ruby libraries |
-| `deploy/` | Infrastructure and deployment tooling |
-| `publish/` | App versioning, simulation, and publishing |
-| `manager/` | Project creation and Code Moto merges |
-| `runbooks/` | Deployment and publishing instructions |
-| `scripts/` | Scripts behind mise tasks |
-
-See [Apple credentials](docs/apple-credentials.md) for publishing setup and [AGENTS.md](AGENTS.md) for contribution rules.
+[MIT](LICENSE)
