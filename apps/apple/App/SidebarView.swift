@@ -22,6 +22,13 @@ struct SidebarView: View {
                 }
             }
         }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            SettingsSidebarButton(isSelected: model.sidebarSelection == .settings) {
+                model.sidebarSelection = .settings
+            }
+            .padding(.horizontal, 10)
+            .padding(.bottom, 10)
+        }
         .toolbar {
             ToolbarItem {
                 Button("New Job", systemImage: "plus") { model.newJob() }
@@ -35,6 +42,32 @@ struct SidebarView: View {
             guard job.isEnabled, let last = model.runs(for: job.id).first(where: { $0.status() != .running }) else { return false }
             return last.status().isFailure
         }.count
+    }
+}
+
+struct SettingsSidebarButton: View {
+    let isSelected: Bool
+    let action: () -> Void
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            Label("Settings", systemImage: "gearshape")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .contentShape(.rect)
+                .background(background, in: .rect(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    private var background: AnyShapeStyle {
+        if isSelected { return AnyShapeStyle(.quaternary) }
+        if isHovered { return AnyShapeStyle(.quinary) }
+        return AnyShapeStyle(.clear)
     }
 }
 

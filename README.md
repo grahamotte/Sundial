@@ -23,7 +23,7 @@ Sundial requires macOS 27 or later. The first time it installs a job, macOS show
 
 Sundial adds a sundial icon to the menu bar. Click it to see the 10 most recent runs across all jobs with their pass/fail status. Choose a run to open it in the main window, or choose **View All Runs…**. While the menu bar icon is shown, closing the main window leaves Sundial running in the menu bar.
 
-**Settings** (⌘,) has two options: **Show in menu bar** (on by default) and **Open at login**.
+**Settings**, at the bottom of the sidebar (⌘,), has two options: **Show in menu bar** (on by default) and **Open at login**.
 
 A run passes when its command exits with status 0. A non-zero exit, a termination signal, or a run that was cut off (shown as **Interrupted**) counts as a failure.
 

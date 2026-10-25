@@ -19,6 +19,9 @@ struct SundialApp: App {
         }
         .defaultSize(width: 1120, height: 700)
         .commands {
+            CommandGroup(replacing: .appSettings) {
+                SettingsCommand(model: model)
+            }
             CommandGroup(replacing: .newItem) {
                 Button("New Job…") { model.newJob() }
                     .keyboardShortcut("n")
@@ -39,10 +42,6 @@ struct SundialApp: App {
             }
         }
 
-        Settings {
-            SettingsView()
-        }
-
         MenuBarExtra(isInserted: $showsMenuBarExtra) {
             MenuBarView()
                 .environment(model)
@@ -56,5 +55,18 @@ struct SundialApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         !Preferences.showsMenuBarExtra
+    }
+}
+
+struct SettingsCommand: View {
+    let model: AppModel
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("Settings…") {
+            model.sidebarSelection = .settings
+            openWindow(id: SundialApp.mainWindowID)
+        }
+        .keyboardShortcut(",")
     }
 }
