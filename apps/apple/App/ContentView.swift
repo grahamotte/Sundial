@@ -1,8 +1,10 @@
+import AppKit
 import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
     @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var sidebarWidth: CGFloat?
 
     var body: some View {
         @Bindable var model = model
@@ -73,6 +75,7 @@ struct ContentView: View {
 
     private var sidebar: some View {
         SidebarView()
+            .background(SidebarWidthKeeper(width: $sidebarWidth))
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 320)
             .toolbar(removing: .sidebarToggle)
     }
@@ -86,6 +89,41 @@ struct ContentView: View {
             RunListView(jobID: id)
         default:
             ContentUnavailableView("No Job Selected", systemImage: "clock", description: Text("Select a job in the sidebar."))
+        }
+    }
+}
+
+struct SidebarWidthKeeper: NSViewRepresentable {
+    @Binding var width: CGFloat?
+
+    func makeNSView(context: Context) -> KeeperView { KeeperView() }
+
+    func updateNSView(_ view: KeeperView, context: Context) {
+        view.width = width
+        view.onResize = { width = $0 }
+    }
+
+    final class KeeperView: NSView {
+        var width: CGFloat?
+        var onResize: ((CGFloat) -> Void)?
+        private var observer: NSObjectProtocol?
+
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            if let observer { NotificationCenter.default.removeObserver(observer) }
+            observer = nil
+            guard window != nil, let splitView = enclosingSplitView() else { return }
+            if let width { splitView.setPosition(width, ofDividerAt: 0) }
+            observer = NotificationCenter.default.addObserver(forName: NSSplitView.didResizeSubviewsNotification, object: splitView, queue: .main) { [weak self] _ in
+                guard let sidebar = splitView.arrangedSubviews.first else { return }
+                MainActor.assumeIsolated { self?.onResize?(sidebar.frame.width) }
+            }
+        }
+
+        private func enclosingSplitView() -> NSSplitView? {
+            var view = superview
+            while let current = view, !(current is NSSplitView) { view = current.superview }
+            return view as? NSSplitView
         }
     }
 }
