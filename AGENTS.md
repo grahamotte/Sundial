@@ -104,6 +104,7 @@ Sundial is a native macOS app (macOS 27+) that schedules user shell commands wit
 - `SundialGlyph` draws the template menu bar glyph in code; there is no SF Symbol for a sundial. The app icon PNGs in `AppIcon.appiconset` show the same dial, gnomon, and shadow.
 - `AppModel.reveal(_:)` selects a run's job and the run itself; `ContentView` applies `revealedRunID` after the sidebar selection changes.
 - The UI is a three-column `NavigationSplitView`: jobs in the sidebar, runs for the selection in the middle, and the selected run's output on the right. Keep it native, dependency-free, and pass/fail first.
+- The toolbar draws its header bar over the runs and output columns only while both columns contribute toolbar items, so the output column keeps a `ToolbarSpacer`. `AppDelegate` hides SwiftUI's tracking separator between those columns (`com.apple.SwiftUI.splitViewSeparator-1`) so the header reads as one bar with the title on the left and the run controls on the right.
 - `JobRunner` runs commands with non-login `/bin/zsh -c`. A login shell runs `/etc/zprofile`, whose `path_helper` drops the mise shims from `PATH` and breaks `mise` tasks.
 - System boundaries are `CommandRunning` (launchctl) and `ProcessLaunching` (the job's shell); stub them in tests.
 

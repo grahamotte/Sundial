@@ -57,12 +57,20 @@ struct SundialApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    static let columnSeparatorID = NSToolbarItem.Identifier("com.apple.SwiftUI.splitViewSeparator-1")
+
+    private var toolbarObserver: NSObjectProtocol?
+
     static func applyActivationPolicy() {
         NSApp.setActivationPolicy(Preferences.showsMenuBarExtra ? .accessory : .regular)
     }
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         AppDelegate.applyActivationPolicy()
+        toolbarObserver = NotificationCenter.default.addObserver(forName: NSToolbar.willAddItemNotification, object: nil, queue: nil) { notification in
+            guard let item = notification.userInfo?["item"] as? NSToolbarItem, item.itemIdentifier == AppDelegate.columnSeparatorID else { return }
+            MainActor.assumeIsolated { item.isHidden = true }
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
