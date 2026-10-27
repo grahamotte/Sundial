@@ -26,6 +26,9 @@ struct SundialApp: App {
             CommandGroup(replacing: .appSettings) {
                 SettingsCommand(model: model)
             }
+            CommandGroup(replacing: .help) {
+                Link("Sundial Help", destination: AppDelegate.helpURL)
+            }
             CommandGroup(replacing: .newItem) {
                 Button("New Job…") { model.newJob() }
                     .keyboardShortcut("n")
@@ -61,8 +64,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var toolbarObserver: NSObjectProtocol?
 
+    static let helpURL = URL(string: "https://github.com/grahamotte/Sundial")!
+
+    static var isMainWindowOpen = false
+
     static func applyActivationPolicy() {
-        NSApp.setActivationPolicy(Preferences.showsMenuBarExtra ? .accessory : .regular)
+        NSApp.setActivationPolicy(Preferences.showsMenuBarExtra && !isMainWindowOpen ? .accessory : .regular)
+    }
+
+    static func setMainWindowOpen(_ isOpen: Bool) {
+        isMainWindowOpen = isOpen
+        applyActivationPolicy()
+        if isOpen { NSApp.activate() }
     }
 
     func applicationWillFinishLaunching(_ notification: Notification) {

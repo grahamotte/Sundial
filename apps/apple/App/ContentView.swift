@@ -65,6 +65,8 @@ struct ContentView: View {
             }
             model.revealedRunID = nil
         }
+        .onAppear { AppDelegate.setMainWindowOpen(true) }
+        .onDisappear { AppDelegate.setMainWindowOpen(false) }
         .task {
             model.start()
             if model.runSelection == nil {
