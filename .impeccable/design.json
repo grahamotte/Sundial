@@ -1,51 +1,51 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-27T00:00:00Z",
+  "generatedAt": "2026-10-27T12:00:00Z",
   "title": "Design System: Sundial",
   "extensions": {
     "colorMeta": {
       "plate": {
         "role": "neutral",
-        "displayName": "Solarized Plate",
-        "canonical": "#EEE8D5",
-        "purpose": "Runs column and default day arc ground (base2 / base02).",
+        "displayName": "Warm White Plate",
+        "canonical": "#FAF7F0",
+        "purpose": "Runs column, empty runs placeholder, and default day arc ground; near-white with a faint warm tint in light, soft charcoal in dark.",
         "appearances": {
-          "light": "#EEE8D5",
-          "dark": "#073642",
-          "lightIncreaseContrast": "#E6DFC8",
-          "darkIncreaseContrast": "#002B36"
+          "light": "#FAF7F0",
+          "dark": "#23272A",
+          "lightIncreaseContrast": "#F4F1E8",
+          "darkIncreaseContrast": "#15181A"
         },
         "tonalRamp": [
-          "#0F0B01",
-          "#292516",
-          "#474232",
-          "#666151",
-          "#888271",
-          "#ABA593",
-          "#CFC9B7",
-          "#F4EEDB"
+          "#0D0B07",
+          "#272520",
+          "#44423C",
+          "#63615B",
+          "#85827C",
+          "#A8A59E",
+          "#CCC9C2",
+          "#F1EEE7"
         ]
       },
       "paper": {
         "role": "neutral",
-        "displayName": "Solarized Paper",
-        "canonical": "#FDF6E3",
-        "purpose": "Output, Settings, command well, menu bar popover (base3 / base03).",
+        "displayName": "Paper White",
+        "canonical": "#FFFDF8",
+        "purpose": "Window container background (toolbar area), output column, empty detail, Settings, command well, menu bar popover.",
         "appearances": {
-          "light": "#FDF6E3",
-          "dark": "#002B36",
+          "light": "#FFFDF8",
+          "dark": "#1C1F21",
           "lightIncreaseContrast": "#FFFFFF",
-          "darkIncreaseContrast": "#001F27"
+          "darkIncreaseContrast": "#0F1112"
         },
         "tonalRamp": [
-          "#0F0B01",
-          "#2A2516",
-          "#474232",
-          "#676151",
-          "#888271",
-          "#ABA593",
-          "#D0C9B6",
-          "#F5EEDB"
+          "#0C0B08",
+          "#262521",
+          "#43423E",
+          "#63615D",
+          "#84827E",
+          "#A7A5A0",
+          "#CBC9C4",
+          "#F0EEE9"
         ]
       },
       "ink": {
@@ -94,53 +94,53 @@
       },
       "hairline": {
         "role": "neutral",
-        "displayName": "Sand Hairline",
-        "canonical": "#D9D2BC",
+        "displayName": "Linen Hairline",
+        "canonical": "#E9E4D8",
         "purpose": "1pt separators and the command well border.",
         "appearances": {
-          "light": "#D9D2BC",
-          "dark": "#0E4553",
+          "light": "#E9E4D8",
+          "dark": "#343A3D",
           "lightIncreaseContrast": "#93A1A1",
-          "darkIncreaseContrast": "#586E75"
+          "darkIncreaseContrast": "#6A7478"
         },
         "tonalRamp": [
-          "#100B00",
-          "#2A2513",
-          "#48422F",
-          "#67614E",
-          "#89826E",
-          "#ACA590",
-          "#D0C9B3",
-          "#F6EED8"
+          "#0E0B04",
+          "#28251C",
+          "#464238",
+          "#656157",
+          "#868277",
+          "#A9A599",
+          "#CEC9BD",
+          "#F3EEE2"
         ]
       },
       "horizon": {
         "role": "neutral",
-        "displayName": "Horizon Taupe",
-        "canonical": "#B3AC97",
+        "displayName": "Horizon Stone",
+        "canonical": "#CFC8B6",
         "purpose": "Arc horizon line and dotted full-day path.",
         "appearances": {
-          "light": "#B3AC97",
-          "dark": "#3B5F69",
+          "light": "#CFC8B6",
+          "dark": "#4A5357",
           "lightIncreaseContrast": "#657B83",
-          "darkIncreaseContrast": "#839496"
+          "darkIncreaseContrast": "#8C979B"
         },
         "tonalRamp": [
-          "#100B00",
-          "#2A2513",
-          "#48422F",
-          "#67614E",
-          "#89826E",
-          "#ACA590",
-          "#D0C9B3",
-          "#F6EED8"
+          "#0F0A01",
+          "#2A2516",
+          "#474232",
+          "#676151",
+          "#888271",
+          "#ABA593",
+          "#D0C9B7",
+          "#F5EEDC"
         ]
       },
       "sun": {
         "role": "primary",
         "displayName": "Sun Gold",
         "canonical": "#A07800",
-        "purpose": "Succeeded glyph, passed marks, elapsed arc path, sun body, menu hover wash.",
+        "purpose": "Succeeded glyph and title, passed marks, elapsed arc path, sun body, menu hover wash.",
         "appearances": {
           "light": "#A07800",
           "dark": "#D9A400",
@@ -184,7 +184,7 @@
         "role": "secondary",
         "displayName": "Sky Blue",
         "canonical": "#1F6FA8",
-        "purpose": "Running glyph, running ring, running header wash.",
+        "purpose": "Running glyph and title, running ring on the arc.",
         "appearances": {
           "light": "#1F6FA8",
           "dark": "#3A9AE0",
@@ -232,7 +232,7 @@
         "role": "tertiary",
         "displayName": "Storm Red",
         "canonical": "#DC322F",
-        "purpose": "Failed and interrupted glyphs, failure diamonds, failure header wash.",
+        "purpose": "Failed and interrupted glyphs, failure diamonds on the arc.",
         "appearances": {
           "light": "#DC322F",
           "dark": "#EC4D49",
@@ -328,14 +328,9 @@
     "shadows": [],
     "gradients": [
       {
-        "name": "status-wash",
-        "value": "linear-gradient(to bottom right, status-tint 16%, status-tint 0%)",
-        "purpose": "Behind the output header; tint is sun, sky, or storm by run state."
-      },
-      {
         "name": "daylight",
-        "value": "linear-gradient(to bottom, sunlight 28%, sunlight 4%)",
-        "purpose": "Day arc fill above the horizon, top of arc to horizon."
+        "value": "linear-gradient(to bottom, sunlight 18%, sunlight 2%)",
+        "purpose": "Day arc fill above the horizon, top of arc to horizon. The only gradient in the app."
       }
     ],
     "motion": [
@@ -367,15 +362,15 @@
       "refersTo": "run-row",
       "description": "40pt list row: glyph, name or time, detail line, trailing duration. Failure detail in storm-text.",
       "html": "<div class=\"ds-run-list\"><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">6:00:00 AM</span><span class=\"ds-run-detail ds-fail\">Exit 1</span></span><span class=\"ds-run-dur\">31s</span></button><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">12:00:00 AM</span><span class=\"ds-run-detail\">Exit 0</span></span><span class=\"ds-run-dur\">3s</span></button></div>",
-      "css": ".ds-run-list { background: #EEE8D5; padding: 4px; width: 340px; } .ds-run-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 2px 8px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-run-row:hover { background: rgba(7,54,66,0.06); } .ds-run-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-run-row:active { background: #CB4B16; color: #FDF6E3; } .ds-run-icon { display: inline-flex; width: 18px; height: 18px; } .ds-run-text { display: flex; flex-direction: column; gap: 1px; flex: 1; } .ds-run-detail { font-size: 11px; color: #4F646B; } .ds-run-detail.ds-fail { color: #B0201D; } .ds-run-dur { font-size: 11px; color: #4F646B; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-run-list { background: #FAF7F0; padding: 4px; width: 340px; } .ds-run-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 2px 8px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-run-row:hover { background: rgba(7,54,66,0.06); } .ds-run-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-run-row:active { background: #CB4B16; color: #FFFDF8; } .ds-run-icon { display: inline-flex; width: 18px; height: 18px; } .ds-run-text { display: flex; flex-direction: column; gap: 1px; flex: 1; } .ds-run-detail { font-size: 11px; color: #4F646B; } .ds-run-detail.ds-fail { color: #B0201D; } .ds-run-dur { font-size: 11px; color: #4F646B; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Status Header",
       "kind": "card",
       "refersTo": "status-header",
-      "description": "Output column header with status title, metadata, and a status-tint wash fading from 16%.",
+      "description": "Output column header on plain paper: status glyph, status-tinted title, metadata, command. No wash; status reads through the icon and title only.",
       "html": "<div class=\"ds-status-header\"><span class=\"ds-sh-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><div class=\"ds-sh-text\"><div class=\"ds-sh-title\">Failed</div><div class=\"ds-sh-meta\">Good Gratis Ingest · Oct 27, 2026 at 6:00:00 AM</div><code class=\"ds-sh-cmd\">mise ingest</code></div><div class=\"ds-sh-grid\"><span>Duration</span><span>Result</span><b>31s</b><b class=\"ds-fail\">Exit 1</b></div></div>",
-      "css": ".ds-status-header { display: flex; gap: 12px; align-items: flex-start; padding: 16px 20px; background: linear-gradient(to bottom right, rgba(220,50,47,0.16), rgba(220,50,47,0)), #FDF6E3; border-bottom: 1px solid #D9D2BC; color: #073642; font: 13px -apple-system, system-ui, sans-serif; } .ds-sh-icon svg { width: 30px; height: 30px; } .ds-sh-text { flex: 1; display: flex; flex-direction: column; gap: 2px; } .ds-sh-title { font: 600 17px ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; color: #B0201D; } .ds-sh-meta { color: #4F646B; } .ds-sh-cmd { margin-top: 8px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #4F646B; } .ds-sh-grid { display: grid; grid-template-columns: auto auto; gap: 2px 20px; text-align: right; } .ds-sh-grid span { font-size: 10px; color: #4F646B; } .ds-sh-grid b { font-weight: 400; font-variant-numeric: tabular-nums; } .ds-fail { color: #B0201D; }"
+      "css": ".ds-status-header { display: flex; gap: 12px; align-items: flex-start; padding: 16px 20px; background: #FFFDF8; border-bottom: 1px solid #E9E4D8; color: #073642; font: 13px -apple-system, system-ui, sans-serif; } .ds-sh-icon svg { width: 30px; height: 30px; } .ds-sh-text { flex: 1; display: flex; flex-direction: column; gap: 2px; } .ds-sh-title { font: 600 17px ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; color: #B0201D; } .ds-sh-meta { color: #4F646B; } .ds-sh-cmd { margin-top: 8px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #4F646B; } .ds-sh-grid { display: grid; grid-template-columns: auto auto; gap: 2px 20px; text-align: right; } .ds-sh-grid span { font-size: 10px; color: #4F646B; } .ds-sh-grid b { font-weight: 400; font-variant-numeric: tabular-nums; } .ds-fail { color: #B0201D; }"
     },
     {
       "name": "Command Well",
@@ -383,7 +378,7 @@
       "refersTo": "command-well",
       "description": "Selectable monospaced command on paper with a hairline border, in the job summary.",
       "html": "<div class=\"ds-command-well\" tabindex=\"0\">mise ingest</div>",
-      "css": ".ds-command-well { background: #FDF6E3; border: 1px solid #D9D2BC; border-radius: 8px; padding: 8px 10px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #073642; user-select: text; width: 300px; } .ds-command-well:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
+      "css": ".ds-command-well { background: #FFFDF8; border: 1px solid #E9E4D8; border-radius: 8px; padding: 8px 10px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #073642; user-select: text; width: 300px; } .ds-command-well:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
     },
     {
       "name": "Log View",
@@ -391,7 +386,7 @@
       "refersTo": "log-view",
       "description": "Selectable, searchable monospaced log in ink on paper with sunlight selection.",
       "html": "<pre class=\"ds-log\">[ingest] $ rails runner Extract.call\nFetched 0 listings in 30.0s\nError: Net::ReadTimeout\nexit status 1</pre>",
-      "css": ".ds-log { margin: 0; padding: 12px 14px; background: #FDF6E3; color: #073642; font: 12px/1.4 ui-monospace, 'SF Mono', Menlo, monospace; white-space: pre-wrap; } .ds-log::selection { background: rgba(181,137,0,0.3); }"
+      "css": ".ds-log { margin: 0; padding: 12px 14px; background: #FFFDF8; color: #073642; font: 12px/1.4 ui-monospace, 'SF Mono', Menlo, monospace; white-space: pre-wrap; } .ds-log::selection { background: rgba(181,137,0,0.3); }"
     },
     {
       "name": "Menu Row",
@@ -399,7 +394,7 @@
       "refersTo": "menu-row",
       "description": "Menu bar popover row; sun at 18% with 6pt corners on hover.",
       "html": "<div class=\"ds-menu\"><button class=\"ds-menu-row\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg><span>Sync Photos</span><span class=\"ds-menu-time\">3 hr. ago</span></button><button class=\"ds-menu-row\"><span>View All Runs…</span></button></div>",
-      "css": ".ds-menu { width: 320px; background: #FDF6E3; padding: 5px; } .ds-menu-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 9px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-menu-row:hover { background: rgba(160,120,0,0.18); } .ds-menu-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-menu-time { margin-left: auto; color: #4F646B; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-menu { width: 320px; background: #FFFDF8; padding: 5px; } .ds-menu-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 9px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-menu-row:hover { background: rgba(160,120,0,0.18); } .ds-menu-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-menu-time { margin-left: auto; color: #4F646B; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Settings Sidebar Button",
@@ -414,15 +409,15 @@
       "kind": "custom",
       "refersTo": "day-arc",
       "description": "Signature: the sun's 24-hour path with daylight fill, elapsed path in sun, sun at now, status marks for today's runs, ink ring at next run.",
-      "html": "<div class=\"ds-arc\"><div class=\"ds-arc-summary\">1 passed, 1 failed. Next run at 12:00 PM.</div><svg viewBox=\"0 0 320 84\" width=\"320\" height=\"84\" role=\"img\" aria-label=\"Today: 1 passed, 1 failed. Next run at 12:00 PM.\"><defs><linearGradient id=\"ds-day\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#B58900\" stop-opacity=\"0.28\"/><stop offset=\"1\" stop-color=\"#B58900\" stop-opacity=\"0.04\"/></linearGradient></defs><path d=\"M80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5Z\" fill=\"url(#ds-day)\"/><line x1=\"9\" y1=\"39.5\" x2=\"311\" y2=\"39.5\" stroke=\"#B3AC97\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5 C266 60 281 70 311 70\" fill=\"none\" stroke=\"#B3AC97\" stroke-dasharray=\"1 3\" stroke-linecap=\"round\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C105 24 120 14 150 10\" fill=\"none\" stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"/><circle cx=\"9\" cy=\"70\" r=\"3.5\" fill=\"#A07800\" stroke=\"#EEE8D5\" stroke-width=\"3\" paint-order=\"stroke\"/><path d=\"M80.5 34 L86 39.5 L80.5 45 L75 39.5Z\" fill=\"#DC322F\" stroke=\"#EEE8D5\" stroke-width=\"3\" paint-order=\"stroke\"/><circle cx=\"150\" cy=\"10\" r=\"5\" fill=\"#A07800\"/><circle cx=\"160.5\" cy=\"9\" r=\"4\" fill=\"#EEE8D5\" stroke=\"#073642\" stroke-width=\"1.5\"/><g font-size=\"10\" fill=\"#4F646B\" text-anchor=\"middle\" font-family=\"-apple-system, system-ui\"><text x=\"80.5\" y=\"80\">6 AM</text><text x=\"160.5\" y=\"80\">Noon</text><text x=\"240.5\" y=\"80\">6 PM</text></g></svg></div>",
-      "css": ".ds-arc { background: #EEE8D5; padding: 8px 12px; width: 344px; font-family: -apple-system, system-ui, sans-serif; } .ds-arc-summary { font-size: 10px; color: #4F646B; margin-bottom: 4px; }"
+      "html": "<div class=\"ds-arc\"><div class=\"ds-arc-summary\">1 passed, 1 failed. Next run at 12:00 PM.</div><svg viewBox=\"0 0 320 84\" width=\"320\" height=\"84\" role=\"img\" aria-label=\"Today: 1 passed, 1 failed. Next run at 12:00 PM.\"><defs><linearGradient id=\"ds-day\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#B58900\" stop-opacity=\"0.18\"/><stop offset=\"1\" stop-color=\"#B58900\" stop-opacity=\"0.02\"/></linearGradient></defs><path d=\"M80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5Z\" fill=\"url(#ds-day)\"/><line x1=\"9\" y1=\"39.5\" x2=\"311\" y2=\"39.5\" stroke=\"#CFC8B6\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5 C266 60 281 70 311 70\" fill=\"none\" stroke=\"#CFC8B6\" stroke-dasharray=\"1 3\" stroke-linecap=\"round\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C105 24 120 14 150 10\" fill=\"none\" stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"/><circle cx=\"9\" cy=\"70\" r=\"3.5\" fill=\"#A07800\" stroke=\"#FAF7F0\" stroke-width=\"3\" paint-order=\"stroke\"/><path d=\"M80.5 34 L86 39.5 L80.5 45 L75 39.5Z\" fill=\"#DC322F\" stroke=\"#FAF7F0\" stroke-width=\"3\" paint-order=\"stroke\"/><circle cx=\"150\" cy=\"10\" r=\"5\" fill=\"#A07800\"/><circle cx=\"160.5\" cy=\"9\" r=\"4\" fill=\"#FAF7F0\" stroke=\"#073642\" stroke-width=\"1.5\"/><g font-size=\"10\" fill=\"#4F646B\" text-anchor=\"middle\" font-family=\"-apple-system, system-ui\"><text x=\"80.5\" y=\"80\">6 AM</text><text x=\"160.5\" y=\"80\">Noon</text><text x=\"240.5\" y=\"80\">6 PM</text></g></svg></div>",
+      "css": ".ds-arc { background: #FAF7F0; padding: 8px 12px; width: 344px; font-family: -apple-system, system-ui, sans-serif; } .ds-arc-summary { font-size: 10px; color: #4F646B; margin-bottom: 4px; }"
     }
   ],
   "narrative": {
     "northStar": "A Sunny Day",
-    "overview": "Sundial is a native Mac utility dressed as a day of weather. Healthy runs are sunshine, failures are storms, and the runs column opens on the sun's path across the day. The palette is Solarized: cream plate and paper grounds in light, deep teal base03/base02 in dark, with the sun's yellow carrying success and Solarized red carrying failure.\n\nPersonality lives in color, weather glyphs, and the day arc; structure stays stock macOS. The window is a native three-column `NavigationSplitView` with system toolbars, segmented pickers, grouped forms, and a system-glass sidebar. Density is standard Mac list density. Status is never color-only: every state has its own glyph and a text label.\n\nEvery color token resolves four ways (light, dark, Increase Contrast light, Increase Contrast dark) through `Solar.color`. The frontmatter records the light value; the sidecar carries all four.",
+    "overview": "Sundial is a native Mac utility dressed as a day of weather. Healthy runs are sunshine, failures are storms, and the runs column opens on the sun's path across the day. The palette stays light and calm: near-white grounds with a faint warm tint in light, a soft neutral charcoal in dark. Solarized is the inspiration for that warm tint, the ink, and the accent hues (the sun's yellow carrying success, Solarized red carrying failure), not a source of literal beige or teal grounds.\n\nPersonality lives in color, weather glyphs, and the day arc; structure stays stock macOS. The window is a native three-column `NavigationSplitView` with system toolbars, segmented pickers, grouped forms, and a system-glass sidebar. Density is standard Mac list density. Status is never color-only: every state has its own glyph and a text label.\n\nEvery color token resolves four ways (light, dark, Increase Contrast light, Increase Contrast dark) through `Solar.color`. The frontmatter records the light value; the sidecar carries all four.",
     "keyCharacteristics": [
-      "Solarized grounds: plate for the runs column, paper for output, settings, and the menu bar popover.",
+      "Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.",
       "Weather glyphs carry run state, each in its status tint.",
       "The day arc is the signature, above the runs list and in the menu bar popover.",
       "Orange is the app accent only (selection and system controls).",
@@ -440,6 +435,11 @@
         "section": "colors"
       },
       {
+        "name": "The Quiet Ground Rule",
+        "body": "Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.",
+        "section": "colors"
+      },
+      {
         "name": "The Four Appearances Rule",
         "body": "A new color is a `Solar.color` with light, dark, and both Increase Contrast values, never a single hex.",
         "section": "colors"
@@ -451,7 +451,12 @@
       },
       {
         "name": "The Two Grounds Rule",
-        "body": "Plate holds lists; paper holds content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow.",
+        "body": "Plate holds lists; paper holds the window and content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow, a tinted band, or a wash.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Wash Rule",
+        "body": "Headers and bands sit on their column's ground. Status shows through the glyph and the status-tinted title, never through a tinted background.",
         "section": "elevation"
       }
     ],
@@ -467,7 +472,9 @@
       "Don't use orange (ember) for run state; running is sky, the next run is ink.",
       "Don't use green checks or red crosses for status; the weather glyphs are the status vocabulary.",
       "Don't add shadows or card elevation; use the plate and paper grounds.",
-      "Don't apply the rounded design to body text, rows, or logs."
+      "Don't apply the rounded design to body text, rows, or logs.",
+      "Don't add strong tinted bands or status washes behind headers.",
+      "Don't use literal Solarized beige or teal for grounds; keep them light and calm."
     ]
   }
 }

@@ -62,7 +62,6 @@ struct RunDetailView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .background(LinearGradient(colors: [status.tint.opacity(0.16), status.tint.opacity(0)], startPoint: .topLeading, endPoint: .bottomTrailing))
             Rectangle()
                 .fill(Solar.hairline)
                 .frame(height: 1)

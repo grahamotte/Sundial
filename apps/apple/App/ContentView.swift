@@ -35,6 +35,7 @@ struct ContentView: View {
                 }
             }
         }
+        .containerBackground(Solar.paper, for: .window)
         .sheet(item: $model.editingJob) { job in
             JobEditorView(job: job, isNew: model.isNew(job))
         }

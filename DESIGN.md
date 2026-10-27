@@ -2,12 +2,12 @@
 name: Sundial
 description: A native macOS launchd scheduler that reads as a sunny day, with storms for failures.
 colors:
-  plate: "#EEE8D5"
-  paper: "#FDF6E3"
+  plate: "#FAF7F0"
+  paper: "#FFFDF8"
   ink: "#073642"
   muted: "#4F646B"
-  hairline: "#D9D2BC"
-  horizon: "#B3AC97"
+  hairline: "#E9E4D8"
+  horizon: "#CFC8B6"
   sun: "#A07800"
   sunlight: "#B58900"
   sky: "#1F6FA8"
@@ -93,14 +93,14 @@ components:
 
 **Creative North Star: "A Sunny Day"**
 
-Sundial is a native Mac utility dressed as a day of weather. Healthy runs are sunshine, failures are storms, and the runs column opens on the sun's path across the day. The palette is Solarized: cream plate and paper grounds in light, deep teal base03/base02 in dark, with the sun's yellow carrying success and Solarized red carrying failure.
+Sundial is a native Mac utility dressed as a day of weather. Healthy runs are sunshine, failures are storms, and the runs column opens on the sun's path across the day. The palette stays light and calm: near-white grounds with a faint warm tint in light, a soft neutral charcoal in dark. Solarized is the inspiration for that warm tint, the ink, and the accent hues (the sun's yellow carrying success, Solarized red carrying failure), not a source of literal beige or teal grounds.
 
 Personality lives in color, weather glyphs, and the day arc; structure stays stock macOS. The window is a native three-column `NavigationSplitView` with system toolbars, segmented pickers, grouped forms, and a system-glass sidebar. Density is standard Mac list density. Status is never color-only: every state has its own glyph and a text label.
 
 Every color token resolves four ways (light, dark, Increase Contrast light, Increase Contrast dark) through `Solar.color`. The frontmatter records the light value; the sidecar carries all four.
 
 **Key Characteristics:**
-- Solarized grounds: plate for the runs column, paper for output, settings, and the menu bar popover.
+- Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.
 - Weather glyphs carry run state, each in its status tint.
 - The day arc is the signature, above the runs list and in the menu bar popover.
 - Orange is the app accent only (selection and system controls).
@@ -108,33 +108,35 @@ Every color token resolves four ways (light, dark, Increase Contrast light, Incr
 
 ## Colors
 
-Solarized, warm-cream in light and deep teal in dark, with three state hues: sun, sky, storm.
+Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark, Solarized ink, and three state hues: sun, sky, storm.
 
 ### Primary
 - **Sun Gold** (sun): Succeeded glyph, the passed dots and elapsed path on the day arc, the sun body at the current time, and the menu row hover wash (18%). Status title text for succeeded runs.
-- **Sunlight** (sunlight): Solarized yellow at fixed value in all appearances. Only as a translucent material: the arc's daylight fill (28% to 4% gradient) and log text selection (30%).
+- **Sunlight** (sunlight): Solarized yellow at fixed value in all appearances. Only as a translucent material: the arc's daylight fill (18% to 2% gradient) and log text selection (30%).
 
 ### Secondary
-- **Sky Blue** (sky): Running. The rotating rays glyph, the running ring on the day arc, and the running status header wash.
+- **Sky Blue** (sky): Running. The rotating rays glyph, the running ring on the day arc, and the running status title.
 - **Ember** (ember): The app accent, set in `AccentColor` (light `#CB4B16`, dark `#E0612A`). Reaches the UI only through system selection and control tinting.
 
 ### Tertiary
-- **Storm Red** (storm): Failed and interrupted glyphs, failure diamonds on the arc, the failure header wash.
+- **Storm Red** (storm): Failed and interrupted glyphs and failure diamonds on the arc.
 - **Storm Text** (storm-text): Deeper red for failure text where storm would be too light to read: exit codes in rows, the Failed title, result values, settings errors.
 
 ### Neutral
-- **Plate** (plate): Solarized base2 / base02. The runs column ground and the default day arc ground.
-- **Paper** (paper): Solarized base3 / base03. The output column, Settings, empty detail, the command well, and the menu bar popover.
-- **Ink** (ink): Primary text and log text; the next-run ring on the arc.
+- **Warm White Plate** (plate): Near-white with a faint warm tint; soft charcoal (#23272A) in dark. The runs column ground, the No Job Selected placeholder, and the default day arc ground.
+- **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container background (so the toolbar area shares it), the output column, Settings, empty detail, the command well, and the menu bar popover.
+- **Ink** (ink): Solarized base02 in light, base2 in dark. Primary text and log text; the next-run ring on the arc.
 - **Muted** (muted): Secondary text: labels, timestamps, durations, the arc summary and hour labels.
-- **Hairline** (hairline): 1pt separators and the command well border.
-- **Horizon** (horizon): The arc's horizon line and dotted full-day path.
+- **Linen Hairline** (hairline): 1pt separators and the command well border. Faint by design; Increase Contrast darkens it.
+- **Horizon Stone** (horizon): The arc's horizon line and dotted full-day path.
 - **Dusk** (dusk): Never-run glyph and the moon on the arc.
 
 ### Named Rules
 **The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.
 
 **The Accent Is Not Status Rule.** Orange (ember) is the accent for selection and controls only. It never marks a run state.
+
+**The Quiet Ground Rule.** Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.
 
 **The Four Appearances Rule.** A new color is a `Solar.color` with light, dark, and both Increase Contrast values, never a single hex.
 
@@ -164,10 +166,12 @@ A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 
 
 ## Elevation & Depth
 
-Flat. There are no custom shadows. Depth comes from the two Solarized grounds (plate behind the list, paper for content wells and output), 1pt hairlines, the system-glass sidebar and toolbar, and one tonal device: the status wash, a status-tint gradient from 16% at top-leading to 0 at bottom-trailing behind the output header.
+Flat. There are no custom shadows and no tinted bands. Depth comes from the two grounds (plate behind the list, paper for the window, content wells, and output), 1pt hairlines, and the system-glass sidebar and toolbar. The window's container background is paper, so the toolbar area reads as the same ground as the output column. The only gradient is the day arc's faint daylight fill.
 
 ### Named Rules
-**The Two Grounds Rule.** Plate holds lists; paper holds content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow.
+**The Two Grounds Rule.** Plate holds lists; paper holds the window and content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow, a tinted band, or a wash.
+
+**The No Wash Rule.** Headers and bands sit on their column's ground. Status shows through the glyph and the status-tinted title, never through a tinted background.
 
 ## Shapes
 
@@ -184,7 +188,7 @@ Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (suc
 - **Selection:** Native list selection.
 
 ### Status Header
-The top of the output column: a title-size status icon, the status title in rounded semibold in the status text tint, job and date in muted, a trailing Duration / Result grid, then the command in mono muted with icon-only borderless Copy Output and Show Log in Finder buttons. The background is the status wash.
+The top of the output column: a title-size status icon, the status title in rounded semibold in the status text tint, job and date in muted, a trailing Duration / Result grid, then the command in mono muted with icon-only borderless Copy Output and Show Log in Finder buttons. It sits on paper like the rest of the column, with no wash; status shows through the icon and the status-tinted title only. A 1pt hairline separates it from the log.
 
 ### Command Well
 Paper fill, 1pt hairline border, 8pt corners, 8 by 10pt padding, callout mono, up to 4 lines, selectable.
@@ -199,7 +203,7 @@ Native sidebar with system glass and `.secondary` subtitles. Settings is a full-
 Paper ground, 320pt. Day arc titled "Today", a hairline, "Recent Runs" (headline) with up to 10 rows, a hairline, then View All Runs…, Settings…, Quit Sundial. Rows highlight with sun at 18% and 6pt corners on hover.
 
 ### Day Arc (signature)
-The sun's path across 24 hours as a negative cosine from midnight to midnight, with the horizon at 6 AM and 6 PM. A horizon line and dotted full-day path in horizon; daylight fill in sunlight above the horizon; the elapsed path stroked 2pt in sun up to now; `sun.max.fill` (17pt) at now above the horizon, `moon.fill` (13pt, dusk) below. Today's runs sit on the path as status marks, failures drawn last so they are on top. Hour labels at 6 AM, Noon, 6 PM in caption2 muted. Above the canvas: a muted caption summary ("7 passed, 1 failed, 1 running. Next run at 12:00 PM."), which is also the accessibility value. Updates every minute.
+The sun's path across 24 hours as a negative cosine from midnight to midnight, with the horizon at 6 AM and 6 PM. A horizon line and dotted full-day path in horizon; a faint daylight fill in sunlight above the horizon (18% at the top of the arc to 2% at the horizon); the elapsed path stroked 2pt in sun up to now; `sun.max.fill` (17pt) at now above the horizon, `moon.fill` (13pt, dusk) below. Today's runs sit on the path as status marks, failures drawn last so they are on top. Hour labels at 6 AM, Noon, 6 PM in caption2 muted. Above the canvas: a muted caption summary ("7 passed, 1 failed, 1 running. Next run at 12:00 PM."), which is also the accessibility value. Updates every minute.
 
 ## Do's and Don'ts
 
@@ -216,3 +220,5 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 - **Don't** use green checks or red crosses for status; the weather glyphs are the status vocabulary.
 - **Don't** add shadows or card elevation; use the plate and paper grounds.
 - **Don't** apply the rounded design to body text, rows, or logs.
+- **Don't** add strong tinted bands or status washes behind headers.
+- **Don't** use literal Solarized beige or teal for grounds; keep them light and calm.

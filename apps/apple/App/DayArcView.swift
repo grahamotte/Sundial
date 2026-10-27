@@ -45,7 +45,7 @@ struct DayArcCanvas: View {
             let rect = CGRect(x: 9, y: 9, width: size.width - 18, height: size.height - 18 - labelHeight)
             let nowFraction = arc.fraction(of: now) ?? 1
             context.fill(daylight(in: rect), with: .linearGradient(
-                Gradient(colors: [Solar.sunlight.opacity(0.28), Solar.sunlight.opacity(0.04)]),
+                Gradient(colors: [Solar.sunlight.opacity(0.18), Solar.sunlight.opacity(0.02)]),
                 startPoint: CGPoint(x: rect.midX, y: rect.minY),
                 endPoint: CGPoint(x: rect.midX, y: rect.midY)
             ))
