@@ -18,6 +18,10 @@ struct SundialApp: App {
                 .environment(model)
         }
         .defaultSize(width: 1120, height: 700)
+        .onChange(of: showsMenuBarExtra) {
+            AppDelegate.applyActivationPolicy()
+            NSApp.activate()
+        }
         .commands {
             CommandGroup(replacing: .appSettings) {
                 SettingsCommand(model: model)
@@ -53,6 +57,14 @@ struct SundialApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    static func applyActivationPolicy() {
+        NSApp.setActivationPolicy(Preferences.showsMenuBarExtra ? .accessory : .regular)
+    }
+
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        AppDelegate.applyActivationPolicy()
+    }
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         !Preferences.showsMenuBarExtra
     }
