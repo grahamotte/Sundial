@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.3.0",
+    "build": "0.3.1",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.3.0",
-    "whatsNew": "Sundial has a sunny new look. Weather icons show each run's result, and a sun path shows today's runs, the current time, and the next scheduled run."
+    "version": "0.3.1",
+    "whatsNew": "Run Now and More sit beside the job title, the All and Failed filter sits above the runs, run status moves up into the title bar, and the sidebar keeps its width between launches."
   }
 }
