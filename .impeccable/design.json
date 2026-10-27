@@ -205,16 +205,16 @@
       "ember": {
         "role": "secondary",
         "displayName": "Solarized Ember",
-        "canonical": "#CB4B16",
+        "canonical": "#93681A",
         "purpose": "App accent via AccentColor asset; selection and control tint only.",
         "appearances": {
-          "light": "#CB4B16",
-          "dark": "#E0612A",
+          "light": "#93681A",
+          "dark": "#9C7024",
           "lightIncreaseContrast": "#A33A0F",
           "darkIncreaseContrast": "#F07A45",
           "assetCatalog": {
-            "light": "#CB4B16",
-            "dark": "#E0612A"
+            "light": "#93681A",
+            "dark": "#9C7024"
           }
         },
         "tonalRamp": [
@@ -362,7 +362,7 @@
       "refersTo": "run-row",
       "description": "40pt list row: glyph, name or time, detail line, trailing duration. Failure detail in storm-text.",
       "html": "<div class=\"ds-run-list\"><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">6:00:00 AM</span><span class=\"ds-run-detail ds-fail\">Exit 1</span></span><span class=\"ds-run-dur\">31s</span></button><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">12:00:00 AM</span><span class=\"ds-run-detail\">Exit 0</span></span><span class=\"ds-run-dur\">3s</span></button></div>",
-      "css": ".ds-run-list { background: #FAF7F0; padding: 4px; width: 340px; } .ds-run-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 2px 8px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-run-row:hover { background: rgba(7,54,66,0.06); } .ds-run-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-run-row:active { background: #CB4B16; color: #FFFDF8; } .ds-run-icon { display: inline-flex; width: 18px; height: 18px; } .ds-run-text { display: flex; flex-direction: column; gap: 1px; flex: 1; } .ds-run-detail { font-size: 11px; color: #4F646B; } .ds-run-detail.ds-fail { color: #B0201D; } .ds-run-dur { font-size: 11px; color: #4F646B; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-run-list { background: #FAF7F0; padding: 4px; width: 340px; } .ds-run-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 2px 8px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-run-row:hover { background: rgba(7,54,66,0.06); } .ds-run-row:focus-visible { outline: 2px solid #93681A; outline-offset: -2px; } .ds-run-row:active { background: #93681A; color: #FFFDF8; } .ds-run-icon { display: inline-flex; width: 18px; height: 18px; } .ds-run-text { display: flex; flex-direction: column; gap: 1px; flex: 1; } .ds-run-detail { font-size: 11px; color: #4F646B; } .ds-run-detail.ds-fail { color: #B0201D; } .ds-run-dur { font-size: 11px; color: #4F646B; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Status Header",
@@ -378,7 +378,7 @@
       "refersTo": "command-well",
       "description": "Selectable monospaced command on paper with a hairline border, in the job summary.",
       "html": "<div class=\"ds-command-well\" tabindex=\"0\">mise ingest</div>",
-      "css": ".ds-command-well { background: #FFFDF8; border: 1px solid #E9E4D8; border-radius: 8px; padding: 8px 10px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #073642; user-select: text; width: 300px; } .ds-command-well:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
+      "css": ".ds-command-well { background: #FFFDF8; border: 1px solid #E9E4D8; border-radius: 8px; padding: 8px 10px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #073642; user-select: text; width: 300px; } .ds-command-well:focus-visible { outline: 2px solid #93681A; outline-offset: 1px; }"
     },
     {
       "name": "Log View",
@@ -394,7 +394,7 @@
       "refersTo": "menu-row",
       "description": "Menu bar popover row; sun at 18% with 6pt corners on hover.",
       "html": "<div class=\"ds-menu\"><button class=\"ds-menu-row\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg><span>Sync Photos</span><span class=\"ds-menu-time\">3 hr. ago</span></button><button class=\"ds-menu-row\"><span>View All Runs…</span></button></div>",
-      "css": ".ds-menu { width: 320px; background: #FFFDF8; padding: 5px; } .ds-menu-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 9px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-menu-row:hover { background: rgba(160,120,0,0.18); } .ds-menu-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-menu-time { margin-left: auto; color: #4F646B; font-variant-numeric: tabular-nums; }"
+      "css": ".ds-menu { width: 320px; background: #FFFDF8; padding: 5px; } .ds-menu-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 9px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-menu-row:hover { background: rgba(160,120,0,0.18); } .ds-menu-row:focus-visible { outline: 2px solid #93681A; outline-offset: -2px; } .ds-menu-time { margin-left: auto; color: #4F646B; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Settings Sidebar Button",
@@ -402,7 +402,7 @@
       "refersTo": "settings-sidebar-button",
       "description": "Full-width Settings button pinned to the sidebar bottom; quinary on hover, quaternary when selected.",
       "html": "<button class=\"ds-settings-btn\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"3.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/></svg>Settings</button>",
-      "css": ".ds-settings-btn { display: flex; align-items: center; gap: 8px; width: 220px; padding: 7px 10px; border: 0; border-radius: 8px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-settings-btn:hover { background: rgba(0,0,0,0.05); } .ds-settings-btn:active, .ds-settings-btn[aria-pressed=true] { background: rgba(0,0,0,0.1); } .ds-settings-btn:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
+      "css": ".ds-settings-btn { display: flex; align-items: center; gap: 8px; width: 220px; padding: 7px 10px; border: 0; border-radius: 8px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-settings-btn:hover { background: rgba(0,0,0,0.05); } .ds-settings-btn:active, .ds-settings-btn[aria-pressed=true] { background: rgba(0,0,0,0.1); } .ds-settings-btn:focus-visible { outline: 2px solid #93681A; outline-offset: 1px; }"
     },
     {
       "name": "Day Arc",
@@ -420,7 +420,7 @@
       "Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.",
       "Weather glyphs carry run state, each in its status tint.",
       "The day arc is the signature, above the runs list and in the menu bar popover.",
-      "Orange is the app accent only (selection and system controls).",
+      "Ochre is the app accent only (selection and system controls).",
       "Native controls, navigation, and keyboard behavior throughout."
     ],
     "rules": [
@@ -431,7 +431,7 @@
       },
       {
         "name": "The Accent Is Not Status Rule",
-        "body": "Orange (ember) is the accent for selection and controls only. It never marks a run state.",
+        "body": "The ochre accent (ember) is for selection and controls only. It never marks a run state.",
         "section": "colors"
       },
       {
@@ -469,7 +469,7 @@
       "Do separate surfaces with 1pt hairlines in hairline."
     ],
     "donts": [
-      "Don't use orange (ember) for run state; running is sky, the next run is ink.",
+      "Don't use the ochre accent (ember) for run state; running is sky, the next run is ink.",
       "Don't use green checks or red crosses for status; the weather glyphs are the status vocabulary.",
       "Don't add shadows or card elevation; use the plate and paper grounds.",
       "Don't apply the rounded design to body text, rows, or logs.",

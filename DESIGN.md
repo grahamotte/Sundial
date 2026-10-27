@@ -11,7 +11,7 @@ colors:
   sun: "#A07800"
   sunlight: "#B58900"
   sky: "#1F6FA8"
-  ember: "#CB4B16"
+  ember: "#93681A"
   storm: "#DC322F"
   storm-text: "#B0201D"
   dusk: "#6E7C7C"
@@ -103,7 +103,7 @@ Every color token resolves four ways (light, dark, Increase Contrast light, Incr
 - Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.
 - Weather glyphs carry run state, each in its status tint.
 - The day arc is the signature, above the runs list and in the menu bar popover.
-- Orange is the app accent only (selection and system controls).
+- Ochre is the app accent only (selection and system controls).
 - Native controls, navigation, and keyboard behavior throughout.
 
 ## Colors
@@ -116,7 +116,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ### Secondary
 - **Sky Blue** (sky): Running. The rotating rays glyph, the running ring on the day arc, and the running status title.
-- **Ember** (ember): The app accent, set in `AccentColor` (light `#CB4B16`, dark `#E0612A`). Reaches the UI only through system selection and control tinting.
+- **Ember** (ember): The app accent, a deep ochre set in `AccentColor` (light `#93681A`, dark `#9C7024`) so white selection text stays readable. Reaches the UI only through system selection and control tinting. Bright orange was too loud for selected rows.
 
 ### Tertiary
 - **Storm Red** (storm): Failed and interrupted glyphs and failure diamonds on the arc.
@@ -124,7 +124,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ### Neutral
 - **Warm White Plate** (plate): Near-white with a faint warm tint; soft charcoal (#23272A) in dark. The runs column ground, the No Job Selected placeholder, and the default day arc ground.
-- **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container background (so the toolbar area shares it), the output column, Settings, empty detail, the command well, and the menu bar popover.
+- **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container and window toolbar background (so the toolbar shares it), the output column, Settings, empty detail, the command well, and the menu bar popover.
 - **Ink** (ink): Solarized base02 in light, base2 in dark. Primary text and log text; the next-run ring on the arc.
 - **Muted** (muted): Secondary text: labels, timestamps, durations, the arc summary and hour labels.
 - **Linen Hairline** (hairline): 1pt separators and the command well border. Faint by design; Increase Contrast darkens it.
@@ -134,7 +134,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 ### Named Rules
 **The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.
 
-**The Accent Is Not Status Rule.** Orange (ember) is the accent for selection and controls only. It never marks a run state.
+**The Accent Is Not Status Rule.** The ochre accent (ember) is the accent for selection and controls only. It never marks a run state.
 
 **The Quiet Ground Rule.** Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.
 
@@ -166,7 +166,7 @@ A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 
 
 ## Elevation & Depth
 
-Flat. There are no custom shadows and no tinted bands. Depth comes from the two grounds (plate behind the list, paper for the window, content wells, and output), 1pt hairlines, and the system-glass sidebar and toolbar. The window's container background is paper, so the toolbar area reads as the same ground as the output column. The only gradient is the day arc's faint daylight fill.
+Flat. There are no custom shadows and no tinted bands. Depth comes from the two grounds (plate behind the list, paper for the window, content wells, and output), 1pt hairlines, and the system-glass sidebar and toolbar. The window's container background and the window toolbar background are both paper, so the toolbar reads as the same ground as the output column instead of a white bar. The only gradient is the day arc's faint daylight fill.
 
 ### Named Rules
 **The Two Grounds Rule.** Plate holds lists; paper holds the window and content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow, a tinted band, or a wash.
@@ -216,7 +216,7 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 - **Do** separate surfaces with 1pt hairlines in hairline.
 
 ### Don't:
-- **Don't** use orange (ember) for run state; running is sky, the next run is ink.
+- **Don't** use the ochre accent (ember) for run state; running is sky, the next run is ink.
 - **Don't** use green checks or red crosses for status; the weather glyphs are the status vocabulary.
 - **Don't** add shadows or card elevation; use the plate and paper grounds.
 - **Don't** apply the rounded design to body text, rows, or logs.
