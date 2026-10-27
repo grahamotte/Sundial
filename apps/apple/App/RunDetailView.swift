@@ -6,40 +6,12 @@ struct RunDetailView: View {
     let run: RunRecord
     @State private var log = ""
     @State private var monitor: FileMonitor?
+    @State private var width: CGFloat = 0
 
     var body: some View {
         let status = run.status()
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .center, spacing: 12) {
-                    StatusIcon(status: status)
-                        .font(.title)
-                        .frame(width: 30, height: 30)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(status.title)
-                            .font(.title2.weight(.semibold))
-                            .fontDesign(.rounded)
-                            .foregroundStyle(status.textTint)
-                        Text("\(run.jobName) · \(run.startedAt.formatted(date: .abbreviated, time: .standard))")
-                            .foregroundStyle(Solar.muted)
-                    }
-                    Spacer()
-                    Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 2) {
-                        GridRow {
-                            Text("Duration").foregroundStyle(Solar.muted)
-                            Text("Result").foregroundStyle(Solar.muted)
-                        }
-                        .font(.caption)
-                        GridRow {
-                            TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
-                                Text(run.durationText(status: status, now: context.date))
-                            }
-                            Text(run.outcome ?? status.title)
-                                .foregroundStyle(status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(.primary))
-                        }
-                        .font(.body.monospacedDigit())
-                    }
-                }
                 HStack(alignment: .firstTextBaseline, spacing: 12) {
                     Text(run.command)
                         .font(.system(.callout, design: .monospaced))
@@ -61,7 +33,8 @@ struct RunDetailView: View {
                 .labelStyle(.iconOnly)
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .padding(.top, 4)
+            .padding(.bottom, 12)
             Rectangle()
                 .fill(Solar.hairline)
                 .frame(height: 1)
@@ -74,11 +47,56 @@ struct RunDetailView: View {
         }
         .background(Solar.paper)
         .foregroundStyle(Solar.ink)
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                header(status: status)
+                    .padding(.leading, 22)
+                    .frame(width: max(width - 18, 0))
+            }
+            .sharedBackgroundVisibility(.hidden)
+        }
         .task(id: run) {
             log = model.log(for: run)
             monitor = run.finishedAt == nil
                 ? FileMonitor(url: model.logURL(for: run)) { log = model.log(for: run) }
                 : nil
+        }
+    }
+
+    private func header(status: RunRecord.Status) -> some View {
+        HStack(alignment: .center, spacing: 10) {
+            StatusIcon(status: status)
+                .font(.title2)
+                .frame(width: 24, height: 24)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(status.title)
+                    .font(.headline)
+                    .fontDesign(.rounded)
+                    .foregroundStyle(status.textTint)
+                    .lineLimit(1)
+                Text("\(run.jobName) · \(run.startedAt.formatted(date: .abbreviated, time: .standard))")
+                    .font(.subheadline)
+                    .foregroundStyle(Solar.muted)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            Spacer(minLength: 8)
+            Grid(alignment: .trailing, horizontalSpacing: 16, verticalSpacing: 1) {
+                GridRow {
+                    Text("Duration").foregroundStyle(Solar.muted)
+                    Text("Result").foregroundStyle(Solar.muted)
+                }
+                .font(.caption)
+                GridRow {
+                    TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
+                        Text(run.durationText(status: status, now: context.date))
+                    }
+                    Text(run.outcome ?? status.title)
+                        .foregroundStyle(status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.ink))
+                }
+                .font(.subheadline.monospacedDigit())
+            }
         }
     }
 }

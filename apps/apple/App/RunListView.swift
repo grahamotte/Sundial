@@ -4,10 +4,36 @@ struct RunListView: View {
     @Environment(AppModel.self) private var model
     let jobID: UUID?
     @State private var filter: RunFilter = .all
+    @State private var width: CGFloat = 0
 
     var body: some View {
+        list
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+            .navigationTitle(job?.name ?? "All Runs")
+            .toolbar(removing: .title)
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    header
+                        .frame(width: max(width - (job == nil ? 18 : 99), 0), alignment: .leading)
+                }
+                .sharedBackgroundVisibility(.hidden)
+                if let job {
+                    ToolbarItem(placement: .navigation) {
+                        Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
+                            .help("Run Now")
+                    }
+                    ToolbarItem(placement: .navigation) {
+                        Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
+                            .menuIndicator(.hidden)
+                            .help("More")
+                    }
+                }
+            }
+    }
+
+    private var list: some View {
         @Bindable var model = model
-        List(selection: $model.runSelection) {
+        return List(selection: $model.runSelection) {
             if let job {
                 Section {
                     JobSummaryView(job: job, runs: allRuns)
@@ -22,6 +48,19 @@ struct RunListView: View {
                         .selectionDisabled()
                 }
             }
+            if !allRuns.isEmpty {
+                Section {
+                    Picker("Show", selection: $filter) {
+                        ForEach(RunFilter.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .controlSize(.small)
+                    .fixedSize()
+                    .help("Show all runs or only failures")
+                    .selectionDisabled()
+                }
+            }
             ForEach(RunDay.group(runs)) { day in
                 Section(day.title()) {
                     ForEach(day.runs) { run in
@@ -30,7 +69,7 @@ struct RunListView: View {
                     }
                 }
             }
-            if runs.isEmpty && job != nil {
+            if runs.isEmpty && !allRuns.isEmpty {
                 Text(filter == .failed ? "No failed runs in the last 30 days." : "No runs in the last 30 days.")
                     .foregroundStyle(Solar.muted)
                     .selectionDisabled()
@@ -40,35 +79,22 @@ struct RunListView: View {
         .scrollContentBackground(.hidden)
         .background(Solar.plate)
         .overlay {
-            if runs.isEmpty && job == nil {
-                ContentUnavailableView(
-                    filter == .failed ? "No Failures" : "No Runs Yet",
-                    systemImage: filter == .failed ? "sun.max" : "sun.horizon",
-                    description: Text(filter == .failed ? "Nothing has failed in the last 30 days." : "Runs from the last 30 days appear here.")
-                )
+            if allRuns.isEmpty && job == nil {
+                ContentUnavailableView("No Runs Yet", systemImage: "sun.horizon", description: Text("Runs from the last 30 days appear here."))
             }
         }
-        .navigationTitle(job?.name ?? "All Runs")
-        .navigationSubtitle(subtitle)
-        .toolbar {
-            ToolbarItem {
-                Picker("Show", selection: $filter) {
-                    ForEach(RunFilter.allCases) { Text($0.title).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .fixedSize()
-                .help("Show all runs or only failures")
-            }
-            if let job {
-                ToolbarItem {
-                    Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
-                        .help("Run Now")
-                }
-                ToolbarItem {
-                    Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
-                        .help("More")
-                }
-            }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(job?.name ?? "All Runs")
+                .font(.headline)
+                .foregroundStyle(Solar.ink)
+                .lineLimit(1)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(Solar.muted)
+                .lineLimit(1)
         }
     }
 
