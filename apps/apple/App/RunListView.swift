@@ -22,6 +22,19 @@ struct RunListView: View {
                         .selectionDisabled()
                 }
             }
+            if !allRuns.isEmpty {
+                Section {
+                    Picker("Show", selection: $filter) {
+                        ForEach(RunFilter.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .controlSize(.small)
+                    .fixedSize()
+                    .help("Show all runs or only failures")
+                    .selectionDisabled()
+                }
+            }
             ForEach(RunDay.group(runs)) { day in
                 Section(day.title()) {
                     ForEach(day.runs) { run in
@@ -30,7 +43,7 @@ struct RunListView: View {
                     }
                 }
             }
-            if runs.isEmpty && job != nil {
+            if runs.isEmpty && !allRuns.isEmpty {
                 Text(filter == .failed ? "No failed runs in the last 30 days." : "No runs in the last 30 days.")
                     .foregroundStyle(Solar.muted)
                     .selectionDisabled()
@@ -40,32 +53,22 @@ struct RunListView: View {
         .scrollContentBackground(.hidden)
         .background(Solar.plate)
         .overlay {
-            if runs.isEmpty && job == nil {
-                ContentUnavailableView(
-                    filter == .failed ? "No Failures" : "No Runs Yet",
-                    systemImage: filter == .failed ? "sun.max" : "sun.horizon",
-                    description: Text(filter == .failed ? "Nothing has failed in the last 30 days." : "Runs from the last 30 days appear here.")
-                )
+            if allRuns.isEmpty && job == nil {
+                ContentUnavailableView("No Runs Yet", systemImage: "sun.horizon", description: Text("Runs from the last 30 days appear here."))
             }
         }
         .navigationTitle(job?.name ?? "All Runs")
         .navigationSubtitle(subtitle)
         .toolbar {
-            ToolbarItem {
-                Picker("Show", selection: $filter) {
-                    ForEach(RunFilter.allCases) { Text($0.title).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .fixedSize()
-                .help("Show all runs or only failures")
-            }
             if let job {
+                ToolbarSpacer(.flexible)
                 ToolbarItem {
                     Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
                         .help("Run Now")
                 }
                 ToolbarItem {
                     Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
+                        .menuIndicator(.hidden)
                         .help("More")
                 }
             }
