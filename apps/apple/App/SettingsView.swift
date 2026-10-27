@@ -8,6 +8,22 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
+                HStack(spacing: 14) {
+                    Image(nsImage: NSApp.applicationIconImage)
+                        .resizable()
+                        .frame(width: 56, height: 56)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Sundial")
+                            .font(.title2.weight(.semibold))
+                            .fontDesign(.rounded)
+                        Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
+                            .foregroundStyle(Solar.muted)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            Section {
                 Toggle("Show in menu bar", isOn: $showsMenuBarExtra)
                 Toggle("Open at login", isOn: Binding(get: { loginItem.isEnabled }, set: { loginItem.setEnabled($0) }))
             } footer: {
@@ -19,16 +35,18 @@ struct SettingsView: View {
                     }
                     if let message = loginItem.errorMessage {
                         Text(message)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(Solar.stormText)
                     }
                     Text("Jobs run on schedule whether or not Sundial is open.")
                 }
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Solar.muted)
             }
         }
         .formStyle(.grouped)
+        .scrollContentBackground(.hidden)
         .frame(maxWidth: 560)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Solar.paper)
         .navigationTitle("Settings")
         .onAppear { loginItem.refresh() }
     }

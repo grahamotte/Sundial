@@ -26,13 +26,17 @@ struct ContentView: View {
                         if let run = model.run(model.runSelection) {
                             RunDetailView(run: run)
                         } else {
-                            ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                            ContentUnavailableView("No Run Selected", systemImage: "sun.dust", description: Text("Select a run to see its output."))
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(Solar.paper)
                         }
                     }
                     .toolbar { ToolbarSpacer(.flexible) }
                 }
             }
         }
+        .containerBackground(Solar.paper, for: .window)
+        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .sheet(item: $model.editingJob) { job in
             JobEditorView(job: job, isNew: model.isNew(job))
         }
@@ -90,7 +94,9 @@ struct ContentView: View {
         case .job(let id)? where model.job(id) != nil:
             RunListView(jobID: id)
         default:
-            ContentUnavailableView("No Job Selected", systemImage: "clock", description: Text("Select a job in the sidebar."))
+            ContentUnavailableView("No Job Selected", systemImage: "sun.horizon", description: Text("Select a job in the sidebar."))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Solar.plate)
         }
     }
 }

@@ -11,6 +11,14 @@ struct RunListView: View {
             if let job {
                 Section {
                     JobSummaryView(job: job, runs: allRuns)
+                        .foregroundStyle(Solar.ink)
+                        .selectionDisabled()
+                }
+            } else if !model.runs.isEmpty {
+                Section {
+                    DayArcView(runs: model.runs, schedules: model.jobs.filter(\.isEnabled).map(\.schedule))
+                        .padding(.vertical, 6)
+                        .foregroundStyle(Solar.ink)
                         .selectionDisabled()
                 }
             }
@@ -24,16 +32,18 @@ struct RunListView: View {
             }
             if runs.isEmpty && job != nil {
                 Text(filter == .failed ? "No failed runs in the last 30 days." : "No runs in the last 30 days.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Solar.muted)
                     .selectionDisabled()
             }
         }
         .environment(\.defaultMinListRowHeight, RunRow.height)
+        .scrollContentBackground(.hidden)
+        .background(Solar.plate)
         .overlay {
             if runs.isEmpty && job == nil {
                 ContentUnavailableView(
                     filter == .failed ? "No Failures" : "No Runs Yet",
-                    systemImage: filter == .failed ? "checkmark.circle" : "clock",
+                    systemImage: filter == .failed ? "sun.max" : "sun.horizon",
                     description: Text(filter == .failed ? "Nothing has failed in the last 30 days." : "Runs from the last 30 days appear here.")
                 )
             }
@@ -86,6 +96,7 @@ struct JobSummaryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            DayArcView(runs: runs, schedules: job.isEnabled ? [job.schedule] : [])
             Text(job.command)
                 .font(.system(.callout, design: .monospaced))
                 .lineLimit(4)
@@ -93,26 +104,27 @@ struct JobSummaryView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.6), in: .rect(cornerRadius: 8))
+                .background(Solar.paper, in: .rect(cornerRadius: 8))
+                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Solar.hairline, lineWidth: 1))
             Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 5) {
                 GridRow {
-                    Text("Schedule").foregroundStyle(.secondary)
+                    Text("Schedule").foregroundStyle(Solar.muted)
                     Text(job.schedule.summary())
                 }
                 GridRow {
-                    Text("Next Run").foregroundStyle(.secondary)
+                    Text("Next Run").foregroundStyle(Solar.muted)
                     TimelineView(.everyMinute) { context in
                         Text(nextRun(now: context.date))
                     }
                 }
                 GridRow {
-                    Text("Directory").foregroundStyle(.secondary)
+                    Text("Directory").foregroundStyle(Solar.muted)
                     Text(job.workingDirectory)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
                 GridRow {
-                    Text("Last 30 Days").foregroundStyle(.secondary)
+                    Text("Last 30 Days").foregroundStyle(Solar.muted)
                     Text(history)
                 }
             }
@@ -142,26 +154,29 @@ struct RunRow: View {
 
     let run: RunRecord
     let showsJobName: Bool
+    @Environment(\.backgroundProminence) private var prominence
 
     var body: some View {
         let status = run.status()
+        let isEmphasized = prominence == .increased
         HStack(spacing: 10) {
             StatusIcon(status: status)
             VStack(alignment: .leading, spacing: 1) {
                 Text(showsJobName ? run.jobName : run.startedAt.formatted(date: .omitted, time: .standard))
+                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.primary) : AnyShapeStyle(Solar.ink))
                     .lineLimit(1)
                 Text(detail(status))
                     .font(.subheadline)
-                    .foregroundStyle(status.isFailure ? AnyShapeStyle(.red) : AnyShapeStyle(.secondary))
+                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.muted))
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             if status == .running {
                 TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
-                    duration(run.durationText(status: status, now: context.date))
+                    duration(run.durationText(status: status, now: context.date), isEmphasized: isEmphasized)
                 }
             } else {
-                duration(run.durationText(status: status))
+                duration(run.durationText(status: status), isEmphasized: isEmphasized)
             }
         }
         .padding(.vertical, 2)
@@ -173,10 +188,10 @@ struct RunRow: View {
         return run.startedAt.formatted(date: .omitted, time: .shortened) + " · " + outcome
     }
 
-    private func duration(_ text: String) -> some View {
+    private func duration(_ text: String, isEmphasized: Bool) -> some View {
         Text(text)
             .font(.subheadline)
             .monospacedDigit()
-            .foregroundStyle(.secondary)
+            .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : AnyShapeStyle(Solar.muted))
     }
 }

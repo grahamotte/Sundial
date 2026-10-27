@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.2.5",
+    "build": "0.3.0",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.2.5",
-    "whatsNew": "Sundial now shows its own menu bar, including About, Window, and Help, while its window is open."
+    "version": "0.3.0",
+    "whatsNew": "Sundial has a sunny new look. Weather icons show each run's result, and a sun path shows today's runs, the current time, and the next scheduled run."
   }
 }

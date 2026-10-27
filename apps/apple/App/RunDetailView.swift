@@ -18,14 +18,16 @@ struct RunDetailView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(status.title)
                             .font(.title2.weight(.semibold))
+                            .fontDesign(.rounded)
+                            .foregroundStyle(status.textTint)
                         Text("\(run.jobName) · \(run.startedAt.formatted(date: .abbreviated, time: .standard))")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Solar.muted)
                     }
                     Spacer()
                     Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 2) {
                         GridRow {
-                            Text("Duration").foregroundStyle(.secondary)
-                            Text("Result").foregroundStyle(.secondary)
+                            Text("Duration").foregroundStyle(Solar.muted)
+                            Text("Result").foregroundStyle(Solar.muted)
                         }
                         .font(.caption)
                         GridRow {
@@ -33,7 +35,7 @@ struct RunDetailView: View {
                                 Text(run.durationText(status: status, now: context.date))
                             }
                             Text(run.outcome ?? status.title)
-                                .foregroundStyle(status.isFailure ? .red : .primary)
+                                .foregroundStyle(status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(.primary))
                         }
                         .font(.body.monospacedDigit())
                     }
@@ -41,7 +43,7 @@ struct RunDetailView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 12) {
                     Text(run.command)
                         .font(.system(.callout, design: .monospaced))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Solar.muted)
                         .lineLimit(2)
                         .truncationMode(.tail)
                         .textSelection(.enabled)
@@ -60,7 +62,9 @@ struct RunDetailView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            Divider()
+            Rectangle()
+                .fill(Solar.hairline)
+                .frame(height: 1)
             LogTextView(text: log, documentID: run.id)
                 .overlay {
                     if log.isEmpty && status != .running {
@@ -68,6 +72,8 @@ struct RunDetailView: View {
                     }
                 }
         }
+        .background(Solar.paper)
+        .foregroundStyle(Solar.ink)
         .task(id: run) {
             log = model.log(for: run)
             monitor = run.finishedAt == nil
@@ -92,7 +98,8 @@ struct LogTextView: NSViewRepresentable {
         textView.usesFindBar = true
         textView.isIncrementalSearchingEnabled = true
         textView.font = .monospacedSystemFont(ofSize: NSFont.systemFontSize - 1, weight: .regular)
-        textView.textColor = .labelColor
+        textView.textColor = NSColor(Solar.ink)
+        textView.selectedTextAttributes = [.backgroundColor: NSColor(Solar.sunlight).withAlphaComponent(0.3)]
         textView.drawsBackground = false
         textView.textContainerInset = NSSize(width: 14, height: 12)
         scrollView.drawsBackground = false

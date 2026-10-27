@@ -10,6 +10,14 @@ struct MenuBarView: View {
     var body: some View {
         let recent = RunRecord.recent(model.runs, limit: MenuBarView.runLimit)
         VStack(alignment: .leading, spacing: 0) {
+            DayArcView(runs: model.runs, schedules: model.jobs.filter(\.isEnabled).map(\.schedule), title: "Today", height: 64, ground: Solar.paper)
+                .padding(.horizontal, 14)
+                .padding(.top, 12)
+                .padding(.bottom, 4)
+            Rectangle()
+                .fill(Solar.hairline)
+                .frame(height: 1)
+                .padding(.vertical, 5)
             Text("Recent Runs")
                 .font(.headline)
                 .padding(.horizontal, 14)
@@ -17,7 +25,7 @@ struct MenuBarView: View {
                 .padding(.bottom, 6)
             if recent.isEmpty {
                 Text("No runs yet.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Solar.muted)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
             } else {
@@ -28,7 +36,9 @@ struct MenuBarView: View {
                 }
                 .padding(.horizontal, 5)
             }
-            Divider()
+            Rectangle()
+                .fill(Solar.hairline)
+                .frame(height: 1)
                 .padding(.vertical, 5)
             VStack(spacing: 0) {
                 MenuRow(action: showAllRuns) { Text("View All Runs…") }
@@ -39,6 +49,8 @@ struct MenuBarView: View {
             .padding(.bottom, 5)
         }
         .frame(width: 320)
+        .background(Solar.paper)
+        .foregroundStyle(Solar.ink)
     }
 
     private func show(_ run: RunRecord) {
@@ -74,7 +86,7 @@ struct MenuRunRow: View {
             Spacer(minLength: 8)
             TimelineView(.everyMinute) { context in
                 Text(status == .running ? "Running" : run.startedAt.formatted(.relative(presentation: .named, unitsStyle: .abbreviated)))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Solar.muted)
                     .monospacedDigit()
                     .lineLimit(1)
             }
@@ -94,8 +106,7 @@ struct MenuRow<Label: View>: View {
                 .padding(.horizontal, 9)
                 .padding(.vertical, 4)
                 .contentShape(.rect)
-                .foregroundStyle(isHovered ? AnyShapeStyle(.white) : AnyShapeStyle(.primary))
-                .background(isHovered ? AnyShapeStyle(.selection) : AnyShapeStyle(.clear), in: .rect(cornerRadius: 6))
+                .background(isHovered ? AnyShapeStyle(Solar.sun.opacity(0.18)) : AnyShapeStyle(.clear), in: .rect(cornerRadius: 6))
         }
         .buttonStyle(.plain)
         .onHover { isHovered = $0 }
