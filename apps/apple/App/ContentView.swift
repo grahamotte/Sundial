@@ -1,29 +1,35 @@
+import AppKit
 import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var sidebarWidth: CGFloat?
 
     var body: some View {
         @Bindable var model = model
         Group {
             if model.sidebarSelection == .settings {
-                NavigationSplitView(columnVisibility: .constant(.all)) {
+                NavigationSplitView(columnVisibility: $columnVisibility) {
                     sidebar
                 } detail: {
                     SettingsView()
                 }
             } else {
-                NavigationSplitView(columnVisibility: .constant(.all)) {
+                NavigationSplitView(columnVisibility: $columnVisibility) {
                     sidebar
                 } content: {
                     content
                         .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
                 } detail: {
-                    if let run = model.run(model.runSelection) {
-                        RunDetailView(run: run)
-                    } else {
-                        ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                    Group {
+                        if let run = model.run(model.runSelection) {
+                            RunDetailView(run: run)
+                        } else {
+                            ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                        }
                     }
+                    .toolbar { ToolbarSpacer(.flexible) }
                 }
             }
         }
@@ -47,6 +53,9 @@ struct ContentView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
+        .onChange(of: columnVisibility) {
+            columnVisibility = .all
+        }
         .onChange(of: model.sidebarSelection) {
             let runs = model.visibleRuns(for: model.sidebarSelection)
             if let revealed = model.revealedRunID, runs.contains(where: { $0.id == revealed }) {
@@ -66,6 +75,7 @@ struct ContentView: View {
 
     private var sidebar: some View {
         SidebarView()
+            .background(SidebarWidthKeeper(width: $sidebarWidth))
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 320)
             .toolbar(removing: .sidebarToggle)
     }
@@ -79,6 +89,41 @@ struct ContentView: View {
             RunListView(jobID: id)
         default:
             ContentUnavailableView("No Job Selected", systemImage: "clock", description: Text("Select a job in the sidebar."))
+        }
+    }
+}
+
+struct SidebarWidthKeeper: NSViewRepresentable {
+    @Binding var width: CGFloat?
+
+    func makeNSView(context: Context) -> KeeperView { KeeperView() }
+
+    func updateNSView(_ view: KeeperView, context: Context) {
+        view.width = width
+        view.onResize = { width = $0 }
+    }
+
+    final class KeeperView: NSView {
+        var width: CGFloat?
+        var onResize: ((CGFloat) -> Void)?
+        private var observer: NSObjectProtocol?
+
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            if let observer { NotificationCenter.default.removeObserver(observer) }
+            observer = nil
+            guard window != nil, let splitView = enclosingSplitView() else { return }
+            if let width { splitView.setPosition(width, ofDividerAt: 0) }
+            observer = NotificationCenter.default.addObserver(forName: NSSplitView.didResizeSubviewsNotification, object: splitView, queue: .main) { [weak self] _ in
+                guard let sidebar = splitView.arrangedSubviews.first else { return }
+                MainActor.assumeIsolated { self?.onResize?(sidebar.frame.width) }
+            }
+        }
+
+        private func enclosingSplitView() -> NSSplitView? {
+            var view = superview
+            while let current = view, !(current is NSSplitView) { view = current.superview }
+            return view as? NSSplitView
         }
     }
 }

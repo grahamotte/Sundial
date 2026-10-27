@@ -30,6 +30,7 @@ struct SidebarView: View {
             .padding(.bottom, 10)
         }
         .toolbar {
+            ToolbarSpacer(.flexible)
             ToolbarItem {
                 Button("New Job", systemImage: "plus") { model.newJob() }
                     .help("New Job")
