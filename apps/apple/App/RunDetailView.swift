@@ -38,12 +38,25 @@ struct RunDetailView: View {
                         .font(.body.monospacedDigit())
                     }
                 }
-                Text(run.command)
-                    .font(.system(.callout, design: .monospaced))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-                    .truncationMode(.tail)
-                    .textSelection(.enabled)
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(run.command)
+                        .font(.system(.callout, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Button("Copy Output", systemImage: "doc.on.doc") {
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(log, forType: .string)
+                    }
+                    .help("Copy Output")
+                    .disabled(log.isEmpty)
+                    Button("Show Log in Finder", systemImage: "folder") { model.revealLog(run) }
+                        .help("Show Log in Finder")
+                }
+                .buttonStyle(.borderless)
+                .labelStyle(.iconOnly)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
@@ -54,20 +67,6 @@ struct RunDetailView: View {
                         ContentUnavailableView("No Output", systemImage: "text.alignleft", description: Text("This run didn't print anything."))
                     }
                 }
-        }
-        .toolbar {
-            ToolbarItem {
-                Button("Copy Output", systemImage: "doc.on.doc") {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(log, forType: .string)
-                }
-                .help("Copy Output")
-                .disabled(log.isEmpty)
-            }
-            ToolbarItem {
-                Button("Show Log in Finder", systemImage: "folder") { model.revealLog(run) }
-                    .help("Show Log in Finder")
-            }
         }
         .task(id: run) {
             log = model.log(for: run)

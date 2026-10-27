@@ -2,18 +2,19 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
         @Bindable var model = model
         Group {
             if model.sidebarSelection == .settings {
-                NavigationSplitView(columnVisibility: .constant(.all)) {
+                NavigationSplitView(columnVisibility: $columnVisibility) {
                     sidebar
                 } detail: {
                     SettingsView()
                 }
             } else {
-                NavigationSplitView(columnVisibility: .constant(.all)) {
+                NavigationSplitView(columnVisibility: $columnVisibility) {
                     sidebar
                 } content: {
                     content
@@ -27,6 +28,7 @@ struct ContentView: View {
                 }
             }
         }
+        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .sheet(item: $model.editingJob) { job in
             JobEditorView(job: job, isNew: model.isNew(job))
         }
@@ -46,6 +48,9 @@ struct ContentView: View {
             Button("OK") {}
         } message: {
             Text(model.errorMessage ?? "")
+        }
+        .onChange(of: columnVisibility) {
+            columnVisibility = .all
         }
         .onChange(of: model.sidebarSelection) {
             let runs = model.visibleRuns(for: model.sidebarSelection)

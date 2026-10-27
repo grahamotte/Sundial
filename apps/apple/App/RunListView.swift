@@ -41,6 +41,7 @@ struct RunListView: View {
         .navigationTitle(job?.name ?? "All Runs")
         .navigationSubtitle(subtitle)
         .toolbar {
+            ToolbarSpacer(.flexible)
             ToolbarItem {
                 Picker("Show", selection: $filter) {
                     ForEach(RunFilter.allCases) { Text($0.title).tag($0) }
