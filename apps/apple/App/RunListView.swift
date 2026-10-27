@@ -5,10 +5,12 @@ struct RunListView: View {
     let jobID: UUID?
     @State private var filter: RunFilter = .all
     @State private var width: CGFloat = 0
+    @State private var topInset: CGFloat = 0
 
     var body: some View {
         list
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+            .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { topInset = $0 }
             .navigationTitle(job?.name ?? "All Runs")
             .toolbar(removing: .title)
             .toolbar {
@@ -78,6 +80,22 @@ struct RunListView: View {
         .environment(\.defaultMinListRowHeight, RunRow.height)
         .scrollContentBackground(.hidden)
         .background(Solar.plate)
+        .overlay(alignment: .top) {
+            if topInset > 12 {
+                LinearGradient(
+                    stops: [
+                        .init(color: Solar.plate, location: 0),
+                        .init(color: Solar.plate, location: (topInset - 12) / topInset),
+                        .init(color: Solar.plate.opacity(0), location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom,
+                )
+                .frame(height: topInset)
+                .offset(y: -topInset)
+                .allowsHitTesting(false)
+            }
+        }
         .overlay {
             if allRuns.isEmpty && job == nil {
                 ContentUnavailableView("No Runs Yet", systemImage: "sun.horizon", description: Text("Runs from the last 30 days appear here."))
