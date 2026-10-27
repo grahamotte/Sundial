@@ -65,8 +65,8 @@ components:
     padding: "8px 10px"
   status-header:
     textColor: "{colors.ink}"
-    typography: "{typography.title}"
-    padding: "16px 20px"
+    typography: "{typography.headline}"
+    padding: "0 20px"
   log-view:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -147,7 +147,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 **Character:** System type at macOS text-style sizes. The rounded design is reserved for a few headings so they feel sunny without leaving the platform. Commands and logs are monospaced.
 
 ### Hierarchy
-- **Title** (600, title2 17pt, rounded): The run status in the output header and "Sundial" in Settings.
+- **Title** (600, title2 17pt, rounded): "Sundial" in Settings. The run status in the output header uses rounded headline so it fits the toolbar.
 - **Headline** (bold, 13pt, rounded): The day arc title ("Today") in the menu bar popover.
 - **Body** (400, 13pt): Row names, values, the job summary grid. Use `monospacedDigit` wherever durations or times change.
 - **Callout** (400, 12pt): The job summary grid and, in mono, the command.
@@ -160,7 +160,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ## Layout
 
-A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings replaces the detail in a two-column split. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column has a status header (20pt horizontal, 16pt vertical padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 84pt tall in the window and 64pt in the popover.
+A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings replaces the detail in a two-column split. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column puts its status line (glyph, status, job and start time, duration, result) in a toolbar item aligned with the 20pt content inset, then the command row (4pt top, 12pt bottom padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 84pt tall in the window and 64pt in the popover.
 
 ## Elevation & Depth
 
