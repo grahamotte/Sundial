@@ -14,9 +14,20 @@ struct RunListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigation) {
                     header
-                        .frame(width: max(width - 18, 0))
+                        .frame(width: max(width - (job == nil ? 18 : 99), 0), alignment: .leading)
                 }
                 .sharedBackgroundVisibility(.hidden)
+                if let job {
+                    ToolbarItem(placement: .navigation) {
+                        Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
+                            .help("Run Now")
+                    }
+                    ToolbarItem(placement: .navigation) {
+                        Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
+                            .menuIndicator(.hidden)
+                            .help("More")
+                    }
+                }
             }
     }
 
@@ -75,30 +86,16 @@ struct RunListView: View {
     }
 
     private var header: some View {
-        HStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(job?.name ?? "All Runs")
-                    .font(.headline)
-                    .foregroundStyle(Solar.ink)
-                    .lineLimit(1)
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(Solar.muted)
-                    .lineLimit(1)
-            }
-            Spacer(minLength: 8)
-            if let job {
-                Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
-                    .help("Run Now")
-                Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
-                    .menuIndicator(.hidden)
-                    .help("More")
-            }
+        VStack(alignment: .leading, spacing: 1) {
+            Text(job?.name ?? "All Runs")
+                .font(.headline)
+                .foregroundStyle(Solar.ink)
+                .lineLimit(1)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(Solar.muted)
+                .lineLimit(1)
         }
-        .buttonStyle(.glass)
-        .buttonBorderShape(.circle)
-        .labelStyle(.iconOnly)
-        .controlSize(.large)
     }
 
     private var job: Job? { jobID.flatMap(model.job) }
