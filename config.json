@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.2.3",
+    "build": "0.2.4",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.2.3",
-    "whatsNew": "Sundial no longer shows a Dock icon while its menu bar item is shown."
+    "version": "0.2.4",
+    "whatsNew": "The run controls sit in a single header bar, the sidebar can no longer be dragged closed and keeps its width when switching to Settings, and Copy Output and Show Log in Finder are inline with each run."
   }
 }
