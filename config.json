@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.2.2",
+    "build": "0.2.3",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.2.2",
-    "whatsNew": "Opening Settings no longer hides the sidebar, and the sidebar always stays visible."
+    "version": "0.2.3",
+    "whatsNew": "Sundial no longer shows a Dock icon while its menu bar item is shown."
   }
 }
