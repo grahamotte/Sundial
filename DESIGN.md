@@ -195,7 +195,7 @@ Paper fill, 1pt hairline border, 8pt corners, 8 by 10pt padding, callout mono, u
 A native `NSTextView`: selectable, find bar enabled, not editable, 12pt monospaced in ink on paper, selection in sunlight at 30%. Follows the end of the log while a run is live.
 
 ### Navigation
-Native sidebar with system glass and `.secondary` subtitles. Settings is a full-width button pinned to the sidebar bottom (8pt corners, quaternary fill selected, quinary on hover). Toolbars use native buttons and a segmented All / Failed picker.
+Native sidebar with system glass and `.secondary` subtitles. Settings is a full-width button pinned to the sidebar bottom (8pt corners, quaternary fill selected, quinary on hover). The runs column draws its own header in the toolbar band: the title and subtitle on the left, glass circle Run Now and More buttons on the right. A small segmented All / Failed picker sits in the runs list above the day groups.
 
 ### Menu Bar Popover
 Paper ground, 320pt. Day arc titled "Today", a hairline, "Recent Runs" (headline) with up to 10 rows, a hairline, then View All Runs…, Settings…, Quit Sundial. Rows highlight with sun at 18% and 6pt corners on hover.

@@ -6,8 +6,19 @@ struct RunListView: View {
     @State private var filter: RunFilter = .all
 
     var body: some View {
+        VStack(spacing: 0) {
+            header
+            list
+        }
+        .background(Solar.plate)
+        .ignoresSafeArea(.container, edges: .top)
+        .navigationTitle(job?.name ?? "All Runs")
+        .toolbar(removing: .title)
+    }
+
+    private var list: some View {
         @Bindable var model = model
-        List(selection: $model.runSelection) {
+        return List(selection: $model.runSelection) {
             if let job {
                 Section {
                     JobSummaryView(job: job, runs: allRuns)
@@ -57,22 +68,35 @@ struct RunListView: View {
                 ContentUnavailableView("No Runs Yet", systemImage: "sun.horizon", description: Text("Runs from the last 30 days appear here."))
             }
         }
-        .navigationTitle(job?.name ?? "All Runs")
-        .navigationSubtitle(subtitle)
-        .toolbar {
+    }
+
+    private var header: some View {
+        HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(job?.name ?? "All Runs")
+                    .font(.headline)
+                    .foregroundStyle(Solar.ink)
+                    .lineLimit(1)
+                Text(subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(Solar.muted)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 8)
             if let job {
-                ToolbarSpacer(.flexible)
-                ToolbarItem {
-                    Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
-                        .help("Run Now")
-                }
-                ToolbarItem {
-                    Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
-                        .menuIndicator(.hidden)
-                        .help("More")
-                }
+                Button("Run Now", systemImage: "play.fill") { model.runNow(job) }
+                    .help("Run Now")
+                Menu("More", systemImage: "ellipsis") { JobMenuItems(job: job) }
+                    .menuIndicator(.hidden)
+                    .help("More")
             }
         }
+        .buttonStyle(.glass)
+        .buttonBorderShape(.circle)
+        .labelStyle(.iconOnly)
+        .controlSize(.large)
+        .padding(.horizontal, 12)
+        .frame(height: 52)
     }
 
     private var job: Job? { jobID.flatMap(model.job) }

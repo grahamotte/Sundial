@@ -4,7 +4,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(AppModel.self) private var model
     @State private var columnVisibility = NavigationSplitViewVisibility.all
-    @State private var sidebarWidth: CGFloat?
+    @AppStorage("sidebarWidth") private var sidebarWidth: Double?
 
     var body: some View {
         @Bindable var model = model
@@ -31,7 +31,6 @@ struct ContentView: View {
                                 .background(Solar.paper)
                         }
                     }
-                    .toolbar { ToolbarSpacer(.flexible) }
                 }
             }
         }
@@ -102,7 +101,7 @@ struct ContentView: View {
 }
 
 struct SidebarWidthKeeper: NSViewRepresentable {
-    @Binding var width: CGFloat?
+    @Binding var width: Double?
 
     func makeNSView(context: Context) -> KeeperView { KeeperView() }
 
@@ -112,8 +111,8 @@ struct SidebarWidthKeeper: NSViewRepresentable {
     }
 
     final class KeeperView: NSView {
-        var width: CGFloat?
-        var onResize: ((CGFloat) -> Void)?
+        var width: Double?
+        var onResize: ((Double) -> Void)?
         private var observer: NSObjectProtocol?
 
         override func viewDidMoveToWindow() {
@@ -121,10 +120,10 @@ struct SidebarWidthKeeper: NSViewRepresentable {
             if let observer { NotificationCenter.default.removeObserver(observer) }
             observer = nil
             guard window != nil, let splitView = enclosingSplitView() else { return }
-            if let width { splitView.setPosition(width, ofDividerAt: 0) }
+            if let width { splitView.setPosition(CGFloat(width), ofDividerAt: 0) }
             observer = NotificationCenter.default.addObserver(forName: NSSplitView.didResizeSubviewsNotification, object: splitView, queue: .main) { [weak self] _ in
                 guard let sidebar = splitView.arrangedSubviews.first else { return }
-                MainActor.assumeIsolated { self?.onResize?(sidebar.frame.width) }
+                MainActor.assumeIsolated { self?.onResize?(Double(sidebar.frame.width)) }
             }
         }
 
