@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T00:00:00Z",
+  "title": "Design System: Sundial",
+  "extensions": {
+    "colorMeta": {
+      "plate": {
+        "role": "neutral",
+        "displayName": "Solarized Plate",
+        "canonical": "#EEE8D5",
+        "purpose": "Runs column and default day arc ground (base2 / base02).",
+        "appearances": {
+          "light": "#EEE8D5",
+          "dark": "#073642",
+          "lightIncreaseContrast": "#E6DFC8",
+          "darkIncreaseContrast": "#002B36"
+        },
+        "tonalRamp": [
+          "#0F0B01",
+          "#292516",
+          "#474232",
+          "#666151",
+          "#888271",
+          "#ABA593",
+          "#CFC9B7",
+          "#F4EEDB"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Solarized Paper",
+        "canonical": "#FDF6E3",
+        "purpose": "Output, Settings, command well, menu bar popover (base3 / base03).",
+        "appearances": {
+          "light": "#FDF6E3",
+          "dark": "#002B36",
+          "lightIncreaseContrast": "#FFFFFF",
+          "darkIncreaseContrast": "#001F27"
+        },
+        "tonalRamp": [
+          "#0F0B01",
+          "#2A2516",
+          "#474232",
+          "#676151",
+          "#888271",
+          "#ABA593",
+          "#D0C9B6",
+          "#F5EEDB"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Deep Teal Ink",
+        "canonical": "#073642",
+        "purpose": "Primary and log text; next-run ring on the arc.",
+        "appearances": {
+          "light": "#073642",
+          "dark": "#EEE8D5",
+          "lightIncreaseContrast": "#002B36",
+          "darkIncreaseContrast": "#FDF6E3"
+        },
+        "tonalRamp": [
+          "#000E15",
+          "#022A35",
+          "#1D4855",
+          "#3E6876",
+          "#5F8A98",
+          "#81ADBC",
+          "#A4D2E1",
+          "#D7F4FE"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Slate Muted",
+        "canonical": "#4F646B",
+        "purpose": "Secondary text, timestamps, durations, arc labels.",
+        "appearances": {
+          "light": "#4F646B",
+          "dark": "#93A1A1",
+          "lightIncreaseContrast": "#3D4F55",
+          "darkIncreaseContrast": "#B8C4C4"
+        },
+        "tonalRamp": [
+          "#000E13",
+          "#15282E",
+          "#32464C",
+          "#50656C",
+          "#71878E",
+          "#93A9B1",
+          "#B6CED6",
+          "#DBF3FC"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Sand Hairline",
+        "canonical": "#D9D2BC",
+        "purpose": "1pt separators and the command well border.",
+        "appearances": {
+          "light": "#D9D2BC",
+          "dark": "#0E4553",
+          "lightIncreaseContrast": "#93A1A1",
+          "darkIncreaseContrast": "#586E75"
+        },
+        "tonalRamp": [
+          "#100B00",
+          "#2A2513",
+          "#48422F",
+          "#67614E",
+          "#89826E",
+          "#ACA590",
+          "#D0C9B3",
+          "#F6EED8"
+        ]
+      },
+      "horizon": {
+        "role": "neutral",
+        "displayName": "Horizon Taupe",
+        "canonical": "#B3AC97",
+        "purpose": "Arc horizon line and dotted full-day path.",
+        "appearances": {
+          "light": "#B3AC97",
+          "dark": "#3B5F69",
+          "lightIncreaseContrast": "#657B83",
+          "darkIncreaseContrast": "#839496"
+        },
+        "tonalRamp": [
+          "#100B00",
+          "#2A2513",
+          "#48422F",
+          "#67614E",
+          "#89826E",
+          "#ACA590",
+          "#D0C9B3",
+          "#F6EED8"
+        ]
+      },
+      "sun": {
+        "role": "primary",
+        "displayName": "Sun Gold",
+        "canonical": "#A07800",
+        "purpose": "Succeeded glyph, passed marks, elapsed arc path, sun body, menu hover wash.",
+        "appearances": {
+          "light": "#A07800",
+          "dark": "#D9A400",
+          "lightIncreaseContrast": "#7A5C00",
+          "darkIncreaseContrast": "#F0C33C"
+        },
+        "tonalRamp": [
+          "#130900",
+          "#322200",
+          "#533E09",
+          "#7B5C06",
+          "#A37B0A",
+          "#C89E3F",
+          "#EDC365",
+          "#FFEDC7"
+        ]
+      },
+      "sunlight": {
+        "role": "primary",
+        "displayName": "Solarized Yellow Sunlight",
+        "canonical": "#B58900",
+        "purpose": "Fixed in all appearances; translucent daylight fill and log selection only.",
+        "appearances": {
+          "light": "#B58900",
+          "dark": "#B58900",
+          "lightIncreaseContrast": "#B58900",
+          "darkIncreaseContrast": "#B58900"
+        },
+        "tonalRamp": [
+          "#130900",
+          "#322200",
+          "#553E00",
+          "#7A5C09",
+          "#A37C0F",
+          "#CB9E2C",
+          "#F0C258",
+          "#FEEDC8"
+        ]
+      },
+      "sky": {
+        "role": "secondary",
+        "displayName": "Sky Blue",
+        "canonical": "#1F6FA8",
+        "purpose": "Running glyph, running ring, running header wash.",
+        "appearances": {
+          "light": "#1F6FA8",
+          "dark": "#3A9AE0",
+          "lightIncreaseContrast": "#15577F",
+          "darkIncreaseContrast": "#6CB6EC"
+        },
+        "tonalRamp": [
+          "#000C1E",
+          "#002744",
+          "#014570",
+          "#12669E",
+          "#3D88C3",
+          "#61ACE9",
+          "#9AD0FD",
+          "#E2F1FE"
+        ]
+      },
+      "ember": {
+        "role": "secondary",
+        "displayName": "Solarized Ember",
+        "canonical": "#CB4B16",
+        "purpose": "App accent via AccentColor asset; selection and control tint only.",
+        "appearances": {
+          "light": "#CB4B16",
+          "dark": "#E0612A",
+          "lightIncreaseContrast": "#A33A0F",
+          "darkIncreaseContrast": "#F07A45",
+          "assetCatalog": {
+            "light": "#CB4B16",
+            "dark": "#E0612A"
+          }
+        },
+        "tonalRamp": [
+          "#220000",
+          "#441200",
+          "#712607",
+          "#A63601",
+          "#D45422",
+          "#FD784A",
+          "#FEB59C",
+          "#FFE9E2"
+        ]
+      },
+      "storm": {
+        "role": "tertiary",
+        "displayName": "Storm Red",
+        "canonical": "#DC322F",
+        "purpose": "Failed and interrupted glyphs, failure diamonds, failure header wash.",
+        "appearances": {
+          "light": "#DC322F",
+          "dark": "#EC4D49",
+          "lightIncreaseContrast": "#B0201D",
+          "darkIncreaseContrast": "#FF6F6B"
+        },
+        "tonalRamp": [
+          "#220000",
+          "#4E0002",
+          "#7F050B",
+          "#B31A1C",
+          "#E43A36",
+          "#FC756A",
+          "#FEB3AA",
+          "#FDE9E6"
+        ]
+      },
+      "storm-text": {
+        "role": "tertiary",
+        "displayName": "Storm Text Red",
+        "canonical": "#B0201D",
+        "purpose": "Failure text: exit codes, Failed title, result values, errors.",
+        "appearances": {
+          "light": "#B0201D",
+          "dark": "#FF6F6B",
+          "lightIncreaseContrast": "#8E1A17",
+          "darkIncreaseContrast": "#FF8E8A"
+        },
+        "tonalRamp": [
+          "#210000",
+          "#4C0103",
+          "#7E0C0D",
+          "#B1211E",
+          "#D94B41",
+          "#FA786A",
+          "#FCB4AA",
+          "#FFE9E6"
+        ]
+      },
+      "dusk": {
+        "role": "neutral",
+        "displayName": "Dusk Grey",
+        "canonical": "#6E7C7C",
+        "purpose": "Never-run glyph and the moon on the arc.",
+        "appearances": {
+          "light": "#6E7C7C",
+          "dark": "#839496",
+          "lightIncreaseContrast": "#56635F",
+          "darkIncreaseContrast": "#A3B1B1"
+        },
+        "tonalRamp": [
+          "#040D0D",
+          "#1C2828",
+          "#384545",
+          "#576464",
+          "#778686",
+          "#9AA8A8",
+          "#BDCDCD",
+          "#E2F2F2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "title": {
+        "displayName": "Title",
+        "purpose": "Run status in the output header and the app name in Settings; macOS title2, rounded semibold."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Day arc title in the menu bar popover; rounded."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Row names, values, menu rows."
+      },
+      "callout": {
+        "displayName": "Callout",
+        "purpose": "Job summary grid."
+      },
+      "subheadline": {
+        "displayName": "Subheadline",
+        "purpose": "Row detail lines and durations."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Arc summary, arc hour labels (caption2), header field labels."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Commands and log output."
+      }
+    },
+    "shadows": [],
+    "gradients": [
+      {
+        "name": "status-wash",
+        "value": "linear-gradient(to bottom right, status-tint 16%, status-tint 0%)",
+        "purpose": "Behind the output header; tint is sun, sky, or storm by run state."
+      },
+      {
+        "name": "daylight",
+        "value": "linear-gradient(to bottom, sunlight 28%, sunlight 4%)",
+        "purpose": "Day arc fill above the horizon, top of arc to horizon."
+      }
+    ],
+    "motion": [
+      {
+        "name": "running-rays",
+        "value": "SF Symbols .rotate, repeat continuous",
+        "purpose": "Running status glyph; disabled under Reduce Motion."
+      },
+      {
+        "name": "arc-tick",
+        "value": "TimelineView .everyMinute",
+        "purpose": "Day arc and relative times refresh each minute; durations of live runs each second."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Status Icon",
+      "kind": "custom",
+      "refersTo": "status-icon",
+      "description": "Weather glyph per run state: sun passed, storm cloud failed, cloud interrupted, rotating rays running, horizon never run.",
+      "html": "<div class=\"ds-status-icons\"><span class=\"ds-status-icon\" role=\"img\" aria-label=\"Succeeded\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg></span><span class=\"ds-status-icon\" role=\"img\" aria-label=\"Failed\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-status-icon\" role=\"img\" aria-label=\"Running\"><svg class=\"ds-rays\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><g stroke=\"#1F6FA8\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8\"/></g></svg></span></div>",
+      "css": ".ds-status-icons { display: flex; gap: 12px; } .ds-status-icon { display: inline-flex; width: 18px; height: 18px; } .ds-rays { animation: ds-spin 2s linear infinite; } @keyframes ds-spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .ds-rays { animation: none; } }"
+    },
+    {
+      "name": "Run Row",
+      "kind": "card",
+      "refersTo": "run-row",
+      "description": "40pt list row: glyph, name or time, detail line, trailing duration. Failure detail in storm-text.",
+      "html": "<div class=\"ds-run-list\"><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">6:00:00 AM</span><span class=\"ds-run-detail ds-fail\">Exit 1</span></span><span class=\"ds-run-dur\">31s</span></button><button class=\"ds-run-row\"><span class=\"ds-run-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg></span><span class=\"ds-run-text\"><span class=\"ds-run-title\">12:00:00 AM</span><span class=\"ds-run-detail\">Exit 0</span></span><span class=\"ds-run-dur\">3s</span></button></div>",
+      "css": ".ds-run-list { background: #EEE8D5; padding: 4px; width: 340px; } .ds-run-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 40px; padding: 2px 8px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-run-row:hover { background: rgba(7,54,66,0.06); } .ds-run-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-run-row:active { background: #CB4B16; color: #FDF6E3; } .ds-run-icon { display: inline-flex; width: 18px; height: 18px; } .ds-run-text { display: flex; flex-direction: column; gap: 1px; flex: 1; } .ds-run-detail { font-size: 11px; color: #4F646B; } .ds-run-detail.ds-fail { color: #B0201D; } .ds-run-dur { font-size: 11px; color: #4F646B; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Status Header",
+      "kind": "card",
+      "refersTo": "status-header",
+      "description": "Output column header with status title, metadata, and a status-tint wash fading from 16%.",
+      "html": "<div class=\"ds-status-header\"><span class=\"ds-sh-icon\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 15a4 4 0 0 1-.4-8A5.5 5.5 0 0 1 17 6.5 4.25 4.25 0 0 1 17.5 15z\" fill=\"#DC322F\"/><path d=\"M12 15l-2 3.5h2.5L11 22\" stroke=\"#DC322F\" stroke-width=\"1.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><div class=\"ds-sh-text\"><div class=\"ds-sh-title\">Failed</div><div class=\"ds-sh-meta\">Good Gratis Ingest · Oct 27, 2026 at 6:00:00 AM</div><code class=\"ds-sh-cmd\">mise ingest</code></div><div class=\"ds-sh-grid\"><span>Duration</span><span>Result</span><b>31s</b><b class=\"ds-fail\">Exit 1</b></div></div>",
+      "css": ".ds-status-header { display: flex; gap: 12px; align-items: flex-start; padding: 16px 20px; background: linear-gradient(to bottom right, rgba(220,50,47,0.16), rgba(220,50,47,0)), #FDF6E3; border-bottom: 1px solid #D9D2BC; color: #073642; font: 13px -apple-system, system-ui, sans-serif; } .ds-sh-icon svg { width: 30px; height: 30px; } .ds-sh-text { flex: 1; display: flex; flex-direction: column; gap: 2px; } .ds-sh-title { font: 600 17px ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; color: #B0201D; } .ds-sh-meta { color: #4F646B; } .ds-sh-cmd { margin-top: 8px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #4F646B; } .ds-sh-grid { display: grid; grid-template-columns: auto auto; gap: 2px 20px; text-align: right; } .ds-sh-grid span { font-size: 10px; color: #4F646B; } .ds-sh-grid b { font-weight: 400; font-variant-numeric: tabular-nums; } .ds-fail { color: #B0201D; }"
+    },
+    {
+      "name": "Command Well",
+      "kind": "input",
+      "refersTo": "command-well",
+      "description": "Selectable monospaced command on paper with a hairline border, in the job summary.",
+      "html": "<div class=\"ds-command-well\" tabindex=\"0\">mise ingest</div>",
+      "css": ".ds-command-well { background: #FDF6E3; border: 1px solid #D9D2BC; border-radius: 8px; padding: 8px 10px; font: 12px ui-monospace, 'SF Mono', Menlo, monospace; color: #073642; user-select: text; width: 300px; } .ds-command-well:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
+    },
+    {
+      "name": "Log View",
+      "kind": "custom",
+      "refersTo": "log-view",
+      "description": "Selectable, searchable monospaced log in ink on paper with sunlight selection.",
+      "html": "<pre class=\"ds-log\">[ingest] $ rails runner Extract.call\nFetched 0 listings in 30.0s\nError: Net::ReadTimeout\nexit status 1</pre>",
+      "css": ".ds-log { margin: 0; padding: 12px 14px; background: #FDF6E3; color: #073642; font: 12px/1.4 ui-monospace, 'SF Mono', Menlo, monospace; white-space: pre-wrap; } .ds-log::selection { background: rgba(181,137,0,0.3); }"
+    },
+    {
+      "name": "Menu Row",
+      "kind": "nav",
+      "refersTo": "menu-row",
+      "description": "Menu bar popover row; sun at 18% with 6pt corners on hover.",
+      "html": "<div class=\"ds-menu\"><button class=\"ds-menu-row\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#A07800\"/><g stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></g></svg><span>Sync Photos</span><span class=\"ds-menu-time\">3 hr. ago</span></button><button class=\"ds-menu-row\"><span>View All Runs…</span></button></div>",
+      "css": ".ds-menu { width: 320px; background: #FDF6E3; padding: 5px; } .ds-menu-row { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 9px; border: 0; border-radius: 6px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-menu-row:hover { background: rgba(160,120,0,0.18); } .ds-menu-row:focus-visible { outline: 2px solid #CB4B16; outline-offset: -2px; } .ds-menu-time { margin-left: auto; color: #4F646B; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Settings Sidebar Button",
+      "kind": "button",
+      "refersTo": "settings-sidebar-button",
+      "description": "Full-width Settings button pinned to the sidebar bottom; quinary on hover, quaternary when selected.",
+      "html": "<button class=\"ds-settings-btn\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"3.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/></svg>Settings</button>",
+      "css": ".ds-settings-btn { display: flex; align-items: center; gap: 8px; width: 220px; padding: 7px 10px; border: 0; border-radius: 8px; background: transparent; color: #073642; font: 13px -apple-system, system-ui, sans-serif; text-align: left; cursor: default; } .ds-settings-btn:hover { background: rgba(0,0,0,0.05); } .ds-settings-btn:active, .ds-settings-btn[aria-pressed=true] { background: rgba(0,0,0,0.1); } .ds-settings-btn:focus-visible { outline: 2px solid #CB4B16; outline-offset: 1px; }"
+    },
+    {
+      "name": "Day Arc",
+      "kind": "custom",
+      "refersTo": "day-arc",
+      "description": "Signature: the sun's 24-hour path with daylight fill, elapsed path in sun, sun at now, status marks for today's runs, ink ring at next run.",
+      "html": "<div class=\"ds-arc\"><div class=\"ds-arc-summary\">1 passed, 1 failed. Next run at 12:00 PM.</div><svg viewBox=\"0 0 320 84\" width=\"320\" height=\"84\" role=\"img\" aria-label=\"Today: 1 passed, 1 failed. Next run at 12:00 PM.\"><defs><linearGradient id=\"ds-day\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#B58900\" stop-opacity=\"0.28\"/><stop offset=\"1\" stop-color=\"#B58900\" stop-opacity=\"0.04\"/></linearGradient></defs><path d=\"M80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5Z\" fill=\"url(#ds-day)\"/><line x1=\"9\" y1=\"39.5\" x2=\"311\" y2=\"39.5\" stroke=\"#B3AC97\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C110 22 130 9 160.5 9 C191 9 211 22 240.5 39.5 C266 60 281 70 311 70\" fill=\"none\" stroke=\"#B3AC97\" stroke-dasharray=\"1 3\" stroke-linecap=\"round\"/><path d=\"M9 70 C40 70 55 60 80.5 39.5 C105 24 120 14 150 10\" fill=\"none\" stroke=\"#A07800\" stroke-width=\"2\" stroke-linecap=\"round\"/><circle cx=\"9\" cy=\"70\" r=\"3.5\" fill=\"#A07800\" stroke=\"#EEE8D5\" stroke-width=\"3\" paint-order=\"stroke\"/><path d=\"M80.5 34 L86 39.5 L80.5 45 L75 39.5Z\" fill=\"#DC322F\" stroke=\"#EEE8D5\" stroke-width=\"3\" paint-order=\"stroke\"/><circle cx=\"150\" cy=\"10\" r=\"5\" fill=\"#A07800\"/><circle cx=\"160.5\" cy=\"9\" r=\"4\" fill=\"#EEE8D5\" stroke=\"#073642\" stroke-width=\"1.5\"/><g font-size=\"10\" fill=\"#4F646B\" text-anchor=\"middle\" font-family=\"-apple-system, system-ui\"><text x=\"80.5\" y=\"80\">6 AM</text><text x=\"160.5\" y=\"80\">Noon</text><text x=\"240.5\" y=\"80\">6 PM</text></g></svg></div>",
+      "css": ".ds-arc { background: #EEE8D5; padding: 8px 12px; width: 344px; font-family: -apple-system, system-ui, sans-serif; } .ds-arc-summary { font-size: 10px; color: #4F646B; margin-bottom: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Sunny Day",
+    "overview": "Sundial is a native Mac utility dressed as a day of weather. Healthy runs are sunshine, failures are storms, and the runs column opens on the sun's path across the day. The palette is Solarized: cream plate and paper grounds in light, deep teal base03/base02 in dark, with the sun's yellow carrying success and Solarized red carrying failure.\n\nPersonality lives in color, weather glyphs, and the day arc; structure stays stock macOS. The window is a native three-column `NavigationSplitView` with system toolbars, segmented pickers, grouped forms, and a system-glass sidebar. Density is standard Mac list density. Status is never color-only: every state has its own glyph and a text label.\n\nEvery color token resolves four ways (light, dark, Increase Contrast light, Increase Contrast dark) through `Solar.color`. The frontmatter records the light value; the sidecar carries all four.",
+    "keyCharacteristics": [
+      "Solarized grounds: plate for the runs column, paper for output, settings, and the menu bar popover.",
+      "Weather glyphs carry run state, each in its status tint.",
+      "The day arc is the signature, above the runs list and in the menu bar popover.",
+      "Orange is the app accent only (selection and system controls).",
+      "Native controls, navigation, and keyboard behavior throughout."
+    ],
+    "rules": [
+      {
+        "name": "The Weather Rule",
+        "body": "Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Accent Is Not Status Rule",
+        "body": "Orange (ember) is the accent for selection and controls only. It never marks a run state.",
+        "section": "colors"
+      },
+      {
+        "name": "The Four Appearances Rule",
+        "body": "A new color is a `Solar.color` with light, dark, and both Increase Contrast values, never a single hex.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rounded Headings Rule",
+        "body": "`.fontDesign(.rounded)` goes on status and identity headings only; body, rows, and logs stay in default SF Pro.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Grounds Rule",
+        "body": "Plate holds lists; paper holds content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do take every color from `Solar`, defined with light, dark, and Increase Contrast values.",
+      "Do pair every status color with its weather glyph and a text label.",
+      "Do use storm-text, not storm, for failure text.",
+      "Do use native SwiftUI controls, lists, forms, toolbars, and split views; put personality in color, glyphs, and the day arc.",
+      "Do gate continuous motion on Reduce Motion, as the running rays do.",
+      "Do separate surfaces with 1pt hairlines in hairline."
+    ],
+    "donts": [
+      "Don't use orange (ember) for run state; running is sky, the next run is ink.",
+      "Don't use green checks or red crosses for status; the weather glyphs are the status vocabulary.",
+      "Don't add shadows or card elevation; use the plate and paper grounds.",
+      "Don't apply the rounded design to body text, rows, or logs."
+    ]
+  }
+}

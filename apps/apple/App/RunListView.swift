@@ -13,6 +13,12 @@ struct RunListView: View {
                     JobSummaryView(job: job, runs: allRuns)
                         .selectionDisabled()
                 }
+            } else if !model.runs.isEmpty {
+                Section {
+                    DayArcView(runs: model.runs, schedules: model.jobs.filter(\.isEnabled).map(\.schedule))
+                        .padding(.vertical, 6)
+                        .selectionDisabled()
+                }
             }
             ForEach(RunDay.group(runs)) { day in
                 Section(day.title()) {
@@ -24,16 +30,19 @@ struct RunListView: View {
             }
             if runs.isEmpty && job != nil {
                 Text(filter == .failed ? "No failed runs in the last 30 days." : "No runs in the last 30 days.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Solar.muted)
                     .selectionDisabled()
             }
         }
         .environment(\.defaultMinListRowHeight, RunRow.height)
+        .scrollContentBackground(.hidden)
+        .background(Solar.plate)
+        .foregroundStyle(Solar.ink)
         .overlay {
             if runs.isEmpty && job == nil {
                 ContentUnavailableView(
                     filter == .failed ? "No Failures" : "No Runs Yet",
-                    systemImage: filter == .failed ? "checkmark.circle" : "clock",
+                    systemImage: filter == .failed ? "sun.max" : "sun.horizon",
                     description: Text(filter == .failed ? "Nothing has failed in the last 30 days." : "Runs from the last 30 days appear here.")
                 )
             }
@@ -86,6 +95,7 @@ struct JobSummaryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            DayArcView(runs: runs, schedules: job.isEnabled ? [job.schedule] : [])
             Text(job.command)
                 .font(.system(.callout, design: .monospaced))
                 .lineLimit(4)
@@ -93,26 +103,27 @@ struct JobSummaryView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.6), in: .rect(cornerRadius: 8))
+                .background(Solar.paper, in: .rect(cornerRadius: 8))
+                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Solar.hairline, lineWidth: 1))
             Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 5) {
                 GridRow {
-                    Text("Schedule").foregroundStyle(.secondary)
+                    Text("Schedule").foregroundStyle(Solar.muted)
                     Text(job.schedule.summary())
                 }
                 GridRow {
-                    Text("Next Run").foregroundStyle(.secondary)
+                    Text("Next Run").foregroundStyle(Solar.muted)
                     TimelineView(.everyMinute) { context in
                         Text(nextRun(now: context.date))
                     }
                 }
                 GridRow {
-                    Text("Directory").foregroundStyle(.secondary)
+                    Text("Directory").foregroundStyle(Solar.muted)
                     Text(job.workingDirectory)
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
                 GridRow {
-                    Text("Last 30 Days").foregroundStyle(.secondary)
+                    Text("Last 30 Days").foregroundStyle(Solar.muted)
                     Text(history)
                 }
             }
@@ -152,7 +163,7 @@ struct RunRow: View {
                     .lineLimit(1)
                 Text(detail(status))
                     .font(.subheadline)
-                    .foregroundStyle(status.isFailure ? AnyShapeStyle(.red) : AnyShapeStyle(.secondary))
+                    .foregroundStyle(status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.muted))
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
@@ -177,6 +188,6 @@ struct RunRow: View {
         Text(text)
             .font(.subheadline)
             .monospacedDigit()
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Solar.muted)
     }
 }

@@ -22,7 +22,8 @@ Each job is a command, a working directory, and a schedule. Sundial hands the sc
 
 Open Sundial and add a job with **New Job** (⌘N). The first time it installs a job, macOS shows a "Background Items Added" notification for Sundial. That is expected: each job is a launch agent, listed under Sundial in System Settings → General → Login Items & Extensions.
 
-- **Jobs** are listed in the sidebar with the result of their latest run: a green check for a pass, a red cross for a failure, a red exclamation mark for an interrupted run, or a spinner while running.
+- **Jobs** are listed in the sidebar with the result of their latest run: a sun for a pass, a red storm cloud for a failure, a red cloud for an interrupted run, a turning sun while running, or a sunrise for a job that hasn't run yet.
+- **Today** is drawn as the sun's path across the day, above the runs and in the menu bar. Each of today's runs sits on the path at the time it started, the sun marks the current time, and a hollow ring marks the next scheduled run.
 - **Runs** for the selected job are grouped by day. **All Runs** shows every job's runs together, and the **Failed** filter shows only failures.
 - **Output** for the selected run shows the full combined stdout and stderr, along with the start time, duration, and exit code. Copy it, or show the log file in Finder.
 - **Run Now** (⌘R) runs a job immediately, even if it is disabled. **Edit** (⌘E), **Duplicate**, **Enabled**, and **Delete** are in the toolbar's More menu and in the sidebar's context menu.

@@ -2,25 +2,27 @@ import SwiftUI
 
 struct StatusIcon: View {
     let status: RunRecord.Status?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         Group {
             switch status {
             case .running:
-                ProgressView()
-                    .controlSize(.small)
+                Image(systemName: "rays")
+                    .symbolEffect(.rotate, options: .repeat(.continuous), isActive: !reduceMotion)
+                    .foregroundStyle(Solar.sky)
             case .succeeded:
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                Image(systemName: "sun.max.fill")
+                    .foregroundStyle(Solar.sun)
             case .failed:
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.red)
+                Image(systemName: "cloud.bolt.rain.fill")
+                    .foregroundStyle(Solar.storm)
             case .interrupted:
-                Image(systemName: "exclamationmark.circle.fill")
-                    .foregroundStyle(.red)
+                Image(systemName: "cloud.fill")
+                    .foregroundStyle(Solar.storm)
             case nil:
-                Image(systemName: "circle.dashed")
-                    .foregroundStyle(.tertiary)
+                Image(systemName: "sun.horizon")
+                    .foregroundStyle(Solar.dusk)
             }
         }
         .symbolRenderingMode(.hierarchical)

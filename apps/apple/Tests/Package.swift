@@ -12,6 +12,7 @@ let package = Package(
                 "AppModel.swift",
                 "Assets.xcassets",
                 "ContentView.swift",
+                "DayArcView.swift",
                 "FileMonitor.swift",
                 "Info.plist",
                 "JobEditorView.swift",
@@ -22,6 +23,7 @@ let package = Package(
                 "RunListView.swift",
                 "SettingsView.swift",
                 "SidebarView.swift",
+                "Solar.swift",
                 "StatusIcon.swift",
                 "Sundial.entitlements",
                 "SundialApp.swift",
@@ -30,6 +32,7 @@ let package = Package(
             ],
             sources: [
                 "CommandRunning.swift",
+                "DayArc.swift",
                 "Job.swift",
                 "JobRunner.swift",
                 "JobStore.swift",
