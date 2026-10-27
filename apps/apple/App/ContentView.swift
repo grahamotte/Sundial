@@ -12,23 +12,29 @@ struct ContentView: View {
                     sidebar
                 } detail: {
                     SettingsView()
+                        .overlay(alignment: .top) { Divider() }
                 }
             } else {
                 NavigationSplitView(columnVisibility: $columnVisibility) {
                     sidebar
                 } content: {
                     content
+                        .overlay(alignment: .top) { Divider() }
                         .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
                 } detail: {
-                    if let run = model.run(model.runSelection) {
-                        RunDetailView(run: run)
-                    } else {
-                        ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                    Group {
+                        if let run = model.run(model.runSelection) {
+                            RunDetailView(run: run)
+                        } else {
+                            ContentUnavailableView("No Run Selected", systemImage: "text.alignleft", description: Text("Select a run to see its output."))
+                        }
                     }
+                    .overlay(alignment: .top) { Divider() }
                 }
             }
         }
-        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+        .toolbarBackground(.bar, for: .windowToolbar)
+        .toolbarBackgroundVisibility(.visible, for: .windowToolbar)
         .sheet(item: $model.editingJob) { job in
             JobEditorView(job: job, isNew: model.isNew(job))
         }
