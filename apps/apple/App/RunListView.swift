@@ -4,16 +4,20 @@ struct RunListView: View {
     @Environment(AppModel.self) private var model
     let jobID: UUID?
     @State private var filter: RunFilter = .all
+    @State private var width: CGFloat = 0
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            list
-        }
-        .background(Solar.plate)
-        .ignoresSafeArea(.container, edges: .top)
-        .navigationTitle(job?.name ?? "All Runs")
-        .toolbar(removing: .title)
+        list
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+            .navigationTitle(job?.name ?? "All Runs")
+            .toolbar(removing: .title)
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    header
+                        .frame(width: max(width - 18, 0))
+                }
+                .sharedBackgroundVisibility(.hidden)
+            }
     }
 
     private var list: some View {
@@ -95,8 +99,6 @@ struct RunListView: View {
         .buttonBorderShape(.circle)
         .labelStyle(.iconOnly)
         .controlSize(.large)
-        .padding(.horizontal, 12)
-        .frame(height: 52)
     }
 
     private var job: Job? { jobID.flatMap(model.job) }
