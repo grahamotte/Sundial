@@ -11,7 +11,6 @@ colors:
   sun: "#A07800"
   sunlight: "#B58900"
   sky: "#1F6FA8"
-  ember: "#93681A"
   storm: "#DC322F"
   storm-text: "#B0201D"
   dusk: "#6E7C7C"
@@ -103,7 +102,7 @@ Every color token resolves four ways (light, dark, Increase Contrast light, Incr
 - Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.
 - Weather glyphs carry run state, each in its status tint.
 - The day arc is the signature, above the runs list and in the menu bar popover.
-- Ochre is the app accent only (selection and system controls).
+- The accent is the user's system accent; the theme never recolors selection.
 - Native controls, navigation, and keyboard behavior throughout.
 
 ## Colors
@@ -116,7 +115,6 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ### Secondary
 - **Sky Blue** (sky): Running. The rotating rays glyph, the running ring on the day arc, and the running status title.
-- **Ember** (ember): The app accent, a deep ochre set in `AccentColor` (light `#93681A`, dark `#9C7024`) so white selection text stays readable. Reaches the UI only through system selection and control tinting. Bright orange was too loud for selected rows.
 
 ### Tertiary
 - **Storm Red** (storm): Failed and interrupted glyphs and failure diamonds on the arc.
@@ -124,7 +122,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ### Neutral
 - **Warm White Plate** (plate): Near-white with a faint warm tint; soft charcoal (#23272A) in dark. The runs column ground, the No Job Selected placeholder, and the default day arc ground.
-- **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container and window toolbar background (so the toolbar shares it), the output column, Settings, empty detail, the command well, and the menu bar popover.
+- **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container background (the toolbar background is hidden so the columns show through), the output column, Settings, empty detail, the command well, and the menu bar popover.
 - **Ink** (ink): Solarized base02 in light, base2 in dark. Primary text and log text; the next-run ring on the arc.
 - **Muted** (muted): Secondary text: labels, timestamps, durations, the arc summary and hour labels.
 - **Linen Hairline** (hairline): 1pt separators and the command well border. Faint by design; Increase Contrast darkens it.
@@ -134,7 +132,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 ### Named Rules
 **The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.
 
-**The Accent Is Not Status Rule.** The ochre accent (ember) is the accent for selection and controls only. It never marks a run state.
+**The Accent Is Not Status Rule.** The accent is the user's system accent: `AccentColor` is empty, so selection and controls follow System Settings. The theme never recolors selection, and run state colors (sun, sky, storm) never stand in for selection. Selected rows switch their text and status glyphs to the system's selected-text color.
 
 **The Quiet Ground Rule.** Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.
 
@@ -166,7 +164,7 @@ A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 
 
 ## Elevation & Depth
 
-Flat. There are no custom shadows and no tinted bands. Depth comes from the two grounds (plate behind the list, paper for the window, content wells, and output), 1pt hairlines, and the system-glass sidebar and toolbar. The window's container background and the window toolbar background are both paper, so the toolbar reads as the same ground as the output column instead of a white bar. The only gradient is the day arc's faint daylight fill.
+Flat. There are no custom shadows and no tinted bands. Depth comes from the two grounds (plate behind the list, paper for the window, content wells, and output), 1pt hairlines, and the system-glass sidebar and toolbar. The window's container background is paper and the window toolbar background is hidden, so each column's ground runs up under the toolbar instead of a white bar. Never give the toolbar a solid background: it spans the whole window and flattens the floating sidebar. The only gradient is the day arc's faint daylight fill.
 
 ### Named Rules
 **The Two Grounds Rule.** Plate holds lists; paper holds the window and content to read. A surface is one or the other, separated by a 1pt hairline, never a shadow, a tinted band, or a wash.
@@ -180,12 +178,12 @@ Native shapes for native controls. Custom shapes are few: 8pt rounded rectangles
 ## Components
 
 ### Status Icon
-Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `sun.horizon` in dusk (never run). Always carries an accessibility label.
+Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `sun.horizon` in dusk (never run). In an emphasized selected row (`backgroundProminence` is `.increased`) the glyph drops its status tint and uses `.primary`, so it turns the system's selected-text white on the accent. Always carries an accessibility label.
 
 ### Run Rows
 - **Layout:** Status icon, a two-line stack (name or time; detail in subheadline), trailing duration in subheadline muted with monospaced digits.
 - **Failure:** The detail line turns storm-text. Passed detail stays muted.
-- **Selection:** Native list selection.
+- **Selection:** Native list selection in the user's system accent. When the row is emphasized (`backgroundProminence` is `.increased`), the title uses `.primary`, the detail and duration use `.secondary` (failure detail included), and the status glyph uses `.primary`, so the whole row reads as white text and glyph on the accent.
 
 ### Status Header
 The top of the output column: a title-size status icon, the status title in rounded semibold in the status text tint, job and date in muted, a trailing Duration / Result grid, then the command in mono muted with icon-only borderless Copy Output and Show Log in Finder buttons. It sits on paper like the rest of the column, with no wash; status shows through the icon and the status-tinted title only. A 1pt hairline separates it from the log.
@@ -209,6 +207,7 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 
 ### Do:
 - **Do** take every color from `Solar`, defined with light, dark, and Increase Contrast values.
+- **Do** leave `AccentColor` empty so selection and controls follow the user's system accent, and switch selected row text and glyphs to `.primary` / `.secondary` when `backgroundProminence` is `.increased`.
 - **Do** pair every status color with its weather glyph and a text label.
 - **Do** use storm-text, not storm, for failure text.
 - **Do** use native SwiftUI controls, lists, forms, toolbars, and split views; put personality in color, glyphs, and the day arc.
@@ -216,7 +215,7 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 - **Do** separate surfaces with 1pt hairlines in hairline.
 
 ### Don't:
-- **Don't** use the ochre accent (ember) for run state; running is sky, the next run is ink.
+- **Don't** give the app a custom accent or recolor selection; never use sun, sky, or storm to mark selection. Running is sky, the next run is ink.
 - **Don't** use green checks or red crosses for status; the weather glyphs are the status vocabulary.
 - **Don't** add shadows or card elevation; use the plate and paper grounds.
 - **Don't** apply the rounded design to body text, rows, or logs.

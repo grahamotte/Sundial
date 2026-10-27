@@ -11,12 +11,14 @@ struct RunListView: View {
             if let job {
                 Section {
                     JobSummaryView(job: job, runs: allRuns)
+                        .foregroundStyle(Solar.ink)
                         .selectionDisabled()
                 }
             } else if !model.runs.isEmpty {
                 Section {
                     DayArcView(runs: model.runs, schedules: model.jobs.filter(\.isEnabled).map(\.schedule))
                         .padding(.vertical, 6)
+                        .foregroundStyle(Solar.ink)
                         .selectionDisabled()
                 }
             }
@@ -37,7 +39,6 @@ struct RunListView: View {
         .environment(\.defaultMinListRowHeight, RunRow.height)
         .scrollContentBackground(.hidden)
         .background(Solar.plate)
-        .foregroundStyle(Solar.ink)
         .overlay {
             if runs.isEmpty && job == nil {
                 ContentUnavailableView(
@@ -153,26 +154,29 @@ struct RunRow: View {
 
     let run: RunRecord
     let showsJobName: Bool
+    @Environment(\.backgroundProminence) private var prominence
 
     var body: some View {
         let status = run.status()
+        let isEmphasized = prominence == .increased
         HStack(spacing: 10) {
             StatusIcon(status: status)
             VStack(alignment: .leading, spacing: 1) {
                 Text(showsJobName ? run.jobName : run.startedAt.formatted(date: .omitted, time: .standard))
+                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.primary) : AnyShapeStyle(Solar.ink))
                     .lineLimit(1)
                 Text(detail(status))
                     .font(.subheadline)
-                    .foregroundStyle(status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.muted))
+                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.muted))
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             if status == .running {
                 TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
-                    duration(run.durationText(status: status, now: context.date))
+                    duration(run.durationText(status: status, now: context.date), isEmphasized: isEmphasized)
                 }
             } else {
-                duration(run.durationText(status: status))
+                duration(run.durationText(status: status), isEmphasized: isEmphasized)
             }
         }
         .padding(.vertical, 2)
@@ -184,10 +188,10 @@ struct RunRow: View {
         return run.startedAt.formatted(date: .omitted, time: .shortened) + " · " + outcome
     }
 
-    private func duration(_ text: String) -> some View {
+    private func duration(_ text: String, isEmphasized: Bool) -> some View {
         Text(text)
             .font(.subheadline)
             .monospacedDigit()
-            .foregroundStyle(Solar.muted)
+            .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : AnyShapeStyle(Solar.muted))
     }
 }
