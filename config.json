@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.4.0",
+    "build": "0.4.1",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.4.0",
-    "whatsNew": "Selection and controls use a Solarized slate accent instead of system blue. The day arc drops its summary line and hour labels, job details right-align their values, All Runs has a history icon, and Settings puts Done inline."
+    "version": "0.4.1",
+    "whatsNew": "Selected rows stay readable and look the same whether or not their list has focus."
   }
 }
