@@ -102,7 +102,7 @@ Every color token resolves four ways (light, dark, Increase Contrast light, Incr
 - Light, calm grounds: warm-white plate for the runs column, paper for the window, output, settings, and the menu bar popover; soft charcoal in dark.
 - Weather glyphs carry run state, each in its status tint.
 - The day arc is the signature, above the runs list and in the menu bar popover.
-- The accent is the user's system accent; the theme never recolors selection.
+- The accent is Solarized slate (base01, base00 in dark), so selection and controls stay in the palette.
 - Native controls, navigation, and keyboard behavior throughout.
 
 ## Colors
@@ -124,7 +124,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 - **Warm White Plate** (plate): Near-white with a faint warm tint; soft charcoal (#23272A) in dark. The runs column ground, the No Job Selected placeholder, and the default day arc ground.
 - **Paper White** (paper): The lightest ground; a deeper charcoal (#1C1F21) in dark. The window container background (the toolbar background is hidden so the columns show through), the output column, Settings, empty detail, the command well, and the menu bar popover.
 - **Ink** (ink): Solarized base02 in light, base2 in dark. Primary text and log text; the next-run ring on the arc.
-- **Muted** (muted): Secondary text: labels, timestamps, durations, the arc summary and hour labels.
+- **Muted** (muted): Secondary text: labels, timestamps, durations.
 - **Linen Hairline** (hairline): 1pt separators and the command well border. Faint by design; Increase Contrast darkens it.
 - **Horizon Stone** (horizon): The arc's horizon line and dotted full-day path.
 - **Dusk** (dusk): Never-run glyph and the moon on the arc.
@@ -132,7 +132,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 ### Named Rules
 **The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.
 
-**The Accent Is Not Status Rule.** The accent is the user's system accent: `AccentColor` is empty, so selection and controls follow System Settings. The theme never recolors selection, and run state colors (sun, sky, storm) never stand in for selection. Selected rows switch their text and status glyphs to the system's selected-text color.
+**The Accent Is Not Status Rule.** `AccentColor` is Solarized slate: #586E75 (base01) in light and #657B83 (base00) in dark, so selection and controls match the theme instead of system blue. Run state colors (sun, sky, storm) never stand in for selection. Selected rows switch their text and status glyphs to the system's selected-text color.
 
 **The Quiet Ground Rule.** Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.
 
@@ -152,7 +152,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 - **Body** (400, 13pt): Row names, values, the job summary grid. Use `monospacedDigit` wherever durations or times change.
 - **Callout** (400, 12pt): The job summary grid and, in mono, the command.
 - **Subheadline** (400, 11pt): Row detail lines (time, outcome, duration).
-- **Caption** (400, 10pt): The arc summary, arc hour labels (caption2), header field labels.
+- **Caption** (400, 10pt): Header field labels.
 - **Mono** (400, 12pt, SF Mono): Commands and log output.
 
 ### Named Rules
@@ -160,7 +160,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ## Layout
 
-A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings is a 460pt grouped-form sheet over the window. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column puts its status line (glyph, status, job and start time, duration, result) in a toolbar item aligned with the 20pt content inset, then the command row (4pt top, 12pt bottom padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 84pt tall in the window and 64pt in the popover.
+A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings is a 460pt grouped-form sheet over the window with no toolbar; its Done button sits inline at the trailing end of the last footer. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column puts its status line (glyph, status, job and start time, duration, result) in a toolbar item aligned with the 20pt content inset, then the command row (4pt top, 12pt bottom padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 70pt tall in the window and 50pt in the popover. The job summary grid puts muted labels on the left and right-aligns their values.
 
 ## Elevation & Depth
 
@@ -183,7 +183,7 @@ Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (suc
 ### Run Rows
 - **Layout:** Status icon, a two-line stack (name or time; detail in subheadline), trailing duration in subheadline muted with monospaced digits.
 - **Failure:** The detail line turns storm-text. Passed detail stays muted.
-- **Selection:** Native list selection in the user's system accent. When the row is emphasized (`backgroundProminence` is `.increased`), the title uses `.primary`, the detail and duration use `.secondary` (failure detail included), and the status glyph uses `.primary`, so the whole row reads as white text and glyph on the accent.
+- **Selection:** Native list selection in the slate accent. When the row is emphasized (`backgroundProminence` is `.increased`), the title uses `.primary`, the detail and duration use `.secondary` (failure detail included), and the status glyph uses `.primary`, so the whole row reads as white text and glyph on the accent.
 
 ### Status Header
 The top of the output column: a title-size status icon, the status title in rounded semibold in the status text tint, job and date in muted, a trailing Duration / Result grid, then the command in mono muted with icon-only borderless Copy Output and Show Log in Finder buttons. It sits on paper like the rest of the column, with no wash; status shows through the icon and the status-tinted title only. A 1pt hairline separates it from the log.
@@ -201,13 +201,13 @@ Native sidebar with system glass and `.secondary` subtitles. Settings is a full-
 Paper ground, 320pt. Day arc titled "Today", a hairline, "Recent Runs" (headline) with up to 10 rows, a hairline, then View All Runs…, Settings…, Quit Sundial. Rows highlight with sun at 18% and 6pt corners on hover.
 
 ### Day Arc (signature)
-The sun's path across 24 hours as a negative cosine from midnight to midnight, with the horizon at 6 AM and 6 PM. A horizon line and dotted full-day path in horizon; a faint daylight fill in sunlight above the horizon (18% at the top of the arc to 2% at the horizon); the elapsed path stroked 2pt in sun up to now; `sun.max.fill` (17pt) at now above the horizon, `moon.fill` (13pt, dusk) below. Today's runs sit on the path as status marks, failures drawn last so they are on top. Hour labels at 6 AM, Noon, 6 PM in caption2 muted. Above the canvas: a muted caption summary ("7 passed, 1 failed, 1 running. Next run at 12:00 PM."), which is also the accessibility value. Updates every minute.
+The sun's path across 24 hours as a negative cosine from midnight to midnight, with the horizon at 6 AM and 6 PM. A horizon line and dotted full-day path in horizon; a faint daylight fill in sunlight above the horizon (18% at the top of the arc to 2% at the horizon); the elapsed path stroked 2pt in sun up to now; `sun.max.fill` (17pt) at now above the horizon, `moon.fill` (13pt, dusk) below. Today's runs sit on the path as status marks, failures drawn last so they are on top. No hour labels and no visible summary; the summary ("7 passed, 1 failed, 1 running. Next run at 12:00 PM.") is only the accessibility value. Updates every minute.
 
 ## Do's and Don'ts
 
 ### Do:
 - **Do** take every color from `Solar`, defined with light, dark, and Increase Contrast values.
-- **Do** leave `AccentColor` empty so selection and controls follow the user's system accent, and switch selected row text and glyphs to `.primary` / `.secondary` when `backgroundProminence` is `.increased`.
+- **Do** keep `AccentColor` Solarized slate, and switch selected row text and glyphs to `.primary` / `.secondary` when `backgroundProminence` is `.increased`.
 - **Do** pair every status color with its weather glyph and a text label.
 - **Do** use storm-text, not storm, for failure text.
 - **Do** use native SwiftUI controls, lists, forms, toolbars, and split views; put personality in color, glyphs, and the day arc.
@@ -215,7 +215,7 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 - **Do** separate surfaces with 1pt hairlines in hairline.
 
 ### Don't:
-- **Don't** give the app a custom accent or recolor selection; never use sun, sky, or storm to mark selection. Running is sky, the next run is ink.
+- **Don't** use system blue or a status hue for the accent; never use sun, sky, or storm to mark selection. Running is sky, the next run is ink.
 - **Don't** use green checks or red crosses for status; the weather glyphs are the status vocabulary.
 - **Don't** add shadows or card elevation; use the plate and paper grounds.
 - **Don't** apply the rounded design to body text, rows, or logs.
