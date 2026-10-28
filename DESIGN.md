@@ -160,7 +160,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 
 ## Layout
 
-A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings replaces the detail in a two-column split. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column puts its status line (glyph, status, job and start time, duration, result) in a toolbar item aligned with the 20pt content inset, then the command row (4pt top, 12pt bottom padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 84pt tall in the window and 64pt in the popover.
+A native three-column split: jobs sidebar, runs column (min 300, ideal 360, max 480pt), output detail. Settings is a 460pt grouped-form sheet over the window. The runs column leads with the day arc (All Runs) or a job summary (arc, command well, summary grid) as a non-selectable first section, followed by runs grouped by day. Run rows are 40pt tall with a 10pt gap between glyph and text. The output column puts its status line (glyph, status, job and start time, duration, result) in a toolbar item aligned with the 20pt content inset, then the command row (4pt top, 12pt bottom padding), a 1pt hairline, then the full-height log with 14 by 12pt insets. The menu bar popover is 320pt wide with 14pt content margins and 5pt row insets. The arc is 84pt tall in the window and 64pt in the popover.
 
 ## Elevation & Depth
 

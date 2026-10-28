@@ -5,7 +5,6 @@ import Observation
 enum SidebarItem: Hashable {
     case allRuns
     case job(UUID)
-    case settings
 }
 
 enum RunFilter: String, CaseIterable, Identifiable {
@@ -26,6 +25,7 @@ final class AppModel {
     var jobPendingDeletion: Job?
     var errorMessage: String?
     var revealedRunID: RunRecord.ID?
+    var isShowingSettings = false
 
     private let paths: SundialPaths
     private let jobStore: JobStore

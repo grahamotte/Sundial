@@ -64,7 +64,7 @@ struct MenuBarView: View {
     }
 
     private func showSettings() {
-        model.sidebarSelection = .settings
+        model.isShowingSettings = true
         openMainWindow()
     }
 

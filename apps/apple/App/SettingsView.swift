@@ -2,6 +2,7 @@ import ServiceManagement
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @AppStorage(Preferences.showsMenuBarExtraKey) private var showsMenuBarExtra = true
     @State private var loginItem = LoginItem()
 
@@ -44,10 +45,14 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .scrollContentBackground(.hidden)
-        .frame(maxWidth: 560)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(width: 460)
         .background(Solar.paper)
         .navigationTitle("Settings")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") { dismiss() }
+            }
+        }
         .onAppear { loginItem.refresh() }
     }
 }

@@ -8,29 +8,19 @@ struct ContentView: View {
 
     var body: some View {
         @Bindable var model = model
-        Group {
-            if model.sidebarSelection == .settings {
-                NavigationSplitView(columnVisibility: $columnVisibility) {
-                    sidebar
-                } detail: {
-                    SettingsView()
-                }
-            } else {
-                NavigationSplitView(columnVisibility: $columnVisibility) {
-                    sidebar
-                } content: {
-                    content
-                        .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
-                } detail: {
-                    Group {
-                        if let run = model.run(model.runSelection) {
-                            RunDetailView(run: run)
-                        } else {
-                            ContentUnavailableView("No Run Selected", systemImage: "sun.dust", description: Text("Select a run to see its output."))
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Solar.paper)
-                        }
-                    }
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            sidebar
+        } content: {
+            content
+                .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
+        } detail: {
+            Group {
+                if let run = model.run(model.runSelection) {
+                    RunDetailView(run: run)
+                } else {
+                    ContentUnavailableView("No Run Selected", systemImage: "sun.dust", description: Text("Select a run to see its output."))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Solar.paper)
                 }
             }
         }
@@ -38,6 +28,9 @@ struct ContentView: View {
         .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .sheet(item: $model.editingJob) { job in
             JobEditorView(job: job, isNew: model.isNew(job))
+        }
+        .sheet(isPresented: $model.isShowingSettings) {
+            SettingsView()
         }
         .confirmationDialog(
             "Delete \(model.jobPendingDeletion?.name ?? "Job")?",
