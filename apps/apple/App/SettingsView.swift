@@ -28,19 +28,24 @@ struct SettingsView: View {
                 Toggle("Show in menu bar", isOn: $showsMenuBarExtra)
                 Toggle("Open at login", isOn: Binding(get: { loginItem.isEnabled }, set: { loginItem.setEnabled($0) }))
             } footer: {
-                VStack(alignment: .leading, spacing: 6) {
-                    if loginItem.requiresApproval {
-                        Text("Allow Sundial in System Settings → General → Login Items & Extensions.")
-                        Button("Open Login Items Settings") { SMAppService.openSystemSettingsLoginItems() }
-                            .buttonStyle(.link)
+                HStack(alignment: .lastTextBaseline) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        if loginItem.requiresApproval {
+                            Text("Allow Sundial in System Settings → General → Login Items & Extensions.")
+                            Button("Open Login Items Settings") { SMAppService.openSystemSettingsLoginItems() }
+                                .buttonStyle(.link)
+                        }
+                        if let message = loginItem.errorMessage {
+                            Text(message)
+                                .foregroundStyle(Solar.stormText)
+                        }
+                        Text("Jobs run on schedule whether or not Sundial is open.")
                     }
-                    if let message = loginItem.errorMessage {
-                        Text(message)
-                            .foregroundStyle(Solar.stormText)
-                    }
-                    Text("Jobs run on schedule whether or not Sundial is open.")
+                    .foregroundStyle(Solar.muted)
+                    Spacer()
+                    Button("Done") { dismiss() }
+                        .keyboardShortcut(.defaultAction)
                 }
-                .foregroundStyle(Solar.muted)
             }
         }
         .formStyle(.grouped)
@@ -48,11 +53,7 @@ struct SettingsView: View {
         .frame(width: 460)
         .background(Solar.paper)
         .navigationTitle("Settings")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") { dismiss() }
-            }
-        }
+        .onExitCommand { dismiss() }
         .onAppear { loginItem.refresh() }
     }
 }
