@@ -89,7 +89,7 @@ struct SettingsCommand: View {
 
     var body: some View {
         Button("Settings…") {
-            model.sidebarSelection = .settings
+            model.isShowingSettings = true
             openWindow(id: SundialApp.mainWindowID)
         }
         .keyboardShortcut(",")

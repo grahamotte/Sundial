@@ -23,8 +23,8 @@ struct SidebarView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            SettingsSidebarButton(isSelected: model.sidebarSelection == .settings) {
-                model.sidebarSelection = .settings
+            SettingsSidebarButton(isSelected: model.isShowingSettings) {
+                model.isShowingSettings = true
             }
             .padding(.horizontal, 10)
             .padding(.bottom, 10)

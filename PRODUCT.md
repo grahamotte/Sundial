@@ -23,7 +23,7 @@ A friendly, native front end to launchd: real launch agents that run whether or 
 ## Operating Context
 
 - Jobs are a name, a `zsh -c` command, a working directory, and a schedule (every N minutes or hours aligned to the clock, daily, or weekly).
-- The main window has three columns: jobs in the sidebar, runs grouped by day in the middle, and the selected run's output on the right. Settings shows in the detail column.
+- The main window has three columns: jobs in the sidebar, runs grouped by day in the middle, and the selected run's output on the right. Settings opens as a sheet over the main window.
 - The menu bar item lists the 10 most recent runs and opens the main window to a run.
 - Users check status occasionally and read long, monospaced command output when something fails.
 
