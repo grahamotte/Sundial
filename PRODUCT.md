@@ -31,7 +31,7 @@ A friendly, native front end to launchd: real launch agents that run whether or 
 
 - Run states: running, succeeded (exit 0), failed (non-zero exit or signal), interrupted, and never run.
 - Native, dependency-free SwiftUI. No third-party UI packages, no notifications, no Dock icon while only the menu bar item is shown.
-- Must work in light and dark appearance, with system accessibility settings (Increase Contrast, Reduce Motion, Reduce Transparency), and with the system accent color left to the user where macOS expects it.
+- Must work in light and dark appearance, with system accessibility settings (Increase Contrast, Reduce Motion, Reduce Transparency).
 - Distributed as a signed, notarized GitHub release and the `sundial` Homebrew cask, not through the App Store.
 
 ## Brand Commitments

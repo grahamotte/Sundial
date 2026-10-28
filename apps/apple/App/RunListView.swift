@@ -154,22 +154,26 @@ struct JobSummaryView: View {
                 GridRow {
                     Text("Schedule").foregroundStyle(Solar.muted)
                     Text(job.schedule.summary())
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 GridRow {
                     Text("Next Run").foregroundStyle(Solar.muted)
                     TimelineView(.everyMinute) { context in
                         Text(nextRun(now: context.date))
                     }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 GridRow {
                     Text("Directory").foregroundStyle(Solar.muted)
                     Text(job.workingDirectory)
                         .lineLimit(1)
                         .truncationMode(.middle)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 GridRow {
                     Text("Last 30 Days").foregroundStyle(Solar.muted)
                     Text(history)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
             .font(.callout)
