@@ -68,6 +68,7 @@ struct RunListView: View {
                     ForEach(day.runs) { run in
                         RunRow(run: run, showsJobName: jobID == nil)
                             .tag(run.id)
+                            .listRowBackground(RowSelectionBackground(isSelected: model.runSelection == run.id))
                     }
                 }
             }
@@ -202,29 +203,27 @@ struct RunRow: View {
 
     let run: RunRecord
     let showsJobName: Bool
-    @Environment(\.backgroundProminence) private var prominence
 
     var body: some View {
         let status = run.status()
-        let isEmphasized = prominence == .increased
         HStack(spacing: 10) {
             StatusIcon(status: status)
             VStack(alignment: .leading, spacing: 1) {
                 Text(showsJobName ? run.jobName : run.startedAt.formatted(date: .omitted, time: .standard))
-                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.primary) : AnyShapeStyle(Solar.ink))
+                    .foregroundStyle(Solar.ink)
                     .lineLimit(1)
                 Text(detail(status))
                     .font(.subheadline)
-                    .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : status.isFailure ? AnyShapeStyle(Solar.stormText) : AnyShapeStyle(Solar.muted))
+                    .foregroundStyle(status.isFailure ? Solar.stormText : Solar.muted)
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
             if status == .running {
                 TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
-                    duration(run.durationText(status: status, now: context.date), isEmphasized: isEmphasized)
+                    duration(run.durationText(status: status, now: context.date))
                 }
             } else {
-                duration(run.durationText(status: status), isEmphasized: isEmphasized)
+                duration(run.durationText(status: status))
             }
         }
         .padding(.vertical, 2)
@@ -236,10 +235,10 @@ struct RunRow: View {
         return run.startedAt.formatted(date: .omitted, time: .shortened) + " · " + outcome
     }
 
-    private func duration(_ text: String, isEmphasized: Bool) -> some View {
+    private func duration(_ text: String) -> some View {
         Text(text)
             .font(.subheadline)
             .monospacedDigit()
-            .foregroundStyle(isEmphasized ? AnyShapeStyle(.secondary) : AnyShapeStyle(Solar.muted))
+            .foregroundStyle(Solar.muted)
     }
 }
