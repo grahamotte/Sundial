@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.3.2",
+    "build": "0.3.3",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.3.2",
-    "whatsNew": "Rows in the runs list no longer show through the title and buttons when you scroll."
+    "version": "0.3.3",
+    "whatsNew": "Settings opens as a sheet over the main window, so opening it from the menu bar no longer scrambles the sidebar and title bar."
   }
 }
