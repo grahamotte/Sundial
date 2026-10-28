@@ -6,6 +6,7 @@ enum Solar {
     static let paper = color(light: 0xFFFDF8, dark: 0x1C1F21, lightContrast: 0xFFFFFF, darkContrast: 0x0F1112)
     static let ink = color(light: 0x073642, dark: 0xEEE8D5, lightContrast: 0x002B36, darkContrast: 0xFDF6E3)
     static let muted = color(light: 0x4F646B, dark: 0x93A1A1, lightContrast: 0x3D4F55, darkContrast: 0xB8C4C4)
+    static let selection = color(light: 0xEBE4D1, dark: 0x384044, lightContrast: 0xDDD5BE, darkContrast: 0x4A5357)
     static let hairline = color(light: 0xE9E4D8, dark: 0x343A3D, lightContrast: 0x93A1A1, darkContrast: 0x6A7478)
     static let horizon = color(light: 0xCFC8B6, dark: 0x4A5357, lightContrast: 0x657B83, darkContrast: 0x8C979B)
     static let sun = color(light: 0xA07800, dark: 0xD9A400, lightContrast: 0x7A5C00, darkContrast: 0xF0C33C)

@@ -3,7 +3,6 @@ import SwiftUI
 struct StatusIcon: View {
     let status: RunRecord.Status?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.backgroundProminence) private var prominence
 
     var body: some View {
         Group {
@@ -21,7 +20,7 @@ struct StatusIcon: View {
                 Image(systemName: "sun.horizon")
             }
         }
-        .foregroundStyle(prominence == .increased ? AnyShapeStyle(.primary) : AnyShapeStyle(status?.tint ?? Solar.dusk))
+        .foregroundStyle(status?.tint ?? Solar.dusk)
         .symbolRenderingMode(.hierarchical)
         .frame(width: 18, height: 18)
         .accessibilityLabel(status?.title ?? "Never run")

@@ -6,6 +6,7 @@ colors:
   paper: "#FFFDF8"
   ink: "#073642"
   muted: "#4F646B"
+  selection: "#EBE4D1"
   hairline: "#E9E4D8"
   horizon: "#CFC8B6"
   sun: "#A07800"
@@ -132,7 +133,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 ### Named Rules
 **The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for never run. Nothing else borrows these hues for decoration.
 
-**The Accent Is Not Status Rule.** `AccentColor` is Solarized slate: #586E75 (base01) in light and #657B83 (base00) in dark, so selection and controls match the theme instead of system blue. Run state colors (sun, sky, storm) never stand in for selection. Selected rows switch their text and status glyphs to the system's selected-text color.
+**The Accent Is Not Status Rule.** `AccentColor` is Solarized slate: #586E75 (base01) in light and #657B83 (base00) in dark, so controls match the theme instead of system blue. Run state colors (sun, sky, storm) never stand in for selection.
 
 **The Quiet Ground Rule.** Grounds stay near-white in light and neutral charcoal in dark. Solarized is the source of the warm tint and the accent hues, not literal beige or teal grounds.
 
@@ -178,12 +179,12 @@ Native shapes for native controls. Custom shapes are few: 8pt rounded rectangles
 ## Components
 
 ### Status Icon
-Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `sun.horizon` in dusk (never run). In an emphasized selected row (`backgroundProminence` is `.increased`) the glyph drops its status tint and uses `.primary`, so it turns the system's selected-text white on the accent. Always carries an accessibility label.
+Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `sun.horizon` in dusk (never run). Always carries an accessibility label.
 
 ### Run Rows
 - **Layout:** Status icon, a two-line stack (name or time; detail in subheadline), trailing duration in subheadline muted with monospaced digits.
 - **Failure:** The detail line turns storm-text. Passed detail stays muted.
-- **Selection:** Native list selection in the slate accent. When the row is emphasized (`backgroundProminence` is `.increased`), the title uses `.primary`, the detail and duration use `.secondary` (failure detail included), and the status glyph uses `.primary`, so the whole row reads as white text and glyph on the accent.
+- **Selection:** One selection look whether or not the list has focus. `RowSelectionBackground` turns off the native table highlight and fills the selected row with selection (#EBE4D1 light, #384044 dark) in a 6pt rounded rectangle inset 10pt. Row text and glyphs keep their normal ink, muted, storm text, and status tints.
 
 ### Status Header
 The top of the output column: a title-size status icon, the status title in rounded semibold in the status text tint, job and date in muted, a trailing Duration / Result grid, then the command in mono muted with icon-only borderless Copy Output and Show Log in Finder buttons. It sits on paper like the rest of the column, with no wash; status shows through the icon and the status-tinted title only. A 1pt hairline separates it from the log.
@@ -207,7 +208,7 @@ The sun's path across 24 hours as a negative cosine from midnight to midnight, w
 
 ### Do:
 - **Do** take every color from `Solar`, defined with light, dark, and Increase Contrast values.
-- **Do** keep `AccentColor` Solarized slate, and switch selected row text and glyphs to `.primary` / `.secondary` when `backgroundProminence` is `.increased`.
+- **Do** keep `AccentColor` Solarized slate, and give list rows `RowSelectionBackground` so selection does not change with focus.
 - **Do** pair every status color with its weather glyph and a text label.
 - **Do** use storm-text, not storm, for failure text.
 - **Do** use native SwiftUI controls, lists, forms, toolbars, and split views; put personality in color, glyphs, and the day arc.

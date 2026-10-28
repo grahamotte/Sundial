@@ -21,6 +21,7 @@ let package = Package(
                 "Preferences.swift",
                 "RunDetailView.swift",
                 "RunListView.swift",
+                "RowSelection.swift",
                 "SettingsView.swift",
                 "SidebarView.swift",
                 "Solar.swift",

@@ -9,10 +9,12 @@ struct SidebarView: View {
             Label("All Runs", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                 .badge(failureCount)
                 .tag(SidebarItem.allRuns)
+                .listRowBackground(RowSelectionBackground(isSelected: model.sidebarSelection == .allRuns))
             Section("Jobs") {
                 ForEach(model.jobs) { job in
                     JobRow(job: job)
                         .tag(SidebarItem.job(job.id))
+                        .listRowBackground(RowSelectionBackground(isSelected: model.sidebarSelection == .job(job.id)))
                         .contextMenu { JobMenuItems(job: job) }
                 }
                 if model.jobs.isEmpty {
@@ -81,10 +83,11 @@ struct JobRow: View {
             StatusIcon(status: model.lastRun(for: job.id)?.status())
             VStack(alignment: .leading, spacing: 1) {
                 Text(job.name)
+                    .foregroundStyle(Solar.ink)
                     .lineLimit(1)
                 Text(job.isEnabled ? job.schedule.summary() : "Paused")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Solar.muted)
                     .lineLimit(1)
             }
         }
