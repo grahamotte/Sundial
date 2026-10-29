@@ -199,7 +199,7 @@ A native `NSTextView`: selectable, find bar enabled, not editable, 12pt monospac
 Native sidebar with system glass and `.secondary` subtitles. Settings is a full-width button pinned to the sidebar bottom (8pt corners, quaternary fill selected, quinary on hover). The runs column's header is one toolbar item as wide as the column: the title and subtitle on the left, glass circle Run Now and More buttons on the right. A small segmented All / Failed picker sits in the runs list above the day groups.
 
 ### Menu Bar Popover
-Paper ground, 320pt. Day arc titled "Today", a hairline, "Recent Runs" (headline) with up to 10 rows, a hairline, then View All Runs…, Settings…, Quit Sundial. Rows highlight with sun at 18% and 6pt corners on hover.
+Paper ground, 320pt. Day arc titled "Today", a hairline, "Recent Runs" (headline) with up to 10 rows, a hairline, then View All Runs…, Quit Sundial. Choosing a run or View All Runs… closes the popover and opens the main window. Rows highlight with sun at 18% and 6pt corners on hover.
 
 ### Day Arc (signature)
 The sun's path across 24 hours as a negative cosine from midnight to midnight, with the horizon at 6 AM and 6 PM. A horizon line and dotted full-day path in horizon; a faint daylight fill in sunlight above the horizon (18% at the top of the arc to 2% at the horizon); the elapsed path stroked 2pt in sun up to now; `sun.max.fill` (17pt) at now above the horizon, `moon.fill` (13pt, dusk) below. Today's runs sit on the path as status marks, failures drawn last so they are on top. No hour labels and no visible summary; the summary ("7 passed, 1 failed, 1 running. Next run at 12:00 PM.") is only the accessibility value. Updates every minute.
