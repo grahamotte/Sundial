@@ -42,6 +42,18 @@ final class ScheduleTests: XCTestCase {
         )
     }
 
+    func testRunsPerDay() {
+        XCTAssertEqual(Schedule.interval(minutes: 1).runsPerDay, 1440)
+        XCTAssertEqual(Schedule.interval(minutes: 15).runsPerDay, 96)
+        XCTAssertEqual(Schedule.interval(minutes: 60).runsPerDay, 24)
+        XCTAssertEqual(Schedule.interval(minutes: 360).runsPerDay, 4)
+        XCTAssertEqual(Schedule.interval(minutes: 720).runsPerDay, 2)
+        XCTAssertEqual(Schedule.daily(hour: 9, minute: 0).runsPerDay, 1)
+        XCTAssertEqual(Schedule.weekly(weekdays: [2], hour: 9, minute: 0).runsPerDay, 1.0 / 7, accuracy: 0.0001)
+        XCTAssertEqual(Schedule.weekly(weekdays: [2, 3, 4, 5, 6], hour: 9, minute: 0).runsPerDay, 5.0 / 7, accuracy: 0.0001)
+        XCTAssertEqual(Schedule.weekly(weekdays: Array(1...7), hour: 9, minute: 0).runsPerDay, 1, accuracy: 0.0001)
+    }
+
     func testNextRun() {
         let now = utcDate(2026, 10, 25, 12, 7, 30)
         XCTAssertEqual(Schedule.interval(minutes: 1).nextRun(after: now, calendar: calendar), utcDate(2026, 10, 25, 12, 8))

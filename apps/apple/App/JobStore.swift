@@ -6,7 +6,7 @@ struct JobStore {
 
     func load() throws -> [Job] {
         guard fileManager.fileExists(atPath: url.path) else { return [] }
-        return try JSONDecoder().decode([Job].self, from: Data(contentsOf: url))
+        return JobStore.sorted(try JSONDecoder().decode([Job].self, from: Data(contentsOf: url)))
     }
 
     func save(_ jobs: [Job]) throws {
@@ -18,6 +18,9 @@ struct JobStore {
 
     static func sorted(_ jobs: [Job]) -> [Job] {
         jobs.sorted {
+            let lhsRuns = $0.schedule.runsPerDay
+            let rhsRuns = $1.schedule.runsPerDay
+            if lhsRuns != rhsRuns { return lhsRuns > rhsRuns }
             let order = $0.name.localizedStandardCompare($1.name)
             return order == .orderedSame ? $0.id.uuidString < $1.id.uuidString : order == .orderedAscending
         }
