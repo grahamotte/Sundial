@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.4.2",
+    "build": "0.4.3",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.4.2",
-    "whatsNew": "A running job's output no longer appears in other runs' output when you switch between runs."
+    "version": "0.4.3",
+    "whatsNew": "Choosing a run or View All Runs in the menu bar now closes the menu bar window, and its Settings item is removed."
   }
 }
