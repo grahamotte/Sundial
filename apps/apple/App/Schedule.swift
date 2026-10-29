@@ -33,6 +33,15 @@ enum Schedule: Codable, Hashable {
         }
     }
 
+    var runsPerDay: Double {
+        calendarIntervals.reduce(0) { total, components in
+            let minutes: Double = components.minute == nil ? 60 : 1
+            let hours: Double = components.hour == nil ? 24 : 1
+            let days: Double = components.weekday == nil ? 1 : 1 / 7
+            return total + minutes * hours * days
+        }
+    }
+
     var launchdIntervals: [[String: Int]] {
         calendarIntervals.map { components in
             var interval: [String: Int] = [:]
