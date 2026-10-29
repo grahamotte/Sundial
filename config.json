@@ -36,7 +36,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.4.1",
+    "build": "0.4.2",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -67,7 +67,7 @@
       },
       "android": {}
     },
-    "version": "0.4.1",
-    "whatsNew": "Selected rows stay readable and look the same whether or not their list has focus."
+    "version": "0.4.2",
+    "whatsNew": "A running job's output no longer appears in other runs' output when you switch between runs."
   }
 }
