@@ -6,6 +6,7 @@ struct MenuBarView: View {
 
     @Environment(AppModel.self) private var model
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         let recent = RunRecord.recent(model.runs, limit: MenuBarView.runLimit)
@@ -42,7 +43,6 @@ struct MenuBarView: View {
                 .padding(.vertical, 5)
             VStack(spacing: 0) {
                 MenuRow(action: showAllRuns) { Text("View All Runs…") }
-                MenuRow(action: showSettings) { Text("Settings…") }
                 MenuRow(action: { NSApp.terminate(nil) }) { Text("Quit Sundial") }
             }
             .padding(.horizontal, 5)
@@ -63,12 +63,8 @@ struct MenuBarView: View {
         openMainWindow()
     }
 
-    private func showSettings() {
-        model.isShowingSettings = true
-        openMainWindow()
-    }
-
     private func openMainWindow() {
+        dismiss()
         openWindow(id: SundialApp.mainWindowID)
         NSApp.activate()
     }
