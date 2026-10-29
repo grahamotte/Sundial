@@ -5,7 +5,6 @@ struct RunDetailView: View {
     @Environment(AppModel.self) private var model
     let run: RunRecord
     @State private var log = ""
-    @State private var monitor: FileMonitor?
     @State private var width: CGFloat = 0
 
     var body: some View {
@@ -58,9 +57,10 @@ struct RunDetailView: View {
         }
         .task(id: run) {
             log = model.log(for: run)
-            monitor = run.finishedAt == nil
-                ? FileMonitor(url: model.logURL(for: run)) { log = model.log(for: run) }
-                : nil
+            guard run.finishedAt == nil else { return }
+            for await _ in FileMonitor.changes(of: model.logURL(for: run)) {
+                log = model.log(for: run)
+            }
         }
     }
 
