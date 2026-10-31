@@ -47,15 +47,17 @@ final class RunRecordTests: XCTestCase {
         XCTAssertEqual(record(finished: false).durationText(status: .interrupted, now: now), "—")
     }
 
-    func testRecentIsNewestFirstAcrossJobsAndLimited() {
-        let jobA = UUID(), jobB = UUID()
-        let runs = (0..<5).map { index in
-            RunRecord(id: "\(index)", jobID: index.isMultiple(of: 2) ? jobA : jobB, jobName: "Job", command: "true", startedAt: utcDate(2026, 10, 25, index), processID: 1)
+    func testLatestPerJobKeepsNewestRunOfEachJobNewestFirstAndLimited() {
+        let jobA = UUID(), jobB = UUID(), jobC = UUID()
+        let jobs = [jobA, jobA, jobB, jobA, jobC, jobA, jobA]
+        let runs = jobs.enumerated().map { index, jobID in
+            RunRecord(id: "\(index)", jobID: jobID, jobName: "Job", command: "true", startedAt: utcDate(2026, 10, 25, index), processID: 1)
         }.shuffled()
-        XCTAssertEqual(RunRecord.recent(runs, limit: 3).map(\.id), ["4", "3", "2"])
-        XCTAssertEqual(RunRecord.recent(runs, limit: 10).map(\.id), ["4", "3", "2", "1", "0"])
-        XCTAssertEqual(RunRecord.recent(runs, limit: 0), [])
-        XCTAssertEqual(RunRecord.recent(runs, limit: -1), [])
+        XCTAssertEqual(RunRecord.latestPerJob(runs, limit: 10).map(\.id), ["6", "4", "2"])
+        XCTAssertEqual(RunRecord.latestPerJob(runs, limit: 2).map(\.id), ["6", "4"])
+        XCTAssertEqual(RunRecord.latestPerJob([], limit: 10), [])
+        XCTAssertEqual(RunRecord.latestPerJob(runs, limit: 0), [])
+        XCTAssertEqual(RunRecord.latestPerJob(runs, limit: -1), [])
     }
 
     func testFormatDuration() {

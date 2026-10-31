@@ -54,8 +54,9 @@ struct RunRecord: Codable, Identifiable, Hashable {
         return kill(processID, 0) == 0 || errno == EPERM
     }
 
-    static func recent(_ runs: [RunRecord], limit: Int) -> [RunRecord] {
-        Array(runs.sorted { $0.startedAt > $1.startedAt }.prefix(max(0, limit)))
+    static func latestPerJob(_ runs: [RunRecord], limit: Int) -> [RunRecord] {
+        let latest = Dictionary(grouping: runs, by: \.jobID).compactMap { $0.value.max { $0.startedAt < $1.startedAt } }
+        return Array(latest.sorted { $0.startedAt > $1.startedAt }.prefix(max(0, limit)))
     }
 
     static func formatDuration(_ interval: TimeInterval) -> String {

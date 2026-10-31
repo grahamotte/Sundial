@@ -11,7 +11,7 @@ Features:
 - Schedules: every 1, 5, 10, 15, or 30 minutes or every 1, 2, 3, 4, 6, 8, or 12 hours, aligned to the clock, daily at a time, or on chosen weekdays at a time. Schedules are calendar-based, so a run missed while the Mac slept happens once when it wakes.
 - Run states are shown as weather: sun for passed (exit 0), a storm for failed (non-zero exit or signal), a cloud for interrupted, turning rays for running, and a sunrise for never run.
 - Output, exit status, and duration are kept for every run for 30 days. Logs are searchable, and a running job's log follows along live. Run Now starts a job by hand.
-- A menu bar item shows today's runs on the sun's path and the ten most recent runs. No Dock icon while only the menu bar item is shown, and no notifications.
+- A menu bar item shows today's runs on the sun's path and the latest run of each job. No Dock icon while only the menu bar item is shown, and no notifications.
 - No accounts, analytics, or network requests.
 
 ## Docs
