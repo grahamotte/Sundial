@@ -12,6 +12,16 @@ struct SundialApp: App {
         return model
     }()
 
+    init() {
+        #if SUNDIAL_DEV
+        DebugHooks.install { name, arguments in
+            if name == "sheet", let path = arguments.first {
+                DebugHooks.snap(DebugHooks.window(titled: nil)?.attachedSheet, to: path)
+            }
+        }
+        #endif
+    }
+
     var body: some Scene {
         Window("Sundial", id: SundialApp.mainWindowID) {
             ContentView()

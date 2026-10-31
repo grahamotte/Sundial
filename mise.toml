@@ -362,6 +362,11 @@ depends = ["dependencies:publish"]
 usage = 'arg "<target>" help="Device to launch" choices "iphone" "phone" "ipad" "tablet" "mac" "macos" "osx" "tv" "tvos"'
 run = 'cd publish && ruby simulate.rb "$usage_target"'
 
+[tasks."app:debug"]
+description = "Send a DebugHooks command to the running Debug macOS app, such as snap|/tmp/app.png (snap|PATH|TITLE for another window), sheet|/tmp/sheet.png for the main window's open sheet, frame|W|H, action|selector:, key|CODE|MODS|CHARS (modifiers c/s/o/t), or type|TEXT"
+usage = 'arg "<command>" help="Debug command for DebugHooks"'
+run = 'swift scripts/mise/app_debug.swift "$usage_command"'
+
 [tasks."publish:xcode"]
 description = "Open the Apple app project in Xcode"
 alias = ["xcode"]
