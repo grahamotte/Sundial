@@ -78,6 +78,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.applyActivationPolicy()
     }
 
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        #if APP_DEV
+        DebugHooks.install()
+        #endif
+    }
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         !Preferences.showsMenuBarExtra
     }
