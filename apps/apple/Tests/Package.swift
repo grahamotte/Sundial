@@ -13,6 +13,7 @@ let package = Package(
                 "Assets.xcassets",
                 "ContentView.swift",
                 "DayArcView.swift",
+                "DebugHooks.swift",
                 "FileMonitor.swift",
                 "Info.plist",
                 "JobEditorView.swift",
@@ -34,6 +35,7 @@ let package = Package(
             sources: [
                 "CommandRunning.swift",
                 "DayArc.swift",
+                "DebugCommand.swift",
                 "Job.swift",
                 "JobRunner.swift",
                 "JobStore.swift",
@@ -46,7 +48,7 @@ let package = Package(
                 "ScheduleDraft.swift",
                 "SundialPaths.swift",
             ],
-            swiftSettings: [.swiftLanguageMode(.v5)],
+            swiftSettings: [.define("APP_DEV"), .swiftLanguageMode(.v5)],
         ),
         .testTarget(
             name: "SundialCoreTests",
