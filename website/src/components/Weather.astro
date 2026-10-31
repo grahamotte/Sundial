@@ -1,0 +1,62 @@
+---
+const { kind, class: className } = Astro.props as {
+  kind: "sun" | "storm" | "cloud" | "rays" | "sunrise";
+  class?: string;
+};
+
+const rays = Array.from({ length: 8 }, (_, index) => {
+  const angle = (index * Math.PI) / 4;
+  return { x1: 12 + Math.cos(angle) * 7.4, y1: 12 + Math.sin(angle) * 7.4, x2: 12 + Math.cos(angle) * 10, y2: 12 + Math.sin(angle) * 10 };
+});
+const risingRays = [-150, -120, -90, -60, -30].map((degrees) => {
+  const angle = (degrees * Math.PI) / 180;
+  return { x1: 12 + Math.cos(angle) * 7.6, y1: 16 + Math.sin(angle) * 7.6, x2: 12 + Math.cos(angle) * 10.2, y2: 16 + Math.sin(angle) * 10.2 };
+});
+const cloud = "M7.2 18.5h10.3a3.9 3.9 0 0 0 .5-7.77 5.6 5.6 0 0 0-10.8 1.17A3.3 3.3 0 0 0 7.2 18.5Z";
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class:list={["shrink-0", className]}
+>
+  {
+    kind === "sun" && (
+      <>
+        <circle cx="12" cy="12" r="4.4" fill="currentColor" stroke="none" />
+        {rays.map((ray) => <line {...ray} />)}
+      </>
+    )
+  }
+  {
+    kind === "rays" && (
+      <>
+        {rays.map((ray) => <line {...ray} />)}
+        <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+      </>
+    )
+  }
+  {
+    kind === "sunrise" && (
+      <>
+        <path d="M6.6 16a5.4 5.4 0 0 1 10.8 0" fill="currentColor" fill-opacity="0.35" />
+        {risingRays.map((ray) => <line {...ray} />)}
+        <line x1="2.5" y1="19.5" x2="21.5" y2="19.5" />
+      </>
+    )
+  }
+  {kind === "cloud" && <path d={cloud} transform="translate(0 0.5)" fill="currentColor" stroke="none" />}
+  {
+    kind === "storm" && (
+      <>
+        <path d={cloud} transform="translate(0 -3.5)" fill="currentColor" fill-opacity="0.4" stroke="none" />
+        <path d="m12.6 13-2.6 4.2h3.2L11 21.5" stroke-width="1.8" />
+      </>
+    )
+  }
+</svg>

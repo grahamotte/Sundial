@@ -1,0 +1,274 @@
+---
+import { dayRuns, formatHour, gnomonHeight, hourAt, hourLine, project, summary, tilt, turn, type Run } from "../lib/sun";
+
+const { name, size = "large", class: className } = Astro.props as { name: string; size?: "large" | "small"; class?: string };
+
+const radius = 150;
+const gnomon = 90;
+const runs = dayRuns;
+
+const angle = (turn * Math.PI) / 180;
+const plan = `matrix(${Math.cos(angle)} ${tilt * Math.sin(angle)} ${Math.sin(angle)} ${-tilt * Math.cos(angle)} 0 0)`;
+const along = (hour: number, distance: number) => {
+  const line = hourLine(hour);
+  return { x: line.x * distance, y: line.y * distance };
+};
+const hours = Array.from({ length: 29 }, (_, index) => 5 + index / 2);
+const numerals = hours.filter((hour) => Number.isInteger(hour) && hour >= 6 && hour <= 18);
+const label = (hour: number) => String(hour > 12 ? hour - 12 : hour);
+const base = project({ x: 0, y: gnomon });
+const top = project({ x: 0, y: gnomon }, gnomonHeight(gnomon));
+const mark = (run: Run) => project(along(run.hour, radius * 0.68));
+const thickness = 12;
+const start = hourAt(0);
+const small = size === "small";
+const id = `dial-${name}`;
+---
+
+<div data-dial class:list={["dial", { "dial-small": small }, className]}>
+  <svg
+    viewBox="-160 -84 320 174"
+    role="img"
+    aria-label="A sundial whose shadow moves through the day as you scroll"
+    class="block h-auto w-full overflow-visible"
+  >
+    <defs>
+      <clipPath id={`${id}-plate`}>
+        <ellipse rx={radius - 6} ry={(radius - 6) * tilt} />
+      </clipPath>
+      <linearGradient id={`${id}-gnomon`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#c07a40" />
+        <stop offset="1" stop-color="#7c4723" />
+      </linearGradient>
+    </defs>
+    <g class="dial-body">
+      <path
+        d={`M${-radius} 0 v${thickness} a${radius} ${radius * tilt} 0 0 0 ${radius * 2} 0 v${-thickness} z`}
+        class="dial-edge"
+      />
+      <ellipse rx={radius} ry={radius * tilt} class="dial-face" />
+      <ellipse rx={radius - 6} ry={(radius - 6) * tilt} class="dial-rim" />
+      {
+        !small && (
+          <>
+            <ellipse rx={radius * 0.8} ry={radius * 0.8 * tilt} class="dial-ring" />
+            <g transform={plan}>
+              {hours.map((hour) => {
+                const inner = along(hour, Number.isInteger(hour) ? radius * 0.36 : radius * 0.72);
+                const outer = along(hour, radius * 0.8);
+                return (
+                  <line
+                    x1={inner.x}
+                    y1={inner.y}
+                    x2={outer.x}
+                    y2={outer.y}
+                    class:list={["dial-line", { "dial-line-half": !Number.isInteger(hour) }]}
+                  />
+                );
+              })}
+            </g>
+            {numerals.map((hour) => {
+              const point = project(along(hour, radius * 0.89));
+              return (
+                <text x={point.x} y={point.y} class="dial-numeral" text-anchor="middle" dominant-baseline="central">
+                  {label(hour)}
+                </text>
+              );
+            })}
+          </>
+        )
+      }
+      <g clip-path={`url(#${id}-plate)`}>
+        <g transform={plan}>
+          <path data-dial-shadow class="dial-shadow" d="" />
+        </g>
+      </g>
+      {
+        !small &&
+          runs.map((run) => {
+            const point = mark(run);
+            return (
+              <g data-dial-run={run.hour} data-state="scheduled" transform={`translate(${point.x} ${point.y})`} class="dial-run">
+                <circle r="5.5" class="dial-run-ring" />
+                <circle r="4" class="dial-run-dot" />
+                <path d="M0 -6 L6 0 L0 6 L-6 0 Z" class="dial-run-diamond" />
+              </g>
+            );
+          })
+      }
+      <path d={`M0 0 L${base.x} ${base.y} L${top.x} ${top.y} Z`} fill={`url(#${id}-gnomon)`} stroke-linejoin="round" />
+      <path d={`M0 0 L${base.x} ${base.y}`} class="dial-gnomon-foot" />
+    </g>
+  </svg>
+  {
+    !small && (
+      <div class="mt-6 text-center" aria-hidden="true">
+        <p data-dial-time class="font-rounded text-[2rem] leading-none font-semibold tracking-[-0.01em] tabular-nums">
+          {formatHour(start)}
+        </p>
+        <p data-dial-summary class="mt-2.5 text-[0.9375rem] text-muted tabular-nums">
+          {summary(runs, start)}
+        </p>
+      </div>
+    )
+  }
+  {small && <span data-dial-time class="sr-only" />}
+</div>
+
+<script>
+  import { dayRuns as runs, formatHour, hourAt, runState, shadowStrength, shadowTip, summary, sunAt } from "../lib/sun";
+
+  const gnomon = 90;
+  const radius = 150;
+  const root = document.documentElement;
+  let frame = 0;
+
+  const render = () => {
+    frame = 0;
+    const scrollable = root.scrollHeight - window.innerHeight;
+    const hour = hourAt(scrollable > 0 ? window.scrollY / scrollable : 0);
+    const tip = shadowTip(hour, gnomon, radius * 1.4);
+    const strength = shadowStrength(hour);
+    const sun = sunAt(hour);
+    const time = formatHour(hour);
+    const text = summary(runs, hour);
+
+    root.style.setProperty("--sky-x", `${50 - Math.max(Math.min(sun.east, 1), -1) * 42}%`);
+    root.style.setProperty("--sky-glow", `${Math.min(Math.max(1 - Math.max(sun.up, 0) / 0.95, 0.12), 1)}`);
+
+    document.querySelectorAll<HTMLElement>("[data-dial]").forEach((dial) => {
+      dial.dataset.night = String(strength === 0);
+      const shadow = dial.querySelector<SVGPathElement>("[data-dial-shadow]");
+      if (shadow) {
+        shadow.setAttribute("d", tip ? `M0 0 L0 ${gnomon} L${tip.x} ${tip.y} Z` : "");
+        shadow.style.opacity = String(strength);
+      }
+      dial.querySelectorAll<SVGGElement>("[data-dial-run]").forEach((mark) => {
+        const run = runs.find((candidate) => candidate.hour === Number(mark.dataset.dialRun));
+        if (run) mark.dataset.state = runState(run, hour, runs);
+      });
+      const clock = dial.querySelector("[data-dial-time]");
+      if (clock && clock.textContent !== time) clock.textContent = time;
+      const line = dial.querySelector("[data-dial-summary]");
+      if (line && line.textContent !== text) line.textContent = text;
+    });
+    document.querySelectorAll("[data-clock]").forEach((clock) => {
+      if (clock.textContent !== time) clock.textContent = time;
+    });
+  };
+
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(render);
+  };
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  render();
+</script>
+
+<style>
+  .dial {
+    --dial-face: #fcf4e5;
+    --dial-edge: #a8693c;
+    --dial-rim: #c9925f;
+    --dial-line: #c49a73;
+    --dial-numeral: #8c5a33;
+    --dial-shadow: #5a3820;
+  }
+
+  .dial-body {
+    transition: filter 600ms ease-out;
+  }
+
+  .dial[data-night="true"] .dial-body {
+    filter: brightness(0.82) saturate(0.7);
+  }
+
+  .dial-edge {
+    fill: var(--dial-edge);
+  }
+
+  .dial-face {
+    fill: var(--dial-face);
+  }
+
+  .dial-rim,
+  .dial-ring {
+    fill: none;
+    stroke: var(--dial-rim);
+    stroke-width: 1.5;
+  }
+
+  .dial-ring {
+    stroke-width: 0.75;
+  }
+
+  .dial-line {
+    stroke: var(--dial-line);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .dial-line-half {
+    stroke-width: 0.75;
+  }
+
+  .dial-numeral {
+    fill: var(--dial-numeral);
+    font-family: var(--font-rounded);
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+
+  .dial-shadow {
+    fill: var(--dial-shadow);
+    fill-opacity: 0.34;
+  }
+
+  .dial-gnomon-foot {
+    stroke: #6b3d1e;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .dial-small .dial-rim {
+    stroke-width: 8;
+  }
+
+  .dial-run circle,
+  .dial-run path {
+    stroke: var(--dial-face);
+    stroke-width: 2.5;
+    paint-order: stroke;
+    display: none;
+  }
+
+  .dial-run[data-state="scheduled"] .dial-run-dot {
+    display: block;
+    r: 2.5px;
+    fill: var(--dial-line);
+  }
+
+  .dial-run[data-state="next"] .dial-run-ring,
+  .dial-run[data-state="running"] .dial-run-ring {
+    display: block;
+    fill: none;
+    stroke: #073642;
+    stroke-width: 1.75;
+  }
+
+  .dial-run[data-state="running"] .dial-run-ring {
+    stroke: #1f6fa8;
+  }
+
+  .dial-run[data-state="passed"] .dial-run-dot {
+    display: block;
+    fill: #a07800;
+  }
+
+  .dial-run[data-state="failed"] .dial-run-diamond {
+    display: block;
+    fill: #dc322f;
+  }
+</style>

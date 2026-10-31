@@ -1,0 +1,26 @@
+# Sundial
+
+> Sundial is a small native macOS app that runs your own shell commands on a schedule with launchd and shows, at a glance, whether each run passed or failed. It is free and open source (MIT) and requires macOS 27 or later.
+
+Install with Homebrew: `brew install grahamotte/tap/sundial`, and update with `brew upgrade`. Or download the latest zip from GitHub Releases, unzip it, and move `Sundial.app` to `/Applications`. Builds are signed with a Developer ID and notarized by Apple. Sundial is not on the App Store.
+
+Features:
+
+- A job is a name, a command, a working directory, and a schedule. Commands run with `zsh -c`; Homebrew, mise, and `~/.local/bin` are on PATH.
+- Each job is a real launchd agent in `~/Library/LaunchAgents`, so it runs whether or not Sundial is open.
+- Schedules: every 1, 5, 10, 15, or 30 minutes or every 1, 2, 3, 4, 6, 8, or 12 hours, aligned to the clock, daily at a time, or on chosen weekdays at a time. Schedules are calendar-based, so a run missed while the Mac slept happens once when it wakes.
+- Run states are shown as weather: sun for passed (exit 0), a storm for failed (non-zero exit or signal), a cloud for interrupted, turning rays for running, and a sunrise for never run.
+- Output, exit status, and duration are kept for every run for 30 days. Logs are searchable, and a running job's log follows along live. Run Now starts a job by hand.
+- A menu bar item shows today's runs on the sun's path and the ten most recent runs. No Dock icon while only the menu bar item is shown, and no notifications.
+- No accounts, analytics, or network requests.
+
+## Docs
+
+- [README](https://raw.githubusercontent.com/grahamotte/Sundial/master/README.md): Installation.
+- [Privacy Policy](https://sundial.rsvp/privacy): Sundial collects no personal information.
+
+## Optional
+
+- [Source code](https://github.com/grahamotte/Sundial): The Sundial repository on GitHub.
+- [Releases](https://github.com/grahamotte/Sundial/releases): Signed and notarized downloads and release notes.
+- [Issues](https://github.com/grahamotte/Sundial/issues): Bug reports and questions.

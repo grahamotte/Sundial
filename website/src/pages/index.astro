@@ -1,9 +1,203 @@
 ---
 import config from "../../../config.json";
+import InstallCommand from "../components/InstallCommand.astro";
+import Sundial from "../components/Sundial.astro";
+import Weather from "../components/Weather.astro";
 import Layout from "../layouts/Layout.astro";
+
+const repoUrl = config.apps.marketingUrl;
+const install = "brew install grahamotte/tap/sundial";
+
+const states = [
+  { kind: "sun", tint: "text-sun", label: "Passed", text: "The command exited 0." },
+  { kind: "storm", tint: "text-storm", label: "Failed", text: "It exited with an error or was stopped by a signal." },
+  { kind: "cloud", tint: "text-storm", label: "Interrupted", text: "The run was cut off before it finished." },
+  { kind: "rays", tint: "text-sky", label: "Running", text: "Its output follows along as it's written." },
+  { kind: "sunrise", tint: "text-dusk", label: "Never run", text: "Scheduled, and waiting for its first run." },
+] as const;
+
+const features = [
+  {
+    title: "Real launch agents",
+    text: "Each job is a launchd agent in ~/Library/LaunchAgents, so it runs on time whether Sundial is open or not.",
+  },
+  {
+    title: "Schedules that keep time",
+    text: "Every few minutes or hours on the clock, daily, or on the weekdays you pick. A run missed while your Mac slept happens once when it wakes.",
+  },
+  {
+    title: "Your shell, your tools",
+    text: "Commands run with zsh -c in the folder you choose. Homebrew, mise, and ~/.local/bin are on PATH.",
+  },
+  {
+    title: "Every run, kept for 30 days",
+    text: "Output, exit status, and duration for each run. Logs are searchable, and a running job's log follows along live.",
+  },
+  {
+    title: "Lives in the menu bar",
+    text: "Today's runs on the sun's path and the ten most recent runs, one click away. No Dock icon and no notifications.",
+  },
+  {
+    title: "Run Now",
+    text: "Start any job by hand to try a change, then read its output right there.",
+  },
+];
+
+const job = [
+  ["Name", "Back Up Notes"],
+  ["Command", "rsync -a ~/Notes /Volumes/Backup"],
+  ["Directory", "~"],
+  ["Schedule", "Daily at 2:00 AM"],
+];
+
+const plist = `<key>Label</key>
+<string>com.grahamotte.sundial.job.…</string>
+<key>ProgramArguments</key>
+<array>
+  <string>/Applications/Sundial.app/Contents/MacOS/Sundial</string>
+  <string>run</string>
+  <string>…</string>
+</array>
+<key>StartCalendarInterval</key>
+<array>
+  <dict>
+    <key>Hour</key>
+    <integer>2</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+</array>`;
 ---
 
 <Layout>
-  <h1 class="text-3xl">{config.site.title}</h1>
-  <p class="max-w-xl text-neutral-400">{config.site.description}</p>
+  <div class="mx-auto grid w-full max-w-6xl gap-x-16 px-6 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,25rem)]">
+    <div class="min-w-0">
+      <section class="pt-12 sm:pt-20">
+        <h1 class="max-w-xl font-rounded text-[2.5rem] leading-[1.06] font-semibold tracking-[-0.025em] text-balance sm:text-[3.5rem]">
+          A sundial for your shell commands.
+        </h1>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-pretty text-muted">
+          Sundial is a small Mac app that runs your own commands on a schedule and shows, at a glance, whether each run
+          passed or failed. Sunshine when it worked. A storm when it didn't.
+        </p>
+        <div class="mt-9 flex flex-col items-start gap-x-6 gap-y-4 sm:flex-row sm:flex-wrap sm:items-center">
+          <InstallCommand command={install} class="bg-paper" />
+          <a href={`${repoUrl}/releases/latest`} class="text-[0.9375rem] font-medium underline">Or download the app</a>
+        </div>
+        <p class="mt-5 text-sm text-muted">
+          Free and open source. Version {config.apps.version}, for macOS 27 or later. Signed and notarized by Apple.
+        </p>
+        <div data-hero-dial class="mx-auto mt-14 max-w-sm lg:hidden">
+          <Sundial name="hero" />
+        </div>
+      </section>
+
+      <section class="mt-14 sm:mt-20">
+        <img
+          src="/screenshot.webp"
+          width="2000"
+          height="1378"
+          alt="The Sundial window. A sidebar lists two jobs, the middle column shows the Good Gratis Ingest job's day arc, command, schedule, and three passed runs, and the right column shows the selected run's output."
+          class="screenshot h-auto w-full"
+          fetchpriority="high"
+        />
+      </section>
+
+      <section class="pt-24 md:pt-32">
+        <h2 class="max-w-lg font-rounded text-[1.75rem] leading-tight font-semibold tracking-[-0.02em] text-balance">
+          Sunshine means it passed
+        </h2>
+        <p class="mt-4 max-w-lg leading-relaxed text-pretty text-muted">
+          Every run gets a little weather. On a good day it's all sun, so the one storm is easy to spot, in the window and
+          in the menu bar.
+        </p>
+        <ul class="mt-10 border-t border-hairline">
+          {
+            states.map((state) => (
+              <li class="flex items-start gap-4 border-b border-hairline py-4 sm:items-center">
+                <Weather kind={state.kind} class:list={["size-6", state.tint]} />
+                <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-0">
+                  <span class="font-semibold sm:w-32 sm:shrink-0">{state.label}</span>
+                  <span class="text-muted">{state.text}</span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="pt-24 md:pt-32">
+        <h2 class="max-w-lg font-rounded text-[1.75rem] leading-tight font-semibold tracking-[-0.02em] text-balance">
+          A friendly face on launchd
+        </h2>
+        <p class="mt-4 max-w-lg leading-relaxed text-pretty text-muted">
+          Sundial isn't a server, a cron wrapper, or a cloud service. It's a native front end to the scheduler already
+          built into your Mac.
+        </p>
+        <ul class="mt-10 grid gap-x-10 border-t border-hairline sm:grid-cols-2">
+          {
+            features.map((feature) => (
+              <li class="border-b border-hairline py-6">
+                <h3 class="font-semibold">{feature.title}</h3>
+                <p class="mt-1.5 leading-relaxed text-pretty text-muted">{feature.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="pt-24 md:pt-32">
+        <h2 class="max-w-lg font-rounded text-[1.75rem] leading-tight font-semibold tracking-[-0.02em] text-balance">
+          A job is four things
+        </h2>
+        <p class="mt-4 max-w-lg leading-relaxed text-pretty text-muted">
+          A name, a command, a folder, and a schedule. Sundial writes the launch agent for you and keeps it in sync when
+          you edit, pause, or delete the job.
+        </p>
+        <div class="mt-10 overflow-hidden rounded-[10px] border border-hairline bg-paper">
+          <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-8 gap-y-3 bg-plate px-5 py-5 text-[0.9375rem]">
+            {
+              job.map(([label, value]) => (
+                <>
+                  <dt class="text-muted">{label}</dt>
+                  <dd class:list={["min-w-0 text-right break-words", { "font-mono text-[0.875rem]": label === "Command" }]}>{value}</dd>
+                </>
+              ))
+            }
+          </dl>
+          <figure class="border-t border-hairline">
+            <figcaption class="truncate border-b border-hairline px-5 py-2.5 font-mono text-[0.8125rem] text-muted">
+              ~/Library/LaunchAgents/com.grahamotte.sundial.job.….plist
+            </figcaption>
+            <pre class="overflow-x-auto px-5 py-4 font-mono text-[0.8125rem] leading-relaxed"><code>{plist}</code></pre>
+          </figure>
+        </div>
+      </section>
+
+      <section class="pt-24 pb-24 md:pt-32 md:pb-32">
+        <div class="flex flex-col items-start gap-6 rounded-[14px] border border-hairline bg-plate px-5 py-8 sm:px-8 sm:py-10">
+          <div class="flex items-center gap-5">
+            <img src="/icon.png" alt="" width="64" height="64" class="size-16 shrink-0" loading="lazy" />
+            <div>
+              <h2 class="font-rounded text-[1.375rem] font-semibold tracking-[-0.015em]">Give Sundial a try</h2>
+              <p class="mt-1 text-muted">Install with Homebrew, then update with <code class="font-mono text-[0.92em]">brew upgrade</code>.</p>
+            </div>
+          </div>
+          <InstallCommand command={install} class="bg-paper" />
+        </div>
+      </section>
+    </div>
+
+    <aside class="hidden lg:block">
+      <div class="sticky top-[max(2rem,calc(50vh-11rem))] pt-20">
+        <Sundial name="rail" />
+      </div>
+    </aside>
+  </div>
 </Layout>
+
+<style>
+  .screenshot {
+    filter: drop-shadow(0 18px 36px rgb(7 54 66 / 0.14)) drop-shadow(0 2px 6px rgb(7 54 66 / 0.08));
+  }
+</style>

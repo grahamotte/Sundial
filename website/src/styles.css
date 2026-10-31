@@ -1,7 +1,109 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --font-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --color-paper: light-dark(#fffdf8, #1c1f21);
+  --color-plate: light-dark(#faf7f0, #23272a);
+  --color-ink: light-dark(#073642, #eee8d5);
+  --color-muted: light-dark(#4f646b, #93a1a1);
+  --color-hairline: light-dark(#e9e4d8, #343a3d);
+  --color-horizon: light-dark(#cfc8b6, #4a5357);
+  --color-selection: light-dark(#ebe4d1, #384044);
+  --color-slate: light-dark(#586e75, #657b83);
+  --color-sun: light-dark(#a07800, #d9a400);
+  --color-sunlight: #b58900;
+  --color-sky: light-dark(#1f6fa8, #3a9ae0);
+  --color-storm: light-dark(#dc322f, #ec4d49);
+  --color-storm-text: light-dark(#b0201d, #ff6f6b);
+  --color-dusk: light-dark(#6e7c7c, #839496);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-paper: light-dark(#ffffff, #0f1112);
+    --color-plate: light-dark(#f4f1e8, #15181a);
+    --color-ink: light-dark(#002b36, #fdf6e3);
+    --color-muted: light-dark(#3d4f55, #b8c4c4);
+    --color-hairline: light-dark(#93a1a1, #6a7478);
+    --color-horizon: light-dark(#657b83, #8c979b);
+    --color-sun: light-dark(#7a5c00, #f0c33c);
+    --color-sky: light-dark(#15577f, #6cb6ec);
+    --color-storm: light-dark(#b0201d, #ff6f6b);
+    --color-storm-text: light-dark(#8e1a17, #ff8e8a);
+    --color-dusk: light-dark(#56635f, #a3b1b1);
+  }
+}
+
 :root {
-  font-family: ui-monospace, monospace;
-  color: #fafafa;
-  background: #0a0a0a;
+  color-scheme: light dark;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scrollbar-color: var(--color-horizon) transparent;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-sunlight) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-slate);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+a {
+  text-decoration-color: var(--color-horizon);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 150ms ease-out, color 150ms ease-out;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+.sky {
+  --sky-tint: #f4a259;
+  --sky-strength: 28%;
+  background: radial-gradient(
+    70% 55% at var(--sky-x, 85%) -12%,
+    color-mix(in srgb, var(--sky-tint) calc(var(--sky-glow, 0.5) * var(--sky-strength)), transparent),
+    transparent
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  .sky {
+    --sky-tint: #b58900;
+    --sky-strength: 14%;
+  }
+}
+
+.prose-policy h1 {
+  font-family: var(--font-rounded);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.prose-policy h2 {
+  padding-top: 1.25rem;
+  font-family: var(--font-rounded);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.prose-policy p {
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
+.prose-policy code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
 }
