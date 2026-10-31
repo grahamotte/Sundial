@@ -17,13 +17,6 @@ final class FileMonitor {
         self.source = source
     }
 
-    static func changes(of url: URL) -> AsyncStream<Void> {
-        AsyncStream { continuation in
-            let monitor = FileMonitor(url: url) { continuation.yield() }
-            continuation.onTermination = { _ in withExtendedLifetime(monitor) {} }
-        }
-    }
-
     deinit {
         source?.cancel()
     }

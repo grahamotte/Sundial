@@ -38,6 +38,7 @@ let package = Package(
                 "JobRunner.swift",
                 "JobStore.swift",
                 "LaunchAgentManager.swift",
+                "LogTail.swift",
                 "RunDay.swift",
                 "RunRecord.swift",
                 "RunStore.swift",
