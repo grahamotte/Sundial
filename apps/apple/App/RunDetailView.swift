@@ -4,7 +4,7 @@ import SwiftUI
 struct RunDetailView: View {
     @Environment(AppModel.self) private var model
     let run: RunRecord
-    @State private var log = ""
+    @State private var hasOutput = false
     @State private var width: CGFloat = 0
 
     var body: some View {
@@ -21,10 +21,10 @@ struct RunDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Button("Copy Output", systemImage: "doc.on.doc") {
                         NSPasteboard.general.clearContents()
-                        NSPasteboard.general.setString(log, forType: .string)
+                        NSPasteboard.general.setString(model.log(for: run), forType: .string)
                     }
                     .help("Copy Output")
-                    .disabled(log.isEmpty)
+                    .disabled(!hasOutput)
                     Button("Show Log in Finder", systemImage: "folder") { model.revealLog(run) }
                         .help("Show Log in Finder")
                 }
@@ -37,9 +37,9 @@ struct RunDetailView: View {
             Rectangle()
                 .fill(Solar.hairline)
                 .frame(height: 1)
-            LogTextView(text: log, documentID: run.id)
+            LogTextView(url: model.logURL(for: run), documentID: run.id, isLive: run.finishedAt == nil, hasOutput: $hasOutput)
                 .overlay {
-                    if log.isEmpty && status != .running {
+                    if !hasOutput && status != .running {
                         ContentUnavailableView("No Output", systemImage: "text.alignleft", description: Text("This run didn't print anything."))
                     }
                 }
@@ -54,13 +54,6 @@ struct RunDetailView: View {
                     .frame(width: max(width - 18, 0))
             }
             .sharedBackgroundVisibility(.hidden)
-        }
-        .task(id: run) {
-            log = model.log(for: run)
-            guard run.finishedAt == nil else { return }
-            for await _ in FileMonitor.changes(of: model.logURL(for: run)) {
-                log = model.log(for: run)
-            }
         }
     }
 
@@ -102,8 +95,10 @@ struct RunDetailView: View {
 }
 
 struct LogTextView: NSViewRepresentable {
-    let text: String
+    let url: URL
     let documentID: String
+    let isLive: Bool
+    @Binding var hasOutput: Bool
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
@@ -122,24 +117,62 @@ struct LogTextView: NSViewRepresentable {
         textView.textContainerInset = NSSize(width: 14, height: 12)
         scrollView.drawsBackground = false
         scrollView.hasHorizontalScroller = false
+        context.coordinator.scrollView = scrollView
         return scrollView
     }
 
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let textView = scrollView.documentView as? NSTextView, textView.string != text || context.coordinator.documentID != documentID else { return }
-        let isNewDocument = context.coordinator.documentID != documentID
-        let visible = scrollView.documentVisibleRect
-        let wasAtBottom = visible.maxY >= textView.bounds.maxY - 4
-        textView.string = text
-        context.coordinator.documentID = documentID
-        if isNewDocument {
-            textView.scroll(.zero)
-        } else if wasAtBottom {
-            textView.scrollToEndOfDocument(nil)
-        }
+        let coordinator = context.coordinator
+        coordinator.onOutputChange = { hasOutput = $0 }
+        guard coordinator.documentID != documentID || coordinator.isLive != isLive else { return }
+        let isNewDocument = coordinator.documentID != documentID
+        coordinator.documentID = documentID
+        coordinator.isLive = isLive
+        coordinator.monitor = nil
+        coordinator.tail = LogTail(url: url)
+        coordinator.refresh(scrollToTop: isNewDocument)
+        guard isLive else { return }
+        coordinator.monitor = FileMonitor(url: url) { [weak coordinator] in coordinator?.scheduleRefresh() }
     }
 
     final class Coordinator {
+        weak var scrollView: NSScrollView?
         var documentID: String?
+        var isLive = false
+        var tail: LogTail?
+        var monitor: FileMonitor?
+        var onOutputChange: (Bool) -> Void = { _ in }
+        private var hasOutput: Bool?
+        private var isRefreshScheduled = false
+
+        func scheduleRefresh() {
+            guard !isRefreshScheduled else { return }
+            isRefreshScheduled = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.isRefreshScheduled = false
+                self?.refresh(scrollToTop: false)
+            }
+        }
+
+        func refresh(scrollToTop: Bool) {
+            guard let update = tail?.read(), let scrollView, let textView = scrollView.documentView as? NSTextView, let storage = textView.textStorage else { return }
+            let wasAtBottom = scrollView.documentVisibleRect.maxY >= textView.bounds.maxY - 4
+            switch update {
+            case .replace(let text):
+                textView.string = text
+            case .append(let text):
+                let attributes: [NSAttributedString.Key: Any] = [.font: textView.font as Any, .foregroundColor: textView.textColor as Any]
+                storage.append(NSAttributedString(string: text, attributes: attributes))
+            }
+            if scrollToTop {
+                textView.scroll(.zero)
+            } else if wasAtBottom {
+                textView.scrollToEndOfDocument(nil)
+            }
+            let output = storage.length > 0
+            guard output != hasOutput else { return }
+            hasOutput = output
+            DispatchQueue.main.async { [onOutputChange] in onOutputChange(output) }
+        }
     }
 }
