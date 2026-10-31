@@ -22,7 +22,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.4.4",
+    "build": "0.4.5",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -53,7 +53,7 @@
       },
       "android": {}
     },
-    "version": "0.4.4",
+    "version": "0.4.5",
     "whatsNew": "Jobs are now listed by how often they run, most frequent first."
   }
 }
