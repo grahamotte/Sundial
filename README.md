@@ -6,6 +6,8 @@
 
 Sundial is a small native macOS app for running your own shell commands on a schedule and seeing, at a glance, whether each run passed or failed.
 
+Learn more at [sundial.rsvp](https://sundial.rsvp).
+
 ## Install
 
 ```sh
