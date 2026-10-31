@@ -9,7 +9,7 @@ struct MenuBarView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        let recent = RunRecord.recent(model.runs, limit: MenuBarView.runLimit)
+        let recent = RunRecord.latestPerJob(model.runs, limit: MenuBarView.runLimit)
         VStack(alignment: .leading, spacing: 0) {
             DayArcView(runs: model.runs, schedules: model.jobs.filter(\.isEnabled).map(\.schedule), title: "Today", height: 50, ground: Solar.paper)
                 .padding(.horizontal, 14)
