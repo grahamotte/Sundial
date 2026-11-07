@@ -2,6 +2,13 @@
   "domain": "sundial.rsvp",
   "githubRepo": "git@github.com:grahamotte/Sundial.git",
   "database": "sundial",
+  "operatorOnlyEnvKeys": [
+    "APPLE_*",
+    "CLOUDFLARE_TOKEN",
+    "DEPLOY_PASSWORD",
+    "DEPLOY_SSH_KEY_*",
+    "DIGITAL_OCEAN_TOKEN"
+  ],
   "site": {
     "title": "Sundial",
     "description": "Schedule local commands on macOS and see every run.",
