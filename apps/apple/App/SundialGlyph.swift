@@ -21,10 +21,10 @@ enum SundialGlyph {
             CGPoint(x: rect.minX + x * unit, y: rect.minY + y * unit)
         }
         let blade = CGMutablePath()
-        blade.move(to: point(1, 2.2))
-        blade.addLine(to: point(14.2, 16.8))
-        blade.addLine(to: point(16.6, 15.6))
-        blade.addCurve(to: point(17, 1.2), control1: point(11.4, 10.4), control2: point(11.4, 3.2))
+        blade.move(to: point(0.8, 2.7))
+        blade.addLine(to: point(15.6, 16.1))
+        blade.addLine(to: point(17, 15.4))
+        blade.addCurve(to: point(17.4, 1.9), control1: point(9.4, 8.1), control2: point(11.6, 2.5))
         blade.closeSubpath()
         return blade
     }
