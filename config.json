@@ -29,7 +29,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.4.5",
+    "build": "0.5.0",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -60,7 +60,7 @@
       },
       "android": {}
     },
-    "version": "0.4.5",
-    "whatsNew": "Jobs are now listed by how often they run, most frequent first."
+    "version": "0.5.0",
+    "whatsNew": "Jobs now wait while your Mac is asleep on battery and run when it is awake or on power. Runs show how long they waited and whether the Mac slept during them."
   }
 }
