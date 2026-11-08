@@ -102,7 +102,7 @@ struct JobEditorView: View {
     private var nextRunText: String {
         guard candidate.schedule.isValid else { return "Choose at least one day." }
         guard let next = candidate.schedule.nextRun(after: Date()) else { return "" }
-        return "Next run \(Schedule.describe(next)). If your Mac is asleep, the job runs when it wakes. Sundial doesn't need to be open."
+        return "Next run \(Schedule.describe(next)). Jobs run when your Mac is awake or on power, and wait while it sleeps on battery. Sundial doesn't need to be open."
     }
 }
 

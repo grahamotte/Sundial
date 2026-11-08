@@ -10,7 +10,7 @@ enum SundialMain {
             return
         }
         do {
-            let runner = JobRunner(paths: .standard, launcher: SystemProcessLauncher())
+            let runner = JobRunner(paths: .standard, launcher: SystemProcessLauncher(), power: SystemPowerMonitor())
             exit(try runner.run(jobID: arguments[2]))
         } catch {
             FileHandle.standardError.write(Data("sundial: \(error.localizedDescription)\n".utf8))

@@ -66,7 +66,7 @@ struct DayArcCanvas: View {
                 let status = run.status()
                 let mark = mark(for: status, at: DayArc.point(at: fraction, in: rect))
                 context.stroke(mark, with: .color(ground), lineWidth: 3)
-                if status == .running {
+                if status.isActive {
                     context.fill(mark, with: .color(ground))
                     context.stroke(mark, with: .color(status.tint), lineWidth: 2)
                 } else {
@@ -117,6 +117,6 @@ struct DayArcCanvas: View {
     }
 
     private func order(_ status: RunRecord.Status) -> Int {
-        status.isFailure ? 2 : status == .running ? 1 : 0
+        status.isFailure ? 2 : status.isActive ? 1 : 0
     }
 }

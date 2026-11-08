@@ -17,13 +17,39 @@ final class RunStoreTests: XCTestCase {
         XCTAssertTrue(record.id.hasPrefix("1792929600000-"))
         XCTAssertEqual(store.records(), [record])
         XCTAssertEqual(store.log(for: record.id), "")
+        XCTAssertNil(record.commandStartedAt)
+        XCTAssertEqual(record.sleeps, [])
 
-        let finished = try store.finish(record, exitCode: 1, signal: nil, now: started.addingTimeInterval(5))
+        let commandStarted = try store.startCommand(record, now: started.addingTimeInterval(60))
+        XCTAssertEqual(commandStarted.commandStartedAt, started.addingTimeInterval(60))
+        XCTAssertEqual(store.records(), [commandStarted])
+
+        let sleep = RunRecord.Sleep(at: started.addingTimeInterval(62), isOnPower: false)
+        let slept = try store.addSleep(sleep, to: commandStarted)
+        XCTAssertEqual(slept.sleeps, [sleep])
+        XCTAssertEqual(store.records(), [slept])
+
+        let finished = try store.finish(slept, exitCode: 1, signal: nil, now: started.addingTimeInterval(65))
         XCTAssertEqual(store.records(), [finished])
         XCTAssertEqual(finished.exitCode, 1)
         XCTAssertEqual(finished.duration(), 5)
+        XCTAssertEqual(finished.wait(), 60)
+        XCTAssertEqual(finished.sleeps, [sleep])
         XCTAssertEqual(finished.jobName, "Backup")
         XCTAssertEqual(finished.processID, 42)
+    }
+
+    func testRecordsWithoutSleepsAreLegacyRunsWhoseCommandStartedWhenTheyFired() throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let json = """
+        {"command":"true","exitCode":0,"finishedAt":800000005,"id":"legacy","jobID":"\(UUID().uuidString)","jobName":"Job","processID":3,"startedAt":800000000}
+        """
+        try Data(json.utf8).write(to: directory.appending(path: "legacy.json"))
+        let record = try XCTUnwrap(store.records().first)
+        XCTAssertEqual(record.commandStartedAt, record.startedAt)
+        XCTAssertEqual(record.sleeps, [])
+        XCTAssertEqual(record.duration(), 5)
+        XCTAssertEqual(record.status { _ in false }, .succeeded)
     }
 
     func testRecordsAreNewestFirstAndSkipCorruptFiles() throws {

@@ -190,7 +190,7 @@ struct JobSummaryView: View {
     }
 
     private var history: String {
-        let finished = runs.filter { $0.status() != .running }
+        let finished = runs.filter { !$0.status().isActive }
         guard !finished.isEmpty else { return "No runs" }
         let failed = finished.filter { $0.status().isFailure }.count
         let passed = finished.count - failed
@@ -218,7 +218,7 @@ struct RunRow: View {
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
-            if status == .running {
+            if status.isActive {
                 TimelineView(.periodic(from: run.startedAt, by: 1)) { context in
                     duration(run.durationText(status: status, now: context.date))
                 }
@@ -230,7 +230,8 @@ struct RunRow: View {
     }
 
     private func detail(_ status: RunRecord.Status) -> String {
-        let outcome = status == .running ? "Running" : status == .interrupted ? "Interrupted" : run.outcome ?? status.title
+        let result = status.isActive || status == .interrupted ? status.title : run.outcome ?? status.title
+        let outcome = ([result] + run.notes(status: status)).joined(separator: " · ")
         guard showsJobName else { return outcome }
         return run.startedAt.formatted(date: .omitted, time: .shortened) + " · " + outcome
     }

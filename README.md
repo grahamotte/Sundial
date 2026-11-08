@@ -24,13 +24,13 @@ Each job is a command, a working directory, and a schedule. Sundial hands the sc
 
 Open Sundial and add a job with **New Job** (⌘N). The first time it installs a job, macOS shows a "Background Items Added" notification for Sundial. That is expected: each job is a launch agent, listed under Sundial in System Settings → General → Login Items & Extensions.
 
-- **Jobs** are listed in the sidebar with the result of their latest run: a sun for a pass, a red storm cloud for a failure, a red cloud for an interrupted run, a turning sun while running, or a sunrise for a job that hasn't run yet.
+- **Jobs** are listed in the sidebar with the result of their latest run: a sun for a pass, a red storm cloud for a failure, a red cloud for an interrupted run, a turning sun while running, a sleeping moon while waiting for the Mac to wake, or a sunrise for a job that hasn't run yet.
 - **Today** is drawn as the sun's path across the day, above the runs and in the menu bar. Each of today's runs sits on the path at the time it started, the sun marks the current time, and a hollow ring marks the next scheduled run.
 - **Runs** for the selected job are grouped by day. **All Runs** shows every job's runs together, and the **Failed** filter shows only failures.
 - **Output** for the selected run shows the full combined stdout and stderr, along with the start time, duration, and exit code. Copy it, or show the log file in Finder.
 - **Run Now** (⌘R) runs a job immediately, even if it is disabled. **Edit** (⌘E), **Duplicate**, **Enabled**, and **Delete** are in the toolbar's More menu and in the sidebar's context menu.
 
-A run passes when its command exits with status 0. A non-zero exit, a termination signal, or a run that was cut off (shown as **Interrupted**) counts as a failure.
+A run passes when its command exits with status 0. A non-zero exit, a termination signal, or a run that was cut off (shown as **Interrupted**) counts as a failure. A run that waited for the Mac to wake shows how long it waited, and a run during which the Mac went to sleep is marked **Mac slept during run**; its exit code still decides whether it passed.
 
 ### Menu bar and settings
 
@@ -46,7 +46,7 @@ Sundial adds a sundial icon to the menu bar. Click it to see the latest run of e
 | Daily | At a set time |
 | Weekly | At a set time on chosen days |
 
-If your Mac is asleep when a job is due, launchd runs it once when the Mac wakes, rather than once for every missed time.
+A job runs when the Mac is awake or on power, and waits only while the Mac is asleep on battery. If your Mac is asleep when a job is due, launchd starts it once at the next wake, rather than once for every missed time. macOS also wakes a sleeping Mac briefly for Power Nap and maintenance: on battery the run shows as **Waiting** until the Mac is properly awake or plugged in, and on power it runs during that brief wake while Sundial keeps the Mac awake until the command exits. A run that started on battery and was caught by sleep is paused with the Mac and resumes when it wakes, rather than being killed.
 
 ### How commands run
 

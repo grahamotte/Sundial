@@ -1,6 +1,6 @@
 import Foundation
 
-struct RunStore {
+nonisolated struct RunStore {
     static let retention: TimeInterval = 30 * 24 * 60 * 60
     static let maxLogBytes = 5_000_000
 
@@ -27,6 +27,20 @@ struct RunStore {
         }
         try write(record)
         return record
+    }
+
+    func startCommand(_ record: RunRecord, now: Date = Date()) throws -> RunRecord {
+        var started = record
+        started.commandStartedAt = now
+        try write(started)
+        return started
+    }
+
+    func addSleep(_ sleep: RunRecord.Sleep, to record: RunRecord) throws -> RunRecord {
+        var slept = record
+        slept.sleeps.append(sleep)
+        try write(slept)
+        return slept
     }
 
     func finish(_ record: RunRecord, exitCode: Int32?, signal: Int32?, now: Date = Date()) throws -> RunRecord {
