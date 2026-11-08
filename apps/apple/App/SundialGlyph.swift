@@ -20,25 +20,36 @@ enum SundialGlyph {
         func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
             CGPoint(x: rect.minX + x * unit, y: rect.minY + y * unit)
         }
-        let face = CGRect(origin: point(1.5, 2.6), size: CGSize(width: 15 * unit, height: 7 * unit))
-        let faceRing = CGPath(ellipseIn: face.insetBy(dx: 0.7 * unit, dy: 0.7 * unit), transform: nil)
-            .copy(strokingWithWidth: 1.4 * unit, lineCap: .round, lineJoin: .round, miterLimit: 10)
-        let base = CGPath(ellipseIn: face.offsetBy(dx: 0, dy: -1.6 * unit), transform: nil)
-        let band = CGPath(rect: CGRect(x: face.minX, y: face.midY - 1.6 * unit, width: face.width, height: 1.6 * unit), transform: nil)
+        func outline(_ path: CGPath, _ width: CGFloat) -> CGPath {
+            path.copy(strokingWithWidth: width * unit, lineCap: .round, lineJoin: .round, miterLimit: 10)
+        }
+        let center = point(9, 6.6)
+        let face = CGRect(x: center.x - 7.5 * unit, y: center.y - 3.4 * unit, width: 15 * unit, height: 6.8 * unit)
         let faceFill = CGPath(ellipseIn: face, transform: nil)
-        let rim = base.union(band).subtracting(faceFill)
+        let faceClearance = faceFill.union(outline(faceFill, 1.6))
+        let base = CGPath(ellipseIn: face.offsetBy(dx: 0, dy: -2 * unit), transform: nil)
+        let band = CGPath(rect: CGRect(x: face.minX, y: face.midY - 2 * unit, width: face.width, height: 2 * unit), transform: nil)
+        let rim = base.union(band).subtracting(faceClearance)
+        let ticks = CGMutablePath()
+        for degrees: CGFloat in [25, 200, 250, 295] {
+            let angle = degrees * .pi / 180
+            let outer = CGPoint(x: center.x + cos(angle) * 6.3 * unit, y: center.y + sin(angle) * 2.75 * unit)
+            let inner = CGPoint(x: center.x + cos(angle) * 5.2 * unit, y: center.y + sin(angle) * 2.25 * unit)
+            ticks.move(to: inner)
+            ticks.addLine(to: outer)
+        }
+        let tickCuts = outline(ticks, 0.85)
         let gnomon = CGMutablePath()
-        gnomon.move(to: point(5.2, 6.1))
-        gnomon.addLine(to: point(9.8, 15.8))
-        gnomon.addLine(to: point(9.8, 6.1))
+        gnomon.move(to: point(5.0, 7.0))
+        gnomon.addLine(to: point(9.6, 16.6))
+        gnomon.addLine(to: point(9.6, 7.0))
         gnomon.closeSubpath()
-        let gnomonGap = gnomon.copy(strokingWithWidth: 1.6 * unit, lineCap: .round, lineJoin: .round, miterLimit: 10)
         let shadow = CGMutablePath()
-        shadow.move(to: point(7.4, 6.1))
-        shadow.addLine(to: point(9.8, 6.1))
-        shadow.addLine(to: point(14.0, 4.2))
+        shadow.move(to: point(6.4, 7.0))
+        shadow.addLine(to: point(9.6, 7.0))
+        shadow.addLine(to: point(14.0, 4.0))
         shadow.closeSubpath()
-        let sun = CGPath(ellipseIn: CGRect(origin: point(1.6, 13.4), size: CGSize(width: 3 * unit, height: 3 * unit)), transform: nil)
-        return faceRing.union(rim).subtracting(gnomonGap).union(gnomon).union(shadow).union(sun)
+        let dial = faceFill.subtracting(tickCuts).subtracting(shadow).subtracting(outline(gnomon, 1.6).union(gnomon))
+        return dial.union(rim).union(gnomon)
     }
 }
