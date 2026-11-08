@@ -23,33 +23,16 @@ enum SundialGlyph {
         func outline(_ path: CGPath, _ width: CGFloat) -> CGPath {
             path.copy(strokingWithWidth: width * unit, lineCap: .round, lineJoin: .round, miterLimit: 10)
         }
-        let center = point(9, 6.6)
-        let face = CGRect(x: center.x - 7.5 * unit, y: center.y - 3.4 * unit, width: 15 * unit, height: 6.8 * unit)
-        let faceFill = CGPath(ellipseIn: face, transform: nil)
-        let faceClearance = faceFill.union(outline(faceFill, 1.6))
-        let base = CGPath(ellipseIn: face.offsetBy(dx: 0, dy: -2 * unit), transform: nil)
-        let band = CGPath(rect: CGRect(x: face.minX, y: face.midY - 2 * unit, width: face.width, height: 2 * unit), transform: nil)
-        let rim = base.union(band).subtracting(faceClearance)
-        let ticks = CGMutablePath()
-        for degrees: CGFloat in [25, 200, 250, 295] {
-            let angle = degrees * .pi / 180
-            let outer = CGPoint(x: center.x + cos(angle) * 6.3 * unit, y: center.y + sin(angle) * 2.75 * unit)
-            let inner = CGPoint(x: center.x + cos(angle) * 5.2 * unit, y: center.y + sin(angle) * 2.25 * unit)
-            ticks.move(to: inner)
-            ticks.addLine(to: outer)
-        }
-        let tickCuts = outline(ticks, 0.85)
+        let dial = CGRect(x: rect.minX + 1.4 * unit, y: rect.minY + 1.4 * unit, width: 15.2 * unit, height: 15.2 * unit)
+        let ring = outline(CGPath(ellipseIn: dial, transform: nil), 1.6)
         let gnomon = CGMutablePath()
-        gnomon.move(to: point(5.0, 7.0))
-        gnomon.addLine(to: point(9.6, 16.6))
-        gnomon.addLine(to: point(9.6, 7.0))
+        gnomon.move(to: point(5.6, 7.6))
+        gnomon.addLine(to: point(10, 14.4))
+        gnomon.addLine(to: point(10, 7.6))
         gnomon.closeSubpath()
         let shadow = CGMutablePath()
-        shadow.move(to: point(6.4, 7.0))
-        shadow.addLine(to: point(9.6, 7.0))
-        shadow.addLine(to: point(14.0, 4.0))
-        shadow.closeSubpath()
-        let dial = faceFill.subtracting(tickCuts).subtracting(shadow).subtracting(outline(gnomon, 1.6).union(gnomon))
-        return dial.union(rim).union(gnomon)
+        shadow.move(to: point(10, 7.6))
+        shadow.addLine(to: point(12.8, 5))
+        return ring.union(gnomon).union(outline(shadow, 1.7))
     }
 }
