@@ -61,16 +61,24 @@ struct DayArcCanvas: View {
                 context.fill(ring, with: .color(ground))
                 context.stroke(ring, with: .color(Solar.ink), lineWidth: 1.5)
             }
-            for run in runs.sorted(by: { order($0.status()) < order($1.status()) }) {
-                guard let fraction = arc.fraction(of: run.startedAt) else { continue }
-                let status = run.status()
-                let mark = mark(for: status, at: DayArc.point(at: fraction, in: rect))
-                context.stroke(mark, with: .color(ground), lineWidth: 3)
-                if status.isActive {
-                    context.fill(mark, with: .color(ground))
-                    context.stroke(mark, with: .color(status.tint), lineWidth: 2)
+            let marks: [(status: RunRecord.Status, path: Path)] = runs
+                .compactMap { run in
+                    guard let fraction = arc.fraction(of: run.startedAt) else { return nil }
+                    let status = run.status()
+                    return (status, mark(for: status, at: DayArc.point(at: fraction, in: rect)))
+                }
+                .sorted { order($0.status) < order($1.status) }
+            for mark in marks {
+                context.stroke(mark.path, with: .color(ground), lineWidth: 3)
+                if mark.status.isActive {
+                    context.fill(mark.path, with: .color(ground))
+                }
+            }
+            for mark in marks {
+                if mark.status.isActive {
+                    context.stroke(mark.path, with: .color(mark.status.tint), lineWidth: 2)
                 } else {
-                    context.fill(mark, with: .color(status.tint))
+                    context.fill(mark.path, with: .color(mark.status.tint))
                 }
             }
         } symbols: {
