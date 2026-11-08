@@ -38,7 +38,7 @@ A friendly, native front end to launchd: real launch agents that run whether or 
 
 - The name Sundial and the sun-and-time motif are the identity. The user wants the interface to embrace it instead of looking bland.
 - The app icon (`apps/apple/App/Assets.xcassets/AppIcon.appiconset`) is a cream sundial plate with a brown gnomon and shadow, on a warm orange-to-amber gradient with a pale sun.
-- `SundialGlyph` draws the template menu bar glyph in code (dial, gnomon, shadow).
+- `SundialGlyph` draws the template menu bar glyph in code (a gnomon blade alone).
 - Voice is plain, short, and literal ("Run Now", "No runs in the last 30 days.").
 
 ## Evidence on Hand
