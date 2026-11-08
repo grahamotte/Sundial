@@ -16,21 +16,18 @@ enum SundialGlyph {
     }()
 
     static func path(in rect: CGRect) -> CGPath {
-        let width = rect.width
-        let height = rect.height
-        let plate = CGRect(x: rect.minX + width * 0.06, y: rect.minY + height * 0.08, width: width * 0.88, height: height * 0.38)
-        let ring = CGPath(ellipseIn: plate, transform: nil)
-            .copy(strokingWithWidth: width * 0.10, lineCap: .round, lineJoin: .round, miterLimit: 10)
-        let gnomon = CGMutablePath()
-        gnomon.move(to: CGPoint(x: plate.midX - width * 0.30, y: plate.midY))
-        gnomon.addLine(to: CGPoint(x: plate.midX + width * 0.07, y: rect.minY + height * 0.97))
-        gnomon.addLine(to: CGPoint(x: plate.midX + width * 0.07, y: plate.midY))
-        gnomon.closeSubpath()
-        let shadow = CGMutablePath()
-        shadow.move(to: CGPoint(x: plate.midX - width * 0.10, y: plate.midY))
-        shadow.addLine(to: CGPoint(x: plate.midX + width * 0.07, y: plate.midY))
-        shadow.addLine(to: CGPoint(x: plate.maxX - width * 0.12, y: plate.minY + height * 0.10))
-        shadow.closeSubpath()
-        return ring.union(gnomon).union(shadow)
+        let unit = rect.width / 18
+        func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+            CGPoint(x: rect.minX + x * unit, y: rect.minY + y * unit)
+        }
+        let blade = CGMutablePath()
+        blade.move(to: point(1, 1.54))
+        blade.addLine(to: point(15.91, 16.46))
+        blade.addLine(to: point(16.81, 15.56))
+        blade.addLine(to: point(14.18, 9.91))
+        blade.addArc(center: point(18.46, 7.91), radius: 4.72 * unit, startAngle: .pi * 155 / 180, endAngle: .pi * 252 / 180, clockwise: false)
+        blade.addLine(to: point(17, 1.54))
+        blade.closeSubpath()
+        return blade
     }
 }
