@@ -39,7 +39,7 @@ struct RunDetailView: View {
                 .frame(height: 1)
             LogTextView(url: model.logURL(for: run), documentID: run.id, isLive: run.finishedAt == nil, hasOutput: $hasOutput)
                 .overlay {
-                    if !hasOutput && status != .running {
+                    if !hasOutput && !status.isActive {
                         ContentUnavailableView("No Output", systemImage: "text.alignleft", description: Text("This run didn't print anything."))
                     }
                 }
@@ -68,7 +68,7 @@ struct RunDetailView: View {
                     .fontDesign(.rounded)
                     .foregroundStyle(status.textTint)
                     .lineLimit(1)
-                Text("\(run.jobName) · \(run.startedAt.formatted(date: .abbreviated, time: .standard))")
+                Text(([run.jobName, run.startedAt.formatted(date: .abbreviated, time: .standard)] + run.notes(status: status)).joined(separator: " · "))
                     .font(.subheadline)
                     .foregroundStyle(Solar.muted)
                     .lineLimit(1)
@@ -77,7 +77,7 @@ struct RunDetailView: View {
             Spacer(minLength: 8)
             Grid(alignment: .trailing, horizontalSpacing: 16, verticalSpacing: 1) {
                 GridRow {
-                    Text("Duration").foregroundStyle(Solar.muted)
+                    Text(status == .waiting ? "Waiting" : "Duration").foregroundStyle(Solar.muted)
                     Text("Result").foregroundStyle(Solar.muted)
                 }
                 .font(.caption)

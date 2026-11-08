@@ -81,7 +81,7 @@ struct MenuRunRow: View {
                 .lineLimit(1)
             Spacer(minLength: 8)
             TimelineView(.everyMinute) { context in
-                Text(status == .running ? "Running" : run.startedAt.formatted(.relative(presentation: .named, unitsStyle: .abbreviated)))
+                Text(status.isActive ? status.title : run.startedAt.formatted(.relative(presentation: .named, unitsStyle: .abbreviated)))
                     .foregroundStyle(Solar.muted)
                     .monospacedDigit()
                     .lineLimit(1)

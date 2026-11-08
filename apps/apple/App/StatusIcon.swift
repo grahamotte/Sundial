@@ -7,6 +7,8 @@ struct StatusIcon: View {
     var body: some View {
         Group {
             switch status {
+            case .waiting:
+                Image(systemName: "moon.zzz.fill")
             case .running:
                 Image(systemName: "rays")
                     .symbolEffect(.rotate, options: .repeat(.continuous), isActive: !reduceMotion)
