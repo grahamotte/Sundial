@@ -29,11 +29,13 @@ struct DayArc {
         let passed = statuses.filter { $0 == .succeeded }.count
         let running = statuses.filter { $0 == .running }.count
         let waiting = statuses.filter { $0 == .waiting }.count
+        let skipped = statuses.filter { $0 == .skipped }.count
         var parts: [String] = []
         if passed > 0 { parts.append("\(passed) passed") }
         if failed > 0 { parts.append("\(failed) failed") }
         if running > 0 { parts.append("\(running) running") }
         if waiting > 0 { parts.append("\(waiting) waiting") }
+        if skipped > 0 { parts.append("\(skipped) skipped") }
         var text = parts.isEmpty ? "No runs today" : parts.joined(separator: ", ")
         if let next, fraction(of: next) != nil {
             text += ". Next run at \(Schedule.time(next, calendar: calendar, locale: locale))"

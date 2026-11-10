@@ -66,6 +66,25 @@ final class ScheduleTests: XCTestCase {
         XCTAssertEqual(Schedule.weekly(weekdays: [4], hour: 8, minute: 0).nextRun(after: now, calendar: calendar), utcDate(2026, 10, 28, 8, 0))
     }
 
+    func testPreviousRun() {
+        let now = utcDate(2026, 10, 25, 12, 7, 30)
+        XCTAssertEqual(Schedule.interval(minutes: 1).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 25, 12, 7))
+        XCTAssertEqual(Schedule.interval(minutes: 15).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 25, 12, 0))
+        XCTAssertEqual(Schedule.interval(minutes: 60).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 25, 12, 0))
+        XCTAssertEqual(Schedule.interval(minutes: 480).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 25, 8, 0))
+        XCTAssertEqual(Schedule.daily(hour: 9, minute: 0).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 25, 9, 0))
+        XCTAssertEqual(Schedule.daily(hour: 12, minute: 30).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 24, 12, 30))
+        XCTAssertEqual(Schedule.weekly(weekdays: [2, 4], hour: 8, minute: 0).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 21, 8, 0))
+        XCTAssertEqual(Schedule.weekly(weekdays: [2], hour: 8, minute: 0).previousRun(atOrBefore: now, calendar: calendar), utcDate(2026, 10, 19, 8, 0))
+    }
+
+    func testPreviousRunMatchesARunFiredExactlyOnTheMinute() {
+        XCTAssertEqual(Schedule.interval(minutes: 15).previousRun(atOrBefore: utcDate(2026, 10, 25, 12, 15), calendar: calendar), utcDate(2026, 10, 25, 12, 15))
+        XCTAssertEqual(Schedule.daily(hour: 20, minute: 0).previousRun(atOrBefore: utcDate(2026, 10, 25, 20, 0), calendar: calendar), utcDate(2026, 10, 25, 20, 0))
+        XCTAssertEqual(Schedule.daily(hour: 20, minute: 0).previousRun(atOrBefore: utcDate(2026, 10, 25, 19, 59, 59), calendar: calendar), utcDate(2026, 10, 24, 20, 0))
+        XCTAssertEqual(Schedule.weekly(weekdays: [1], hour: 12, minute: 7).previousRun(atOrBefore: utcDate(2026, 10, 25, 12, 7), calendar: calendar), utcDate(2026, 10, 25, 12, 7))
+    }
+
     func testSummaries() {
         XCTAssertEqual(Schedule.interval(minutes: 1).summary(calendar: calendar, locale: locale), "Every minute")
         XCTAssertEqual(Schedule.interval(minutes: 30).summary(calendar: calendar, locale: locale), "Every 30 minutes")

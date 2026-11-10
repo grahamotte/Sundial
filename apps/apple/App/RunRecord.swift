@@ -8,6 +8,7 @@ nonisolated struct RunRecord: Codable, Identifiable, Hashable {
         case succeeded
         case failed
         case interrupted
+        case skipped
 
         var title: String {
             switch self {
@@ -16,6 +17,7 @@ nonisolated struct RunRecord: Codable, Identifiable, Hashable {
             case .succeeded: return "Succeeded"
             case .failed: return "Failed"
             case .interrupted: return "Interrupted"
+            case .skipped: return "Skipped"
             }
         }
 
@@ -39,8 +41,10 @@ nonisolated struct RunRecord: Codable, Identifiable, Hashable {
     var signal: Int32?
     var processID: Int32
     var sleeps: [Sleep] = []
+    var skipped = false
 
     func status(isProcessAlive: (Int32) -> Bool = RunRecord.isProcessAlive) -> Status {
+        if skipped { return .skipped }
         guard finishedAt != nil else {
             guard isProcessAlive(processID) else { return .interrupted }
             return commandStartedAt == nil ? .waiting : .running
@@ -59,7 +63,7 @@ nonisolated struct RunRecord: Codable, Identifiable, Hashable {
 
     func durationText(status: Status, now: Date = Date()) -> String {
         switch status {
-        case .interrupted: return "—"
+        case .interrupted, .skipped: return "—"
         case .waiting: return RunRecord.formatDuration(wait(now: now))
         default: return RunRecord.formatDuration(duration(now: now))
         }
@@ -109,7 +113,7 @@ nonisolated struct RunRecord: Codable, Identifiable, Hashable {
 
 nonisolated extension RunRecord {
     private enum CodingKeys: String, CodingKey {
-        case id, jobID, jobName, command, startedAt, commandStartedAt, finishedAt, exitCode, signal, processID, sleeps
+        case id, jobID, jobName, command, startedAt, commandStartedAt, finishedAt, exitCode, signal, processID, sleeps, skipped
     }
 
     init(from decoder: Decoder) throws {
@@ -130,5 +134,6 @@ nonisolated extension RunRecord {
             sleeps = []
             commandStartedAt = startedAt
         }
+        skipped = try container.decodeIfPresent(Bool.self, forKey: .skipped) ?? false
     }
 }

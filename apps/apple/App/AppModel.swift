@@ -150,6 +150,7 @@ final class AppModel {
 
     func runNow(_ job: Job) {
         do {
+            try RunRequests(directory: paths.requestsDirectory).request(jobID: job.id)
             try launchAgents.runNow(job)
         } catch {
             errorMessage = "Sundial could not start \(job.name): \(error.localizedDescription)"

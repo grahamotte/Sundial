@@ -131,7 +131,7 @@ Solarized-inspired and quiet: warm near-white in light, neutral charcoal in dark
 - **Dusk** (dusk): Never-run glyph and the moon on the arc.
 
 ### Named Rules
-**The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for waiting and never run. Nothing else borrows these hues for decoration.
+**The Weather Rule.** Run state maps to exactly one hue: sun for passed, sky for running, storm for failed and interrupted, dusk for waiting, skipped, and never run. Nothing else borrows these hues for decoration.
 
 **The Accent Is Not Status Rule.** `AccentColor` is Solarized slate: #586E75 (base01) in light and #657B83 (base00) in dark, so controls match the theme instead of system blue. Run state colors (sun, sky, storm) never stand in for selection.
 
@@ -179,7 +179,7 @@ Native shapes for native controls. Custom shapes are few: 8pt rounded rectangles
 ## Components
 
 ### Status Icon
-Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `moon.zzz.fill` in dusk (waiting), `sun.horizon` in dusk (never run). Always carries an accessibility label.
+Weather glyphs at 18 by 18pt, hierarchical rendering: `sun.max.fill` in sun (succeeded), `cloud.bolt.rain.fill` in storm (failed), `cloud.fill` in storm (interrupted), `rays` in sky rotating continuously (running; static under Reduce Motion), `moon.zzz.fill` in dusk (waiting), `sunset.fill` in dusk (skipped), `sun.horizon` in dusk (never run). Always carries an accessibility label.
 
 ### Run Rows
 - **Layout:** Status icon, a two-line stack (name or time; detail in subheadline), trailing duration in subheadline muted with monospaced digits.

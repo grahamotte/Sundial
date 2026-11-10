@@ -39,6 +39,19 @@ final class RunStoreTests: XCTestCase {
         XCTAssertEqual(finished.processID, 42)
     }
 
+    func testSkipFinishesWithoutStartingTheCommand() throws {
+        let started = utcDate(2026, 10, 25, 9, 2, 10)
+        let record = try store.begin(job: job, processID: 42, now: started)
+        let skipped = try store.skip(record, now: started)
+        XCTAssertEqual(store.records(), [skipped])
+        XCTAssertTrue(skipped.skipped)
+        XCTAssertNil(skipped.commandStartedAt)
+        XCTAssertEqual(skipped.finishedAt, started)
+        XCTAssertNil(skipped.exitCode)
+        XCTAssertEqual(skipped.status { _ in true }, .skipped)
+        XCTAssertEqual(store.records()[0].status { _ in false }, .skipped)
+    }
+
     func testRecordsWithoutSleepsAreLegacyRunsWhoseCommandStartedWhenTheyFired() throws {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let json = """

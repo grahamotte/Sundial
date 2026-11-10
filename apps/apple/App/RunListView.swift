@@ -190,7 +190,7 @@ struct JobSummaryView: View {
     }
 
     private var history: String {
-        let finished = runs.filter { !$0.status().isActive }
+        let finished = runs.filter { !$0.status().isActive && $0.status() != .skipped }
         guard !finished.isEmpty else { return "No runs" }
         let failed = finished.filter { $0.status().isFailure }.count
         let passed = finished.count - failed
@@ -230,7 +230,7 @@ struct RunRow: View {
     }
 
     private func detail(_ status: RunRecord.Status) -> String {
-        let result = status.isActive || status == .interrupted ? status.title : run.outcome ?? status.title
+        let result = status.isActive || status == .interrupted || status == .skipped ? status.title : run.outcome ?? status.title
         let outcome = ([result] + run.notes(status: status)).joined(separator: " · ")
         guard showsJobName else { return outcome }
         return run.startedAt.formatted(date: .omitted, time: .shortened) + " · " + outcome

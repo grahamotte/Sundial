@@ -55,12 +55,21 @@ struct JobRunner {
             throw RunError.unknownJob(jobID)
         }
         let store = RunStore(directory: paths.runsDirectory)
-        let journal = try RunJournal(store: store, record: store.begin(job: job, processID: processID, now: now()))
+        let firedAt = now()
+        let isManual = RunRequests(directory: paths.requestsDirectory).consume(jobID: job.id, now: firedAt)
+        let journal = try RunJournal(store: store, record: store.begin(job: job, processID: processID, now: firedAt))
         let output = try journal.openLog()
+        let limit = isManual ? nil : lateness(for: job, firedAt: firedAt)
+        if let limit, firedAt > limit.deadline {
+            return try skip(journal: journal, store: store, output: output, startingAt: firedAt, lateness: limit)
+        }
         if !power.state().allowsRun {
             journal.note("Sundial: the Mac is asleep on battery; waiting until it is awake or on power", to: output)
             repeat { power.waitForChange() } while !power.state().allowsRun
             let started = now()
+            if let limit, started > limit.deadline {
+                return try skip(journal: journal, store: store, output: output, startingAt: started, lateness: limit)
+            }
             try journal.startCommand(now: started)
             let waited = RunRecord.formatDuration(started.timeIntervalSince(journal.record.startedAt))
             journal.note("Sundial: started at \(JobRunner.time(started, timeZone: timeZone)) after waiting \(waited)", to: output)
@@ -95,6 +104,32 @@ struct JobRunner {
         store.prune(now: now())
         if let signal = outcome.signal { return 128 + signal }
         return outcome.exitCode ?? 1
+    }
+
+    struct Lateness: Equatable {
+        var scheduledAt: Date
+        var hours: Int
+
+        var deadline: Date { scheduledAt.addingTimeInterval(TimeInterval(hours) * 3600) }
+    }
+
+    func lateness(for job: Job, firedAt: Date) -> Lateness? {
+        guard let hours = job.startWithinHours else { return nil }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        guard let scheduledAt = job.schedule.previousRun(atOrBefore: firedAt, calendar: calendar) else { return nil }
+        return Lateness(scheduledAt: scheduledAt, hours: hours)
+    }
+
+    private func skip(journal: RunJournal, store: RunStore, output: FileHandle, startingAt date: Date, lateness: Lateness) throws -> Int32 {
+        let start = JobRunner.time(date, timeZone: timeZone)
+        let limit = Schedule.durationLabel(lateness.hours * 60)
+        let scheduled = JobRunner.time(lateness.scheduledAt, timeZone: timeZone)
+        journal.note("Sundial: skipped; it would start at \(start), more than \(limit) after its \(scheduled) scheduled time", to: output)
+        try? output.close()
+        try journal.skip(now: date)
+        store.prune(now: date)
+        return 0
     }
 
     nonisolated static func time(_ date: Date, timeZone: TimeZone) -> String {
@@ -161,6 +196,10 @@ nonisolated private final class RunJournal: @unchecked Sendable {
             slept.sleeps.append(sleep)
             current = (try? store.addSleep(sleep, to: current)) ?? slept
         }
+    }
+
+    func skip(now: Date) throws {
+        try lock.withLock { current = try store.skip(current, now: now) }
     }
 
     func finish(exitCode: Int32?, signal: Int32?, now: Date) throws {

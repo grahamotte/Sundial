@@ -60,6 +60,14 @@ enum Schedule: Codable, Hashable {
         }.min()
     }
 
+    func previousRun(atOrBefore date: Date, calendar: Calendar = .current) -> Date? {
+        calendarIntervals.compactMap { components in
+            var matching = components
+            matching.second = 0
+            return calendar.nextDate(after: date.addingTimeInterval(1), matching: matching, matchingPolicy: .nextTime, direction: .backward)
+        }.max()
+    }
+
     func summary(calendar: Calendar = .current, locale: Locale = .current) -> String {
         switch self {
         case .interval(let minutes):
