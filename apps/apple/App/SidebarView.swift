@@ -42,7 +42,7 @@ struct SidebarView: View {
 
     private var failureCount: Int {
         model.jobs.filter { job in
-            guard job.isEnabled, let last = model.runs(for: job.id).first(where: { !$0.status().isActive }) else { return false }
+            guard job.isEnabled, let last = model.runs(for: job.id).first(where: { !$0.status().isActive && $0.status() != .skipped }) else { return false }
             return last.status().isFailure
         }.count
     }

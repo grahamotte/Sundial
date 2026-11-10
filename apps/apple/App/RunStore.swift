@@ -53,6 +53,14 @@ nonisolated struct RunStore {
         return finished
     }
 
+    func skip(_ record: RunRecord, now: Date = Date()) throws -> RunRecord {
+        var skipped = record
+        skipped.skipped = true
+        skipped.finishedAt = now
+        try write(skipped)
+        return skipped
+    }
+
     func records() -> [RunRecord] {
         let decoder = JSONDecoder()
         let files = (try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []

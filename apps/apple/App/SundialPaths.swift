@@ -26,4 +26,5 @@ struct SundialPaths {
 
     var jobsFile: URL { supportDirectory.appending(path: "jobs.json") }
     var runsDirectory: URL { supportDirectory.appending(path: "Runs", directoryHint: .isDirectory) }
+    var requestsDirectory: URL { supportDirectory.appending(path: "Requests", directoryHint: .isDirectory) }
 }

@@ -7,6 +7,9 @@ struct Job: Codable, Identifiable, Hashable {
     var workingDirectory: String
     var schedule: Schedule
     var isEnabled: Bool
+    var startWithinHours: Int?
+
+    static let startWithinOptions = [1, 2, 3, 4, 6, 8, 12]
 
     init(
         id: UUID = UUID(),
@@ -14,7 +17,8 @@ struct Job: Codable, Identifiable, Hashable {
         command: String = "",
         workingDirectory: String = "~",
         schedule: Schedule = .interval(minutes: 60),
-        isEnabled: Bool = true
+        isEnabled: Bool = true,
+        startWithinHours: Int? = nil
     ) {
         self.id = id
         self.name = name
@@ -22,6 +26,7 @@ struct Job: Codable, Identifiable, Hashable {
         self.workingDirectory = workingDirectory
         self.schedule = schedule
         self.isEnabled = isEnabled
+        self.startWithinHours = startWithinHours
     }
 
     var label: String { SundialPaths.labelPrefix + id.uuidString.lowercased() }
@@ -30,6 +35,7 @@ struct Job: Codable, Identifiable, Hashable {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && !command.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && schedule.isValid
+            && (startWithinHours.map(Job.startWithinOptions.contains) ?? true)
     }
 
     func workingDirectoryURL(home: URL) -> URL {
@@ -47,7 +53,14 @@ struct Job: Codable, Identifiable, Hashable {
     }
 
     func duplicated() -> Job {
-        Job(name: "\(name) Copy", command: command, workingDirectory: workingDirectory, schedule: schedule, isEnabled: isEnabled)
+        Job(
+            name: "\(name) Copy",
+            command: command,
+            workingDirectory: workingDirectory,
+            schedule: schedule,
+            isEnabled: isEnabled,
+            startWithinHours: startWithinHours,
+        )
     }
 }
 

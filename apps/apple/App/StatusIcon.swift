@@ -18,6 +18,8 @@ struct StatusIcon: View {
                 Image(systemName: "cloud.bolt.rain.fill")
             case .interrupted:
                 Image(systemName: "cloud.fill")
+            case .skipped:
+                Image(systemName: "sunset.fill")
             case nil:
                 Image(systemName: "sun.horizon")
             }

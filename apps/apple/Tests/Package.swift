@@ -44,6 +44,7 @@ let package = Package(
                 "PowerMonitoring.swift",
                 "RunDay.swift",
                 "RunRecord.swift",
+                "RunRequests.swift",
                 "RunStore.swift",
                 "Schedule.swift",
                 "ScheduleDraft.swift",

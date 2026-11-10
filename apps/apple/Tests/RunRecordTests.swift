@@ -7,7 +7,8 @@ final class RunRecordTests: XCTestCase {
         exitCode: Int32? = nil,
         signal: Int32? = nil,
         commandStartedAt: Date? = utcDate(2026, 10, 25, 12, 0, 0),
-        sleeps: [RunRecord.Sleep] = []
+        sleeps: [RunRecord.Sleep] = [],
+        skipped: Bool = false
     ) -> RunRecord {
         RunRecord(
             id: "1",
@@ -20,7 +21,8 @@ final class RunRecordTests: XCTestCase {
             exitCode: exitCode,
             signal: signal,
             processID: 123,
-            sleeps: sleeps
+            sleeps: sleeps,
+            skipped: skipped
         )
     }
 
@@ -33,6 +35,30 @@ final class RunRecordTests: XCTestCase {
         XCTAssertEqual(record(finished: false, commandStartedAt: nil).status { $0 == 123 }, .waiting)
         XCTAssertEqual(record(finished: false, commandStartedAt: nil).status { _ in false }, .interrupted)
         XCTAssertEqual(record(finished: true, exitCode: 0, sleeps: [RunRecord.Sleep(at: utcDate(2026, 10, 25, 12, 0, 10), isOnPower: false)]).status { _ in false }, .succeeded)
+    }
+
+    func testSkippedStatus() {
+        XCTAssertEqual(record(finished: true, commandStartedAt: nil, skipped: true).status { _ in false }, .skipped)
+        XCTAssertEqual(record(finished: true, commandStartedAt: nil, skipped: true).status { _ in true }, .skipped)
+        XCTAssertEqual(record(finished: false, commandStartedAt: nil, skipped: true).status { _ in false }, .skipped)
+        XCTAssertEqual(record(finished: true, commandStartedAt: nil, skipped: true).durationText(status: .skipped), "—")
+        XCTAssertEqual(record(finished: true, commandStartedAt: nil, skipped: true).notes(status: .skipped), [])
+        XCTAssertNil(record(finished: true, commandStartedAt: nil, skipped: true).outcome)
+        XCTAssertFalse(RunRecord.Status.skipped.isFailure)
+        XCTAssertFalse(RunRecord.Status.skipped.isActive)
+        XCTAssertEqual(RunRecord.Status.skipped.title, "Skipped")
+    }
+
+    func testSkippedRoundTripsAndDefaultsToFalse() throws {
+        let skipped = record(finished: true, commandStartedAt: nil, skipped: true)
+        let encoded = try JSONEncoder().encode(skipped)
+        XCTAssertEqual(try JSONDecoder().decode(RunRecord.self, from: encoded), skipped)
+        var object = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+        XCTAssertEqual(object["skipped"] as? Bool, true)
+        object.removeValue(forKey: "skipped")
+        let decoded = try JSONDecoder().decode(RunRecord.self, from: JSONSerialization.data(withJSONObject: object))
+        XCTAssertFalse(decoded.skipped)
+        XCTAssertEqual(decoded.status { _ in false }, .failed)
     }
 
     func testFailureFlags() {

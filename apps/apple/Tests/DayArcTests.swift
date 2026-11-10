@@ -68,6 +68,19 @@ final class DayArcTests: XCTestCase {
         )
     }
 
+    func testSummaryCountsSkippedRunsWithoutCountingThemAsFailures() {
+        let arc = DayArc(containing: utcDate(2026, 10, 25, 12), calendar: calendar)
+        var skipped = run("s", utcDate(2026, 10, 25, 9), exitCode: nil, started: false)
+        skipped.skipped = true
+        var other = run("t", utcDate(2026, 10, 25, 10), exitCode: nil, started: false)
+        other.skipped = true
+        XCTAssertEqual(arc.summary([skipped], next: nil, calendar: calendar, locale: locale, isProcessAlive: { _ in false }), "1 skipped.")
+        XCTAssertEqual(
+            arc.summary([run("a", utcDate(2026, 10, 25, 1)), run("b", utcDate(2026, 10, 25, 2), exitCode: 1), skipped, other], next: nil, calendar: calendar, locale: locale),
+            "1 passed, 1 failed, 2 skipped."
+        )
+    }
+
     func testSummaryWithoutRunsOmitsNextRunOutsideTheDay() {
         let arc = DayArc(containing: utcDate(2026, 10, 25, 12), calendar: calendar)
         XCTAssertEqual(arc.summary([], next: utcDate(2026, 10, 26, 6), calendar: calendar, locale: locale), "No runs today.")

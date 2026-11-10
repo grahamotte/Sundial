@@ -56,6 +56,10 @@ struct JobEditorView: View {
                     LabeledContent("On") { WeekdayPicker(draft: $draft) }
                     DatePicker("Time", selection: time, displayedComponents: .hourAndMinute)
                 }
+                Picker("Start Within", selection: $job.startWithinHours) {
+                    Text("Any time").tag(Int?.none)
+                    ForEach(Job.startWithinOptions, id: \.self) { Text(Schedule.durationLabel($0 * 60)).tag(Int?.some($0)) }
+                }
             } header: {
                 Text("Schedule")
             } footer: {
@@ -102,7 +106,9 @@ struct JobEditorView: View {
     private var nextRunText: String {
         guard candidate.schedule.isValid else { return "Choose at least one day." }
         guard let next = candidate.schedule.nextRun(after: Date()) else { return "" }
-        return "Next run \(Schedule.describe(next)). Jobs run when your Mac is awake or on power, and wait while it sleeps on battery. Sundial doesn't need to be open."
+        let text = "Next run \(Schedule.describe(next)). Jobs run when your Mac is awake or on power, and wait while it sleeps on battery. Sundial doesn't need to be open."
+        guard let hours = candidate.startWithinHours else { return text }
+        return text + " Runs that would start more than \(Schedule.durationLabel(hours * 60)) late, such as after sleep, are skipped."
     }
 }
 

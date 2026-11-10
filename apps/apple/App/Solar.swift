@@ -40,7 +40,7 @@ enum Solar {
 extension RunRecord.Status {
     var tint: Color {
         switch self {
-        case .waiting: return Solar.dusk
+        case .waiting, .skipped: return Solar.dusk
         case .running: return Solar.sky
         case .succeeded: return Solar.sun
         case .failed, .interrupted: return Solar.storm

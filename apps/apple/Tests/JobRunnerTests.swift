@@ -50,12 +50,13 @@ final class JobRunnerTests: XCTestCase {
     private var launcher: StubLauncher!
     private var power: StubPower!
     private let job = Job(name: "Backup", command: "echo hi && false", workingDirectory: "~/Code", schedule: .interval(minutes: 5))
+    private let nightly = Job(name: "Sync", command: "sync", schedule: .daily(hour: 20, minute: 0), startWithinHours: 2)
 
     override func setUp() {
         paths = SundialPaths(home: makeTemporaryDirectory())
         launcher = StubLauncher()
         power = StubPower()
-        try! JobStore(url: paths.jobsFile).save([job])
+        try! JobStore(url: paths.jobsFile).save([job, nightly])
     }
 
     private func runner(now: Date = utcDate(2026, 10, 25, 12)) -> JobRunner {
@@ -225,6 +226,115 @@ final class JobRunnerTests: XCTestCase {
         let record = store.records()[0]
         XCTAssertEqual(record.exitCode, 127)
         XCTAssertTrue(store.log(for: record.id).hasPrefix("Sundial could not start the command: "))
+    }
+
+    func testRunsWithinTheStartLimit() throws {
+        for date in [utcDate(2026, 11, 7, 20, 0, 0), utcDate(2026, 11, 7, 21, 59, 59), utcDate(2026, 11, 8, 22, 0, 0)] {
+            launcher.received = nil
+            XCTAssertEqual(try runner(now: date).run(jobID: nightly.id.uuidString), 0)
+            XCTAssertNotNil(launcher.received)
+        }
+        XCTAssertTrue(store.records().allSatisfy { $0.status { _ in false } == .succeeded })
+    }
+
+    func testSkipsALateFireWithoutRunningTheCommand() throws {
+        XCTAssertEqual(try runner(now: utcDate(2026, 11, 8, 9, 2, 10)).run(jobID: nightly.id.uuidString), 0)
+
+        XCTAssertNil(launcher.received)
+        XCTAssertEqual(power.held, [])
+        let record = store.records()[0]
+        XCTAssertEqual(record.status { _ in true }, .skipped)
+        XCTAssertTrue(record.skipped)
+        XCTAssertNil(record.commandStartedAt)
+        XCTAssertEqual(record.startedAt, utcDate(2026, 11, 8, 9, 2, 10))
+        XCTAssertEqual(record.finishedAt, utcDate(2026, 11, 8, 9, 2, 10))
+        XCTAssertEqual(
+            store.log(for: record.id),
+            "Sundial: skipped; it would start at 09:02:10, more than 2 hours after its 20:00:00 scheduled time\n"
+        )
+    }
+
+    func testSkipsJustPastTheDeadlineAndSaysOneHour() throws {
+        var hourly = nightly
+        hourly.startWithinHours = 1
+        try JobStore(url: paths.jobsFile).save([hourly])
+        XCTAssertEqual(try runner(now: utcDate(2026, 11, 7, 21, 0, 1)).run(jobID: hourly.id.uuidString), 0)
+        XCTAssertNil(launcher.received)
+        XCTAssertEqual(
+            store.log(for: store.records()[0].id),
+            "Sundial: skipped; it would start at 21:00:01, more than 1 hour after its 20:00:00 scheduled time\n"
+        )
+    }
+
+    func testIntervalJobsSkipOnlyWhenTheLimitIsShorterThanTheInterval() throws {
+        let everyFour = Job(name: "Pull", command: "git pull", schedule: .interval(minutes: 240), startWithinHours: 2)
+        let everyHour = Job(name: "Fetch", command: "git fetch", schedule: .interval(minutes: 60), startWithinHours: 2)
+        try JobStore(url: paths.jobsFile).save([everyFour, everyHour])
+        XCTAssertEqual(try runner(now: utcDate(2026, 11, 7, 11, 30)).run(jobID: everyFour.id.uuidString), 0)
+        XCTAssertNil(launcher.received)
+        XCTAssertEqual(try runner(now: utcDate(2026, 11, 7, 11, 30)).run(jobID: everyHour.id.uuidString), 0)
+        XCTAssertNotNil(launcher.received)
+    }
+
+    func testJobsWithoutAStartLimitRunHowEverLateTheyFire() throws {
+        let unlimited = Job(name: "Sync", command: "sync", schedule: .daily(hour: 20, minute: 0))
+        try JobStore(url: paths.jobsFile).save([unlimited])
+        XCTAssertEqual(try runner(now: utcDate(2026, 11, 8, 9, 2, 10)).run(jobID: unlimited.id.uuidString), 0)
+        XCTAssertNotNil(launcher.received)
+    }
+
+    func testSkipsARunThatWakesFromWaitingOnBatteryPastTheDeadline() throws {
+        let clock = Clock(utcDate(2026, 11, 7, 20, 0, 0))
+        power.states = [PowerState(isAsleep: true, isOnPower: false), PowerState(isAsleep: false, isOnPower: false)]
+        power.onWait = { clock.date = utcDate(2026, 11, 8, 9, 2, 10) }
+        XCTAssertEqual(try runner(clock: clock).run(jobID: nightly.id.uuidString), 0)
+
+        XCTAssertEqual(power.waits, 1)
+        XCTAssertNil(launcher.received)
+        let record = store.records()[0]
+        XCTAssertEqual(record.status { _ in true }, .skipped)
+        XCTAssertNil(record.commandStartedAt)
+        XCTAssertEqual(record.startedAt, utcDate(2026, 11, 7, 20, 0, 0))
+        XCTAssertEqual(record.finishedAt, utcDate(2026, 11, 8, 9, 2, 10))
+        XCTAssertEqual(
+            store.log(for: record.id),
+            """
+            Sundial: the Mac is asleep on battery; waiting until it is awake or on power
+            Sundial: skipped; it would start at 09:02:10, more than 2 hours after its 20:00:00 scheduled time
+
+            """
+        )
+    }
+
+    func testRunsAWaitingRunThatWakesBeforeTheDeadline() throws {
+        let clock = Clock(utcDate(2026, 11, 7, 20, 0, 0))
+        power.states = [PowerState(isAsleep: true, isOnPower: false), PowerState(isAsleep: false, isOnPower: false)]
+        power.onWait = { clock.date = utcDate(2026, 11, 7, 21, 30, 0) }
+        XCTAssertEqual(try runner(clock: clock).run(jobID: nightly.id.uuidString), 0)
+        XCTAssertNotNil(launcher.received)
+        XCTAssertEqual(store.records()[0].commandStartedAt, utcDate(2026, 11, 7, 21, 30, 0))
+    }
+
+    func testFreshRunNowRequestRunsEvenWhenLate() throws {
+        let now = utcDate(2026, 11, 8, 9, 2, 10)
+        let requests = RunRequests(directory: paths.requestsDirectory)
+        try requests.request(jobID: nightly.id, now: now.addingTimeInterval(-5))
+        XCTAssertEqual(try runner(now: now).run(jobID: nightly.id.uuidString), 0)
+
+        XCTAssertNotNil(launcher.received)
+        XCTAssertEqual(store.records()[0].status { _ in false }, .succeeded)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: requests.requestURL(nightly.id).path))
+    }
+
+    func testStaleRunNowRequestDoesNotExemptALateRun() throws {
+        let now = utcDate(2026, 11, 8, 9, 2, 10)
+        let requests = RunRequests(directory: paths.requestsDirectory)
+        try requests.request(jobID: nightly.id, now: now.addingTimeInterval(-RunRequests.freshness - 1))
+        XCTAssertEqual(try runner(now: now).run(jobID: nightly.id.uuidString), 0)
+
+        XCTAssertNil(launcher.received)
+        XCTAssertEqual(store.records()[0].status { _ in false }, .skipped)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: requests.requestURL(nightly.id).path))
     }
 
     func testUnknownJobThrows() {

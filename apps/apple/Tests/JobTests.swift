@@ -15,6 +15,25 @@ final class JobTests: XCTestCase {
         XCTAssertFalse(Job(name: "Hi", command: "\n").isValid)
         XCTAssertFalse(Job(name: "Hi", command: "echo hi", schedule: .interval(minutes: 7)).isValid)
         XCTAssertTrue(Job(name: "Hi", command: "echo hi").isValid)
+        XCTAssertTrue(Job(name: "Hi", command: "echo hi", startWithinHours: 2).isValid)
+        XCTAssertTrue(Job(name: "Hi", command: "echo hi", startWithinHours: 12).isValid)
+        XCTAssertFalse(Job(name: "Hi", command: "echo hi", startWithinHours: 5).isValid)
+        XCTAssertFalse(Job(name: "Hi", command: "echo hi", startWithinHours: 0).isValid)
+    }
+
+    func testDecodesJobsSavedWithoutStartWithin() throws {
+        let job = Job(name: "Backup", command: "echo", schedule: .daily(hour: 20, minute: 0))
+        var object = try JSONSerialization.jsonObject(with: JSONEncoder().encode(job)) as! [String: Any]
+        XCTAssertNil(object["startWithinHours"])
+        object.removeValue(forKey: "startWithinHours")
+        let decoded = try JSONDecoder().decode(Job.self, from: JSONSerialization.data(withJSONObject: object))
+        XCTAssertEqual(decoded, job)
+        XCTAssertNil(decoded.startWithinHours)
+    }
+
+    func testStartWithinRoundTrips() throws {
+        let job = Job(name: "Backup", command: "echo", startWithinHours: 3)
+        XCTAssertEqual(try JSONDecoder().decode(Job.self, from: JSONEncoder().encode(job)).startWithinHours, 3)
     }
 
     func testWorkingDirectoryURL() {
@@ -32,7 +51,7 @@ final class JobTests: XCTestCase {
     }
 
     func testDuplicatedHasNewIdentity() {
-        let job = Job(name: "Backup", command: "echo", workingDirectory: "/tmp", schedule: .daily(hour: 1, minute: 2), isEnabled: false)
+        let job = Job(name: "Backup", command: "echo", workingDirectory: "/tmp", schedule: .daily(hour: 1, minute: 2), isEnabled: false, startWithinHours: 4)
         let copy = job.duplicated()
         XCTAssertNotEqual(copy.id, job.id)
         XCTAssertEqual(copy.name, "Backup Copy")
@@ -40,5 +59,6 @@ final class JobTests: XCTestCase {
         XCTAssertEqual(copy.workingDirectory, job.workingDirectory)
         XCTAssertEqual(copy.schedule, job.schedule)
         XCTAssertEqual(copy.isEnabled, job.isEnabled)
+        XCTAssertEqual(copy.startWithinHours, 4)
     }
 }
