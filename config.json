@@ -29,7 +29,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.5.0",
+    "build": "0.6.0",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -60,7 +60,7 @@
       },
       "android": {}
     },
-    "version": "0.5.0",
-    "whatsNew": "On battery, scheduled runs now wait while the Mac sleeps and start when it wakes, and each run shows any waiting or sleep. Streaming output stays responsive, and day arc markers no longer overlap."
+    "version": "0.6.0",
+    "whatsNew": "Jobs can now skip a run that would start too late after its scheduled time, such as after a long sleep, and show it as Skipped. Run Now always runs. The menu bar icon is now a sundial gnomon."
   }
 }
