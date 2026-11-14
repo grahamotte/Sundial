@@ -29,7 +29,7 @@
     "size": "s-1vcpu-2gb"
   },
   "apps": {
-    "build": "0.6.0",
+    "build": "0.6.1",
     "homebrew": {
       "desc": "Schedule local commands and see whether each run passed or failed",
       "macos": "golden_gate",
@@ -60,7 +60,7 @@
       },
       "android": {}
     },
-    "version": "0.6.0",
-    "whatsNew": "Jobs can now skip a run that would start too late after its scheduled time, such as after a long sleep, and show it as Skipped. Run Now always runs. The menu bar icon is now a sundial gnomon."
+    "version": "0.6.1",
+    "whatsNew": "Closing the main window no longer switches to another Space."
   }
 }
