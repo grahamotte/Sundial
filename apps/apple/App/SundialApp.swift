@@ -65,7 +65,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     static var isMainWindowOpen = false
 
     static func applyActivationPolicy() {
-        NSApp.setActivationPolicy(Preferences.showsMenuBarExtra && !isMainWindowOpen ? .accessory : .regular)
+        let policy: NSApplication.ActivationPolicy = Preferences.showsMenuBarExtra && !isMainWindowOpen ? .accessory : .regular
+        if policy == .accessory && NSApp.isActive { return }
+        NSApp.setActivationPolicy(policy)
     }
 
     static func setMainWindowOpen(_ isOpen: Bool) {
@@ -82,6 +84,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         #if APP_DEV
         DebugHooks.install()
         #endif
+    }
+
+    func applicationDidResignActive(_ notification: Notification) {
+        AppDelegate.applyActivationPolicy()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
